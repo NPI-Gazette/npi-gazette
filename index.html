@@ -2090,22 +2090,41 @@ async function loadSeason(lg) {
   const ownerByRoster = {}; (rosters || []).forEach(r => ownerByRoster[r.roster_id] = r.owner_id);
   const weekData = {}; mus.forEach((arr, i) => weekData[i + 1] = Array.isArray(arr) ? arr : []);
 
-  // champion / runner-up / 3rd from the winners bracket placement games
-  const champMatch = (wb || []).find(m => m.p === 1);
-  const thirdMatch = (wb || []).find(m => m.p === 3);
-  const champion = champMatch ? ownerByRoster[champMatch.w] : null;
-  const runnerUp = champMatch ? ownerByRoster[champMatch.l] : null;
-  const third    = thirdMatch ? ownerByRoster[thirdMatch.w] : null;
-
-  // wooden spoon = last in final regular-season standings
+  // Build complete final rankings from bracket data.
+  // WB: winner of p=N gets Nth place, loser gets (N+1)th.
+  // LB (toilet bowl): INVERTED format — winner of the final (p=1) earns the wooden spoon.
+  //   Sort LB placement games highest-p first (best finish → worst finish).
+  //   Within each game the LOSER gets the better rank, WINNER gets the worse rank.
+  const wbTeamCount = new Set((wb || []).flatMap(m => [m.w, m.l].filter(Boolean))).size;
+  const finalRankings = {}; // roster_id -> finishing position
+  (wb || []).filter(m => m.p != null).forEach(m => {
+    if (m.w) finalRankings[m.w] = m.p;
+    if (m.l) finalRankings[m.l] = m.p + 1;
+  });
+  const lbGames = (lb || []).filter(m => m.p != null).sort((a, b) => b.p - a.p);
+  let lbPos = wbTeamCount + 1;
+  lbGames.forEach(m => {
+    if (m.l) finalRankings[m.l] = lbPos++;  // loser escapes → better rank
+    if (m.w) finalRankings[m.w] = lbPos++;  // winner earns spoon → worse rank
+  });
+  // Fallback: teams not in any bracket ranked by regular-season record
   const sorted = [...(rosters || [])].sort((a, b) =>
     (((b.settings && b.settings.wins) || 0) - ((a.settings && a.settings.wins) || 0)) ||
     (parsePF(b.settings) - parsePF(a.settings)));
-  const last = sorted.length ? sorted[sorted.length - 1].owner_id : null;
+  const bracketCount = Object.keys(finalRankings).length;
+  sorted.filter(r => finalRankings[r.roster_id] == null)
+    .forEach((r, i) => { finalRankings[r.roster_id] = bracketCount + i + 1; });
+
+  const byRank = pos => ownerByRoster[Object.keys(finalRankings).find(rid => finalRankings[rid] === pos)] || null;
+  const totalTeams = (rosters || []).length;
+  const champion = byRank(1);
+  const runnerUp  = byRank(2);
+  const third     = byRank(3);
+  const last      = byRank(totalTeams);
 
   const played = weeks.some(w => (weekData[w] || []).some(m => (m.points || 0) > 0));
 
-  return { season: lg.season, id, pStart, rosters: rosters || [], userById, ownerByRoster, weekData, champion, runnerUp, third, last, played };
+  return { season: lg.season, id, pStart, rosters: rosters || [], userById, ownerByRoster, weekData, finalRankings, champion, runnerUp, third, last, played };
 }
 
 function computeAllTime(hist) {
