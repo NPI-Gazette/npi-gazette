@@ -418,6 +418,13 @@
     .sz-title { font-size: 22px; font-weight: 800; color: #e8f4ff; letter-spacing: -.3px; }
     .sz-sub { font-size: 13px; color: #7a9ab8; margin-top: 4px; margin-bottom: 18px; }
     .sz-chart-wrap { position: relative; height: 460px; background: #0d2137; border: 1px solid #1e3a55; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+    .sz-mobile-tip { display: none; font-size: 12px; color: #7a9ab8; background: #0d2137; border: 1px solid #1e3a55; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; text-align: center; }
+    .sz-fs-btn { position: absolute; top: 10px; right: 10px; background: rgba(46,204,113,.15); border: 1px solid rgba(46,204,113,.4); color: #2ecc71; border-radius: 6px; padding: 5px 9px; font-size: 11px; font-weight: 700; cursor: pointer; z-index: 2; letter-spacing: .04em; }
+    .sz-fs-btn:hover { background: rgba(46,204,113,.28); }
+    .sz-chart-wrap:fullscreen { height: 100vh; border-radius: 0; padding: 20px; display: flex; flex-direction: column; }
+    .sz-chart-wrap:fullscreen canvas { flex: 1; }
+    .sz-chart-wrap:-webkit-full-screen { height: 100vh; border-radius: 0; padding: 20px; }
+    @media (max-width: 600px) { .sz-mobile-tip { display: block; } }
     .sz-loading { color: #7a9ab8; font-size: 14px; text-align: center; padding: 40px 0; }
     .sz-bs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
     .sz-bs-card { background: #0d2137; border-radius: 12px; padding: 14px 16px; }
@@ -782,7 +789,9 @@
           <div class="sz-title">2025 Draft Pick vs Fantasy Points</div>
           <div class="sz-sub">How every drafted player delivered relative to where they were picked in our league. Players above the trend line outperformed their draft position; below it, they underdelivered.</div>
         </div>
-        <div class="sz-chart-wrap">
+        <div class="sz-mobile-tip">📱 Best viewed in landscape — or tap ⛶ to go fullscreen</div>
+        <div class="sz-chart-wrap" id="sz-chart-wrap">
+          <button class="sz-fs-btn" id="sz-fs-btn" title="Fullscreen">⛶ Fullscreen</button>
           <div class="sz-loading" id="sz-loading">Loading 2025 draft &amp; season data…</div>
           <canvas id="sz-chart" style="display:none;"></canvas>
         </div>
@@ -2668,6 +2677,23 @@ async function initStatZone() {
   } catch (err) {
     loading.textContent = "Couldn't load Stat Zone: " + err.message;
     loading.style.color = "#f08a8a";
+  }
+
+  // Fullscreen button
+  const fsBtn  = document.getElementById("sz-fs-btn");
+  const wrap   = document.getElementById("sz-chart-wrap");
+  if (fsBtn && wrap) {
+    fsBtn.onclick = () => {
+      if (!document.fullscreenElement) {
+        (wrap.requestFullscreen || wrap.webkitRequestFullscreen || wrap.mozRequestFullScreen).call(wrap);
+      } else {
+        (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen).call(document);
+      }
+    };
+    document.addEventListener("fullscreenchange", () => {
+      fsBtn.textContent = document.fullscreenElement ? "✕ Exit" : "⛶ Fullscreen";
+      if (_szChart) _szChart.resize();
+    });
   }
 }
 
