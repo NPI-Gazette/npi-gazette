@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fantasy League</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #071525; color: #e8f4ff; min-height: 100vh; }
+
+    /* Status screen - always visible until JS hides it */
+    #status {
+      position: fixed; inset: 0; background: #071525;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 20px; z-index: 100; padding: 32px;
+    }
+    #status-icon { font-size: 48px; }
+    #status-msg { color: #e8f4ff; font-size: 17px; font-weight: 600; text-align: center; }
+    #status-detail {
+      color: #7a9ab8; font-size: 13px; text-align: center;
+      max-width: 460px; line-height: 1.6; word-break: break-all;
+      background: #0d2137; border: 1px solid #1e3a55;
+      border-radius: 10px; padding: 14px 18px; display: none;
+    }
+    .spinner {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 3px solid #1e3a55; border-top-color: #2ecc71;
+      animation: spin 0.8s linear infinite;
+    }
+    .spinner.sm { width: 22px; height: 22px; border-width: 2px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* App */
+    #app { display: none; }
+
+    .header {
+      background: linear-gradient(180deg, #0a1f35 0%, #071525 100%);
+      border-bottom: 1px solid #1e3a55;
+      padding: 24px 20px 0;
+    }
+    .inner { max-width: 1060px; margin: 0 auto; }
+    .title-row { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 22px; text-align: center; }
+    .league-logo { width: 150px; height: 150px; flex-shrink: 0; display: block; }
+    .league-name { font-size: 20px; font-weight: 800; }
+    .league-sub { color: #4a7a9b; font-size: 12px; margin-top: 3px; }
+
+    .stat-row { display: flex; gap: 10px; margin: 0 auto 20px; flex-wrap: wrap; max-width: 816px; }
+    .stat-card {
+      flex: 1; min-width: 100px;
+      background: #0d2137; border: 1px solid #1e3a55; border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stat-label { color: #7a9ab8; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
+    .stat-val { font-size: 20px; font-weight: 800; }
+    .stat-sub { color: #4a7a9b; font-size: 11px; margin-top: 3px; }
+
+    /* Tabs — horizontally scrollable on small screens */
+    .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; justify-content: center; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      border: none; border-radius: 8px 8px 0 0; padding: 9px 11px;
+      font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit;
+      background: transparent; color: #7a9ab8; transition: all .15s; white-space: nowrap;
+      line-height: 1.25; text-align: center;
+    }
+    .tab:hover { color: #cfe6ff; }
+    .tab.active { background: #2ecc71; color: #071525; }
+
+    .content { max-width: 840px; margin: 0 auto; padding: 20px; }
+    .pane { display: none; }
+    .pane.active { display: block; }
+
+    /* Section header */
+    .section-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px; gap: 12px; flex-wrap: wrap;
+    }
+    .section-title { font-size: 11px; font-weight: 700; color: #7a9ab8; text-transform: uppercase; letter-spacing: .07em; }
+    .section-note { color: #4a7a9b; font-size: 11px; }
+    .legend { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 9px; height: 9px; border-radius: 2px; background: #2ecc71; }
+    .legend-txt { color: #4a7a9b; font-size: 11px; }
+
+    /* Standings */
+    .standings-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #1e3a55; }
+    .standings-hd {
+      display: flex; padding: 8px 14px 8px 70px;
+      background: #050f1a; gap: 10px;
+    }
+    .standings-hd-space { flex: 1; }
+    .col-hd { color: #4a7a9b; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+    .col-wl { min-width: 50px; text-align: center; }
+    .col-pf { min-width: 64px; text-align: right; }
+
+    .s-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; border-left: 3px solid transparent; cursor: pointer;
+      transition: background .12s;
+    }
+    .s-row:hover { background: #11304d !important; }
+    .s-row.playoff { border-left-color: #2ecc71; }
+    .s-row.even { background: #0a1d30; }
+    .s-row.odd { background: #0d2137; }
+    .s-rank { width: 22px; font-weight: 700; font-size: 14px; text-align: center; color: #4a7a9b; flex-shrink: 0; }
+    .s-rank.gold { color: #f1c40f; }
+    .s-info { flex: 1; min-width: 0; }
+    .s-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .s-owner { color: #4a7a9b; font-size: 11px; }
+    .s-wl { min-width: 50px; text-align: center; font-weight: 700; font-size: 14px; }
+    .s-pf { min-width: 64px; text-align: right; }
+    .s-pf-val { color: #7a9ab8; font-size: 13px; }
+    .s-pf-lbl { color: #4a7a9b; font-size: 10px; }
+
+    /* Matchups */
+    .week-nav { display: flex; align-items: center; gap: 10px; }
+    .wk-btn {
+      background: #0d2137; border: 1px solid #1e3a55; color: #7a9ab8;
+      border-radius: 7px; padding: 5px 12px; font-size: 13px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    .wk-btn:hover:not(:disabled) { border-color: #2ecc71; color: #2ecc71; }
+    .wk-btn:disabled { opacity: .35; cursor: default; }
+    .wk-lbl { color: #e8f4ff; font-size: 14px; font-weight: 700; min-width: 76px; text-align: center; }
+
+    .m-list { display: flex; flex-direction: column; gap: 10px; }
+    .m-card {
+      background: #0d2137; border: 1px solid #1e3a55; border-radius: 12px;
+      padding: 14px 18px; display: flex; align-items: center; gap: 10px;
+    }
+    .m-team { flex: 1; display: flex; align-items: center; gap: 9px; min-width: 0; cursor: pointer; }
+    .m-team.right { flex-direction: row-reverse; text-align: right; }
+    .m-name { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .m-name.win { color: #2ecc71; font-weight: 700; }
+    .m-sub { color: #7a9ab8; font-size: 11px; }
+    .m-score { text-align: center; flex-shrink: 0; }
+    .score-nums { display: flex; align-items: center; gap: 7px; font-size: 19px; font-weight: 800; }
+    .score-w { color: #2ecc71; }
+    .score-l { color: #e8f4ff; }
+    .score-dash { color: #1e3a55; font-size: 13px; }
+    .score-vs { color: #4a7a9b; font-size: 12px; font-style: italic; }
+
+    .avatar { border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .av-fb {
+      border-radius: 50%; background: linear-gradient(135deg,#1a3a5c,#2ecc71);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .empty { color: #4a7a9b; text-align: center; padding: 40px 24px; background: #0d2137; border-radius: 12px; border: 1px solid #1e3a55; font-size: 14px; }
+    .loading-inline { display: flex; align-items: center; justify-content: center; gap: 12px; color: #7a9ab8; padding: 40px 24px; font-size: 14px; }
+
+    /* Power rankings */
+    .pr-list { display: flex; flex-direction: column; gap: 8px; }
+    .pr-row {
+      display: flex; align-items: center; gap: 12px; cursor: pointer;
+      background: #0d2137; border: 1px solid #1e3a55; border-radius: 10px; padding: 11px 14px;
+      transition: background .12s;
+    }
+    .pr-row:hover { background: #11304d; }
+    .pr-rank { width: 26px; text-align: center; font-weight: 800; font-size: 16px; color: #2ecc71; flex-shrink: 0; }
+    .pr-info { flex: 1; min-width: 0; }
+    .pr-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pr-meta { color: #7a9ab8; font-size: 11px; margin-top: 2px; }
+    .pr-score { text-align: right; flex-shrink: 0; }
+    .pr-score-val { font-weight: 800; font-size: 16px; }
+    .pr-score-lbl { color: #4a7a9b; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+    .trend { font-size: 12px; font-weight: 700; }
+    .trend.up { color: #2ecc71; }
+    .trend.down { color: #e74c3c; }
+    .trend.flat { color: #4a7a9b; }
+    .delta { font-size: 11px; font-weight: 600; }
+    .delta.up { color: #2ecc71; }
+    .delta.down { color: #e74c3c; }
+    .delta.flat { color: #4a7a9b; }
+
+    /* Records */
+    .rec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 22px; }
+    .rec-card { background: #0d2137; border: 1px solid #1e3a55; border-radius: 10px; padding: 14px 16px; }
+    .rec-card-label { color: #7a9ab8; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+    .rec-card-val { font-size: 22px; font-weight: 800; color: #2ecc71; }
+    .rec-card-sub { color: #4a7a9b; font-size: 12px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rec-card-sub.multi { white-space: normal; overflow: visible; }
+    .hs-row {
+      display: flex; align-items: center; gap: 12px;
+      background: #0d2137; border: 1px solid #1e3a55; border-radius: 9px; padding: 9px 14px; margin-bottom: 6px;
+    }
+    .hs-week { width: 60px; color: #4a7a9b; font-size: 11px; font-weight: 700; text-transform: uppercase; flex-shrink: 0; }
+    .hs-name { flex: 1; font-weight: 600; font-size: 13px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hs-pts { font-weight: 800; color: #2ecc71; font-size: 14px; }
+
+    /* H2H */
+    .h2h-select {
+      width: 100%; background: #0d2137; color: #e8f4ff; border: 1px solid #1e3a55;
+      border-radius: 9px; padding: 11px 14px; font-size: 14px; font-family: inherit; font-weight: 600;
+      margin-bottom: 14px; cursor: pointer;
+    }
+    .h2h-row {
+      display: flex; align-items: center; gap: 12px;
+      background: #0d2137; border: 1px solid #1e3a55; border-radius: 9px; padding: 10px 14px; margin-bottom: 6px;
+    }
+    .h2h-opp { flex: 1; min-width: 0; }
+    .h2h-opp-name { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .h2h-opp-pts { color: #7a9ab8; font-size: 11px; margin-top: 2px; }
+    .h2h-rec { font-weight: 800; font-size: 15px; min-width: 54px; text-align: right; }
+    .h2h-rec.win { color: #2ecc71; }
+    .h2h-rec.loss { color: #e74c3c; }
+    .h2h-rec.even { color: #e8f4ff; }
+
+    /* Transactions */
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+    .fbtn {
+      background: #0d2137; border: 1px solid #1e3a55; color: #7a9ab8;
+      border-radius: 7px; padding: 6px 13px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    .fbtn:hover { border-color: #2ecc71; color: #2ecc71; }
+    .fbtn.active { background: #2ecc71; border-color: #2ecc71; color: #071525; }
+    .tx-card { background: #0d2137; border: 1px solid #1e3a55; border-radius: 11px; padding: 13px 16px; margin-bottom: 9px; }
+    .tx-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; gap: 10px; }
+    .tx-type { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 5px; }
+    .tx-type.trade { background: #2a1a4d; color: #b39ddb; }
+    .tx-type.waiver { background: #1a3a4d; color: #7ec8e3; }
+    .tx-type.free_agent { background: #1a4d2e; color: #7ee3a3; }
+    .tx-date { color: #4a7a9b; font-size: 11px; }
+    .tx-team { margin-bottom: 7px; }
+    .tx-team:last-child { margin-bottom: 0; }
+    .tx-team-name { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+    .tx-move { font-size: 12px; line-height: 1.5; padding-left: 2px; }
+    .tx-add { color: #2ecc71; }
+    .tx-drop { color: #e07a7a; }
+    .tx-pos { color: #4a7a9b; font-size: 11px; }
+
+    /* Playoffs bracket */
+    .bracket { display: flex; gap: 22px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; }
+    .br-round { display: flex; flex-direction: column; justify-content: space-around; gap: 14px; min-width: 200px; }
+    .br-round-title { color: #4a7a9b; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; text-align: center; margin-bottom: 2px; }
+    .br-match { background: #0d2137; border: 1px solid #1e3a55; border-radius: 10px; overflow: hidden; }
+    .br-team { display: flex; align-items: center; gap: 8px; padding: 9px 12px; cursor: pointer; }
+    .br-team + .br-team { border-top: 1px solid #1e3a55; }
+    .br-team.winner { background: #0f2e1d; }
+    .br-seed { color: #4a7a9b; font-size: 11px; font-weight: 700; width: 16px; flex-shrink: 0; }
+    .br-name { flex: 1; font-size: 13px; font-weight: 600; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .br-name.winner { color: #2ecc71; }
+    .br-pts { font-size: 13px; font-weight: 700; color: #7a9ab8; }
+    .br-pts.winner { color: #2ecc71; }
+    .br-tbd { color: #4a7a9b; font-style: italic; font-size: 13px; padding: 9px 12px; }
+
+    /* Team modal */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(3,9,18,.78); z-index: 200;
+      display: none; align-items: flex-start; justify-content: center; padding: 24px 16px; overflow-y: auto;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: #0a1d30; border: 1px solid #1e3a55; border-radius: 16px;
+      max-width: 540px; width: 100%; margin: auto; overflow: hidden;
+    }
+    .modal-hd { padding: 20px; border-bottom: 1px solid #1e3a55; display: flex; align-items: center; gap: 14px; position: relative; }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px; background: #0d2137; border: 1px solid #1e3a55;
+      color: #7a9ab8; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 17px;
+      display: flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .modal-close:hover { color: #e74c3c; border-color: #e74c3c; }
+    .modal-team-name { font-size: 18px; font-weight: 800; }
+    .modal-team-owner { color: #4a7a9b; font-size: 12px; margin-top: 2px; }
+    .modal-stats { display: flex; gap: 8px; padding: 16px 20px; flex-wrap: wrap; border-bottom: 1px solid #1e3a55; }
+    .ms-card { flex: 1; min-width: 70px; background: #0d2137; border: 1px solid #1e3a55; border-radius: 9px; padding: 10px 12px; }
+    .ms-label { color: #7a9ab8; font-size: 9px; text-transform: uppercase; letter-spacing: .06em; }
+    .ms-val { font-size: 16px; font-weight: 800; margin-top: 3px; }
+    .modal-body { padding: 16px 20px 22px; }
+    .roster-section-title { color: #7a9ab8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin: 14px 0 8px; }
+    .roster-section-title:first-child { margin-top: 0; }
+    .p-row { display: flex; align-items: center; gap: 11px; padding: 8px 10px; border-radius: 8px; background: #0d2137; margin-bottom: 5px; }
+    .p-slot { width: 38px; font-size: 10px; font-weight: 800; text-align: center; color: #7a9ab8; flex-shrink: 0; }
+    .p-badge { font-size: 9px; font-weight: 800; padding: 3px 6px; border-radius: 5px; flex-shrink: 0; min-width: 34px; text-align: center; }
+    .pos-QB { background: #4d1a26; color: #ff7a93; }
+    .pos-RB { background: #1a4d2e; color: #7ee3a3; }
+    .pos-WR { background: #1a3a4d; color: #7ec8e3; }
+    .pos-TE { background: #4d3a1a; color: #ffc97a; }
+    .pos-K  { background: #3a1a4d; color: #c89ae3; }
+    .pos-DEF { background: #1a4d4a; color: #7ee3da; }
+    .pos-DST { background: #1a4d4a; color: #7ee3da; }
+    .pos-def { background: #2a2f3a; color: #9ab0c8; }
+    .p-name { flex: 1; font-size: 13px; font-weight: 600; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .p-team { color: #4a7a9b; font-size: 11px; flex-shrink: 0; }
+    .p-injury { color: #e74c3c; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+
+    /* Hall of Fame */
+    .hof-sub { color: #7a9ab8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 10px; }
+    .hof-sub:first-child { margin-top: 4px; }
+    .champ-card {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 9px;
+      background: #0d2137; border: 1px solid #1e3a55; border-radius: 12px; padding: 14px 16px;
+      border-left: 3px solid #f1c40f;
+    }
+    .champ-year { text-align: center; flex-shrink: 0; width: 46px; }
+    .champ-year-num { font-size: 17px; font-weight: 800; color: #f1c40f; }
+    .champ-year-lbl { font-size: 9px; color: #4a7a9b; text-transform: uppercase; letter-spacing: .05em; }
+    .champ-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
+    .champ-info { min-width: 0; }
+    .champ-trophy { font-size: 20px; flex-shrink: 0; }
+    .champ-name { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .champ-owner { color: #7a9ab8; font-size: 11px; }
+    .champ-extra { text-align: right; flex-shrink: 0; font-size: 11px; line-height: 1.7; }
+    .champ-extra .lbl { color: #4a7a9b; }
+    .champ-extra .ru { color: #b8c8d8; }
+    .champ-extra .spoon { color: #e07a7a; }
+
+    .hof-row {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 14px; border-radius: 9px; margin-bottom: 5px;
+      background: #0d2137; border: 1px solid #1e3a55;
+    }
+    .hof-rk { width: 22px; text-align: center; font-weight: 800; font-size: 14px; color: #4a7a9b; flex-shrink: 0; }
+    .hof-info { flex: 1; min-width: 0; }
+    .hof-name { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hof-meta { color: #7a9ab8; font-size: 11px; margin-top: 2px; }
+    .hof-titles { flex-shrink: 0; font-size: 13px; font-weight: 700; color: #f1c40f; min-width: 30px; text-align: right; }
+    .hof-wl { flex-shrink: 0; text-align: right; min-width: 64px; }
+    .hof-wl-pct { font-weight: 800; font-size: 14px; }
+    .hof-wl-rec { color: #4a7a9b; font-size: 10px; }
+    .hs-season { color: #4a7a9b; font-size: 10px; font-weight: 600; }
+
+    /* News / Gazette */
+    .news-wrap { max-width: 720px; margin: 0 auto; }
+    .masthead { text-align: center; border-top: 3px solid #C9A227; border-bottom: 3px solid #C9A227; padding: 16px 8px; }
+    .masthead-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: .5px; color: #f3e4c0; text-transform: uppercase; }
+    .masthead-sub { color: #C9A227; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; margin-top: 7px; }
+    .article-date { color: #4a7a9b; font-size: 11px; text-align: center; margin: 12px 0 20px; letter-spacing: .04em; }
+    .editor-note { background: #0d2137; border: 1px solid #1e3a55; border-left: 3px solid #C9A227; border-radius: 10px; padding: 16px 18px; margin-bottom: 22px; }
+    .editor-note-hd { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #C9A227; margin-bottom: 11px; }
+    .editor-note p { font-family: 'Source Serif 4', Georgia, serif; color: #d6e4f2; line-height: 1.72; margin-bottom: 11px; font-size: 15px; }
+    .editor-sign { font-family: 'Source Serif 4', Georgia, serif; font-style: italic; color: #7a9ab8; font-size: 12.5px; margin-top: 13px; line-height: 1.5; }
+    #pane-matchups .dc-lead { font-family: 'Merriweather', Georgia, serif; font-weight: 400; font-size: 14.5px; }
+    #pane-matchups .dc-byline { font-family: 'Merriweather', Georgia, serif; font-style: italic; }
+    .article-head { font-family: 'Archivo', system-ui, sans-serif; color: #C9A227; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; margin: 20px 0 6px; }
+    .article-sub { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; color: #f3e4c0; line-height: 1.2; margin-bottom: 18px; border-bottom: 1px solid #1e3a55; padding-bottom: 14px; }
+    .news-article p { font-family: 'Source Serif 4', Georgia, serif; color: #d6e4f2; line-height: 1.72; font-size: 15px; margin-bottom: 14px; }
+    .bios-hd { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 700; color: #f3e4c0; text-align: center; margin: 26px 0 14px; padding-bottom: 9px; border-bottom: 2px solid #C9A227; }
+    .team-bio { background: #0d2137; border: 1px solid #1e3a55; border-radius: 10px; margin-bottom: 8px; }
+    .team-bio summary { display: flex; align-items: center; gap: 12px; padding: 11px 14px; cursor: pointer; list-style: none; border-radius: 10px; }
+    .team-bio summary::-webkit-details-marker { display: none; }
+    .team-bio summary:hover { background: #11304d; }
+    .bio-logo { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #1a3a5c; }
+    .bio-id { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .bio-team { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bio-mgr { color: #7a9ab8; font-size: 11px; }
+    .bio-chevron { color: #4a7a9b; font-size: 11px; transition: transform .2s; flex-shrink: 0; }
+    .team-bio[open] .bio-chevron { transform: rotate(90deg); }
+    .bio-body { padding: 2px 16px 16px; }
+    .bio-body p { font-family: 'Source Serif 4', Georgia, serif; color: #d6e4f2; line-height: 1.72; font-size: 15px; margin-bottom: 11px; }
+    .bio-body p:last-child { margin-bottom: 0; }
+    .bio-aside { font-style: italic; color: #C9A227; font-size: 13px; border-top: 1px solid #1e3a55; padding-top: 10px; margin-top: 4px; }
+    .bio-stats { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-left: auto; }
+    .bio-stat { font-family: 'Source Serif 4', Georgia, serif; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: rgba(30,58,85,0.7); color: #d6e4f2; white-space: nowrap; }
+    .bio-stat.gold { background: rgba(201,162,39,0.13); color: #C9A227; border: 1px solid rgba(201,162,39,0.28); }
+    .bio-stat.dim  { background: rgba(30,58,85,0.4); color: #7a9ab8; }
+    .news-footer { text-align: center; color: #4a7a9b; font-size: 11px; font-style: italic; margin-top: 20px; padding-top: 14px; border-top: 1px solid #1e3a55; line-height: 1.6; }
+    /* Letters tab */
+    .letters-intro { font-family: 'Source Serif 4', Georgia, serif; color: #d6e4f2; font-size: 15px; line-height: 1.72; margin-bottom: 11px; }
+    .letters-intro em { color: #7a9ab8; }
+    .letters-form-hd { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 700; color: #f3e4c0; text-align: center; margin: 26px 0 8px; padding-bottom: 9px; border-bottom: 2px solid #C9A227; }
+    .letters-iframe-wrap { width: 100%; overflow: hidden; border-radius: 10px; margin-top: 16px; background: #fff; }
+    .letters-iframe-wrap iframe { width: 100%; min-height: 640px; border: none; display: block; }
+    .letters-published-hd { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 700; color: #f3e4c0; text-align: center; margin: 36px 0 16px; padding-bottom: 9px; border-bottom: 2px solid #C9A227; }
+    .letters-empty { font-family: 'Source Serif 4', Georgia, serif; color: #4a7a9b; font-size: 14px; font-style: italic; text-align: center; padding: 20px 0 10px; }
+    .letter-card { background: #0d2137; border: 1px solid #1e3a55; border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; }
+    .letter-from { font-family: 'Source Serif 4', Georgia, serif; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #C9A227; margin-bottom: 10px; }
+    .letter-body { font-family: 'Source Serif 4', Georgia, serif; color: #d6e4f2; font-size: 15px; line-height: 1.72; }
+    .letter-body p { margin-bottom: 10px; }
+    .letter-body p:last-child { margin-bottom: 0; }
+    .letter-response { border-top: 1px solid #1e3a55; margin-top: 16px; padding-top: 14px; }
+    .letter-response-hd { font-family: 'Source Serif 4', Georgia, serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #C9A227; margin-bottom: 8px; }
+    .letter-response p { font-family: 'Source Serif 4', Georgia, serif; color: #d6e4f2; font-size: 14px; line-height: 1.72; font-style: italic; margin-bottom: 8px; }
+    .letter-response p:last-of-type { margin-bottom: 0; }
+
+    /* Draft Centre (Chad Thunderbolt) */
+    .dc-wrap { max-width: 760px; margin: 0 auto; }
+    .dc-kicker { font-family: 'Archivo', system-ui, sans-serif; color: #C9A227; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; margin-bottom: 7px; }
+    .dc-title { font-family: 'Archivo', system-ui, sans-serif; font-size: 34px; font-weight: 800; letter-spacing: -.5px; color: #e8f4ff; line-height: 1.05; }
+    .dc-byline { font-family: 'Archivo', system-ui, sans-serif; color: #7a9ab8; font-size: 13px; font-weight: 500; font-style: italic; margin-top: 8px; }
+    .dc-rule { height: 3px; background: #C9A227; border-radius: 2px; margin: 16px 0 20px; }
+    .dc-lead { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; font-size: 15px; line-height: 1.68; color: #d6e4f2; margin: 0 0 1.1em; }
+    .dc-section { border-top: 1px solid #1e3a55; padding-top: 20px; margin-top: 22px; }
+    .dc-section-title { font-family: 'Archivo', system-ui, sans-serif; font-size: 21px; font-weight: 800; color: #e8f4ff; letter-spacing: -.3px; }
+    .dc-section-sub { font-family: 'Archivo', system-ui, sans-serif; color: #7a9ab8; font-size: 13px; font-weight: 500; margin: 4px 0 14px; }
+    .dc-list { display: flex; flex-direction: column; gap: 10px; }
+    .dc-card { background: #0d2137; border: 1px solid #1e3a55; border-radius: 12px; padding: 15px 18px; display: flex; align-items: center; gap: 16px; }
+    .dc-card-main { flex: 1; min-width: 0; }
+    .dc-card-title { font-family: 'Archivo', system-ui, sans-serif; font-weight: 700; font-size: 15px; color: #e8f4ff; margin-bottom: 4px; }
+    .dc-card-take { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; color: #7a9ab8; font-size: 13px; line-height: 1.5; }
+    .dc-verdict { font-family: 'Archivo', system-ui, sans-serif; flex-shrink: 0; font-size: 12px; font-weight: 800; padding: 7px 14px; border-radius: 8px; white-space: nowrap; }
+    .dc-verdict.smash { background: #14432a; color: #4ee08a; }
+    .dc-verdict.film { background: #16314d; color: #6db8f0; }
+    .dc-verdict.dead { background: #4d1a20; color: #f08a8a; }
+    .dc-editor-note { font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 13px; color: #C9A227; border-left: 2px solid #C9A227; padding: 9px 14px; margin: 16px 0 0; line-height: 1.62; background: rgba(201,162,39,.06); border-radius: 0 6px 6px 0; }
+    .dc-editor-note strong { font-style: normal; font-weight: 600; }
+
+    /* Stat Zone */
+    .sz-wrap { max-width: 860px; margin: 0 auto; }
+    .sz-hd { margin-bottom: 4px; }
+    .sz-title { font-size: 22px; font-weight: 800; color: #e8f4ff; letter-spacing: -.3px; }
+    .sz-sub { font-size: 13px; color: #7a9ab8; margin-top: 4px; margin-bottom: 18px; }
+    .sz-chart-wrap { position: relative; height: 460px; background: #0d2137; border: 1px solid #1e3a55; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+    .sz-loading { color: #7a9ab8; font-size: 14px; text-align: center; padding: 40px 0; }
+    .sz-bs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+    .sz-bs-card { background: #0d2137; border-radius: 12px; padding: 14px 16px; }
+    .sz-bs-card.busts  { border: 1px solid rgba(240,138,138,.35); }
+    .sz-bs-card.steals { border: 1px solid rgba(78,224,138,.35); }
+    .sz-bs-hd { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+    .sz-bs-card.busts  .sz-bs-hd { color: #f08a8a; }
+    .sz-bs-card.steals .sz-bs-hd { color: #4ee08a; }
+    .sz-bs-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #1a2e42; gap: 8px; }
+    .sz-bs-row:last-child { border-bottom: none; }
+    .sz-bs-player { font-size: 13px; font-weight: 600; color: #d6e4f2; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sz-bs-meta { display: flex; gap: 10px; flex-shrink: 0; font-size: 11px; color: #7a9ab8; white-space: nowrap; }
+    .sz-bs-pts { font-weight: 600; color: #d6e4f2; }
+    .sz-bs-diff.pos { color: #4ee08a; }
+    .sz-bs-diff.neg { color: #f08a8a; }
+    .sz-pos-pill { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+    .sz-pos-pill.QB { background:#3a2200; color:#f0a050; }
+    .sz-pos-pill.RB { background:#0d3020; color:#4ee08a; }
+    .sz-pos-pill.WR { background:#0d2040; color:#6db8f0; }
+    .sz-pos-pill.TE { background:#200d3a; color:#b87aff; }
+    .sz-pos-section-hd { font-size: 15px; font-weight: 700; color: #e8f4ff; margin: 28px 0 14px; padding-bottom: 9px; border-bottom: 2px solid #1e3a55; letter-spacing: -.2px; }
+    .sz-pos-block { margin-bottom: 20px; }
+    .sz-pos-block-label { display: inline-block; font-size: 12px; font-weight: 800; padding: 3px 11px; border-radius: 6px; margin-bottom: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .sz-pos-block-label.QB { background:#3a2200; color:#f0a050; }
+    .sz-pos-block-label.RB { background:#0d3020; color:#4ee08a; }
+    .sz-pos-block-label.WR { background:#0d2040; color:#6db8f0; }
+    .sz-pos-block-label.TE { background:#200d3a; color:#b87aff; }
+
+    @media(max-width:500px){
+      .m-sub, .s-pf { display: none; }
+      .stat-card { min-width: calc(50% - 5px); }
+      .rec-grid { grid-template-columns: 1fr; }
+      .champ-extra { display: none; }
+      .dc-card { flex-wrap: wrap; gap: 10px; }
+      .dc-title { font-size: 28px; }
+      .sz-bs-grid { grid-template-columns: 1fr; }
+      .sz-chart-wrap { height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="status">
+  <div id="status-icon"><div class="spinner"></div></div>
+  <div id="status-msg">Loading your league…</div>
+  <div id="status-detail"></div>
+</div>
+
+<div id="app">
+  <div class="header">
+    <div class="inner">
+      <div class="title-row">
+        <div class="masthead" style="width:100%; margin-bottom:0;">
+          <div class="masthead-title">🗞️ The No Punt Intended Gazette</div>
+        </div>
+        <div class="league-sub" id="lsub"></div>
+      </div>
+      <div class="stat-row" id="stat-row"></div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Standings -->
+    <div class="pane" id="pane-standings">
+      <div class="section-hd">
+        <span class="section-title">Standings</span>
+        <div class="legend">
+          <div class="legend-dot"></div>
+          <span class="legend-txt" id="playoff-txt"></span>
+        </div>
+      </div>
+      <div class="standings-wrap">
+        <div class="standings-hd">
+          <div class="standings-hd-space"></div>
+          <div class="col-hd col-wl">W-L</div>
+          <div class="col-hd col-pf">PF</div>
+        </div>
+        <div id="srows"></div>
+      </div>
+    </div>
+
+    <!-- Letters to the Gazette -->
+    <div class="pane" id="pane-letters">
+      <div class="news-wrap">
+        <article class="news-article">
+          <div class="masthead">
+            <div class="masthead-title">Letters to the Editor</div>
+            <div class="masthead-sub">The NPI Gazette</div>
+          </div>
+
+          <div class="editor-note">
+            <div class="editor-note-hd">A Note on Correspondence</div>
+            <p class="letters-intro">The Gazette welcomes letters from all managers. This office reads every submission with the diligence it deserves — which is to say, considerable diligence, applied with complete impartiality and no prior opinions whatsoever about any of the senders.</p>
+            <p class="letters-intro">Letters may be edited for length, clarity, and to remove anything this office finds personally unflattering. Publication is at the sole discretion of the Editor in Chief. Submissions do not guarantee a response, though impertinence usually does.</p>
+            <div class="editor-sign">— C. Laude, Editor in Chief</div>
+          </div>
+
+          <div class="letters-form-hd">Submit a Letter</div>
+          <div class="letters-iframe-wrap">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScKOTjKOxwhE55AmL8zU0VB6JrrGN6_1nD6pXIj4gAbkk1mTg/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          </div>
+
+          <div class="letters-published-hd">Published Correspondence</div>
+          <!-- Letters will be prepended here as: newest first -->
+          <p class="letters-empty">No letters have been published yet. The Editor is waiting.</p>
+
+        </article>
+      </div>
+    </div>
+
+    <!-- Draft Centre (Chad Thunderbolt) -->
+    <div class="pane" id="pane-draft">
+      <div class="dc-wrap">
+        <div class="dc-kicker">Draft Day Build-Up</div>
+        <div class="dc-title">Trade winds: the 2026 offseason gumbo</div>
+        <div class="dc-byline">by Chad Thunderbolt III — NPI Insider &amp; draft savant</div>
+        <div class="dc-rule"></div>
+
+        <p class="dc-lead">Folks, I have not slept. And I want to address something before we even get to the football, because I have been BITING MY TONGUE for a week now and I am DONE. Turn on any sports channel in this country right now and what do you get? Twenty-two men in shorts running around a field for two hours so they can finish 0-0 and hug it out. I'm sorry — I respect the GLOBAL GAME, I respect the PAGEANTRY, but we are SIX WEEKS from an NFL Draft that will reshape rosters for a DECADE and the entire planet is currently losing its mind over a CORNER KICK. I turned on the TV looking for mock draft coverage and got Group B standings. Group B! Nobody in this country could find Group B on a map three weeks ago! I'm not saying soccer's not a sport. I'm saying it picked the WORST possible six weeks to exist. Anyway. ANYWAY. Let's talk about something that actually MATTERS.</p>
+        <p class="dc-lead">Because June 1st happened and the entire football universe rearranged itself in a single AFTERNOON, World Cup or no World Cup. We start with the earthquake: A.J. BROWN, a top-five wide receiver, SHIPPED from Philadelphia to New England for a 2028 first and a 2027 fifth — and I need you to understand, he is reuniting with Mike Vrabel, he is catching passes from a man who led the ENTIRE NFL in completion percentage and yards per attempt last year, and Drake Maye finished SECOND in MVP voting throwing to Hollins and Boutte. You add a true WR1 to that operation and I am not drafting this man outside the back of round two.</p>
+        <p class="dc-lead">Then, hours later, completely buried by the news cycle because the football gods have no mercy (and also because everyone was watching a SCORELESS DRAW): the Rams traded Jared Verse, a first-round pick, and a haul of capital for MYLES GARRETT, the reigning Defensive Player of the Year, who just broke the single-season sack record on a 5-and-12 team. Doesn't move your fantasy lineup one inch. I don't care. I needed you to feel what I felt.</p>
+        <p class="dc-lead">And quietly, in March, while nobody was watching — Kenneth Walker the Third, SUPER BOWL MVP, signed with Kansas City as the lead back Andy Reid has been missing for YEARS. Mahomes comes back healthy, this offense gets explosive again, and Walker becomes RB1 in an offense that finally remembered it has legs. Gumbo, people. GUMBO. Real football gumbo, not the other kind.</p>
+
+        <div class="dc-editor-note"><strong>Editor's note:</strong> This office has had a conversation with Mr Thunderbolt III regarding the use of capital letters in analytical prose. He was receptive, engaged, and entirely unmoved. The CAPS have been retained at his insistence. We are monitoring the situation. — <em>C.</em></div>
+
+        <div class="dc-section">
+          <div class="dc-section-title">Stock up, stock down</div>
+          <div class="dc-section-sub">Chad's verdict on every move that matters before your draft</div>
+
+          <div class="dc-list">
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">A.J. Brown — traded to Patriots</div>
+                <div class="dc-card-take">NEW QB. NEW CITY. SAME ALPHA. Round 2 lock, do not blink.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Drake Maye — Patriots QB</div>
+                <div class="dc-card-take">Already elite, now he's got a WEAPON. Top-five QB, mark it down.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Kenneth Walker III — signed with Chiefs</div>
+                <div class="dc-card-take">Super Bowl MVP walks into a backfield that was a CRIME SCENE. Eat, Kenneth, EAT.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">DeVonta Smith — stays in Philadelphia</div>
+                <div class="dc-card-take">No more splitting targets with Brown. He's the ALPHA now. Sneaky league winner.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">DJ Moore — traded to Bills</div>
+                <div class="dc-card-take">JOSH ALLEN'S WR1. The man hasn't had a real No. 1 since Diggs. FEAST INCOMING.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Colston Loveland &amp; Luther Burden — Bears WRs/TE</div>
+                <div class="dc-card-take">Moore's gone. The targets are LYING THERE. Somebody go pick them up.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Mike Evans — signed with 49ers</div>
+                <div class="dc-card-take">33 years old, contested-catch MONSTER, lands in a pass-heavy attack. The vet ain't done.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">David Montgomery — traded to Texans</div>
+                <div class="dc-card-take">New starting job in Houston. RB2 upside walking through the door. I LIKE it.</div>
+              </div>
+              <span class="dc-verdict smash">🔥 smash smash smash</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Myles Garrett — traded to Rams</div>
+                <div class="dc-card-take">A DEFENSIVE LINEMAN. Does NOTHING for your roster. I am still emotional about it.</div>
+              </div>
+              <span class="dc-verdict film">😐 film's inconclusive</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Zach Charbonnet — Seahawks RB</div>
+                <div class="dc-card-take">Walker's gone, the touches are THERE — but he's coming off a torn ACL. Watch the tape, not the headline.</div>
+              </div>
+              <span class="dc-verdict film">😐 film's inconclusive</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">George Pickens — franchise tagged by Cowboys</div>
+                <div class="dc-card-take">Wanted out, got 27 million and stayed put. Same offense, same drama, same upside.</div>
+              </div>
+              <span class="dc-verdict film">😐 film's inconclusive</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Tua Tagovailoa — signed with Falcons</div>
+                <div class="dc-card-take">Walking into a QUARTERBACK BATTLE he might not win. Bench him on draft day.</div>
+              </div>
+              <span class="dc-verdict dead">☠️ dead to me</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Romeo Doubs — Patriots WR2</div>
+                <div class="dc-card-take">Brown just ate a QUARTER of this offense's targets. Doubs got buried alive on arrival.</div>
+              </div>
+              <span class="dc-verdict dead">☠️ dead to me</span>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-card-title">Stefon Diggs — released by Patriots</div>
+                <div class="dc-card-take">One year, 85 catches, and a PINK SLIP. The man led the team and got NOTHING for it.</div>
+              </div>
+              <span class="dc-verdict dead">☠️ dead to me</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matchups -->
+    <div class="pane" id="pane-matchups">
+      <div class="dc-wrap">
+        <div class="dc-kicker">Tales of the Tape</div>
+        <div class="dc-title" style="font-size:22px;">Introducing Alexa Blitz &mdash; Beat Writer &amp; Analyst</div>
+        <div class="dc-rule"></div>
+
+        <p class="dc-lead">Hey everyone. Alexa Blitz here. And yeah, like the voice assistant &mdash; trust me, the two guys I share an office with have made sure I&rsquo;ll never forget that.</p>
+        <p class="dc-lead">So here&rsquo;s the deal. I spent the best years of my career coaching defensive linemen in the NFL, which means I&rsquo;ve stood on sidelines in December rain watching 300-pound men do things that would make most of you cry, and I&rsquo;ve loved every second of it. Now I&rsquo;m covering a fantasy football league where a man called Turks has 47 spreadsheet tabs and still thinks it&rsquo;s all luck. Life comes at you fast.</p>
+        <p class="dc-lead">I&rsquo;ve been brought on as the Gazette&rsquo;s Beat Writer &amp; Analyst, and what that really means is I&rsquo;m the one who shows up. Clarence runs this publication from behind a desk he has never left, analysing win percentages and writing footnotes about himself in the third person. Chad &mdash; and I genuinely don&rsquo;t know how else to put this &mdash; just sort of yells about things. They&rsquo;re fine. They&rsquo;re good at what they do. But neither of them has ever had to look a man in the eye after he&rsquo;s burned his first-round pick on a tight end, and that&rsquo;s the kind of journalism this league deserves.</p>
+        <p class="dc-lead">I&rsquo;ll be at the draft. I&rsquo;ll be in the living rooms on game day. I&rsquo;ll be at Wembley when the crew rolls up for the international games. Every week, I&rsquo;ll tell you what to watch before kickoff and what actually happened once the dust settles &mdash; not just who won, but why, and what it looked like from the sideline. Because I&rsquo;ve been around football long enough to know that the stats only ever tell you half the story &mdash; and usually the boring half.</p>
+        <p class="dc-lead">I know how to read a defence, I know when a roster move is smart and when it&rsquo;s panic dressed up as strategy, and I&rsquo;m not going to sugarcoat it when someone makes a bad call. I&rsquo;ve coached men who outweigh me by a hundred pounds through the worst days of their careers. I can handle telling Adam his trade offers are bad.</p>
+        <p class="dc-lead">Looking forward to getting started. This league&rsquo;s got real characters, real rivalries, and at least three people who have no business being as confident as they are. My kind of coverage.</p>
+
+        <div class="dc-byline" style="margin-top:20px;">by Alexa Blitz &mdash; Beat Writer &amp; Analyst, The No Punt Intended Gazette</div>
+
+        <div class="editor-note" style="margin-top:28px;">
+          <div class="editor-note-hd">Editor&rsquo;s Note</div>
+          <p>Ms Blitz&rsquo;s introduction has been reviewed and approved by this office, with minor corrections she has not yet accepted. We are delighted to welcome her to the team. Despite this office now prefacing every interaction with &ldquo;Alexa&rdquo;, in keeping with standard activation procedure, Ms Blitz continues to disregard the feedback that follows.</p>
+          <div class="editor-sign">&mdash; C. Laude, Editor in Chief</div>
+        </div>
+      </div>
+
+      <div class="section-hd" style="margin-top:28px;">
+        <span class="section-title">Matchups</span>
+        <div class="week-nav">
+          <button class="wk-btn" id="wprev" onclick="changeWeek(-1)">&#9664;</button>
+          <span class="wk-lbl" id="wklbl">Week 1</span>
+          <button class="wk-btn" id="wnext" onclick="changeWeek(1)">&#9654;</button>
+        </div>
+      </div>
+      <div id="mlist" class="m-list"></div>
+    </div>
+
+    <!-- Power rankings & Records -->
+    <div class="pane" id="pane-power">
+      <div class="section-hd">
+        <span class="section-title">Power Rankings</span>
+        <span class="section-note">Score = PPG × (0.6 + 0.4 × win%)</span>
+      </div>
+      <div id="power-body"></div>
+      <div class="section-hd" style="margin-top:28px;">
+        <span class="section-title">Season Records</span>
+      </div>
+      <div id="records-body"></div>
+    </div>
+
+    <!-- Records pane kept as shell so old references don't break -->
+    <div class="pane" id="pane-records"></div>
+
+    <!-- Head to head -->
+    <div class="pane" id="pane-h2h">
+      <div class="section-hd"><span class="section-title">Head-to-Head</span></div>
+      <div id="h2h-body"></div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="pane" id="pane-trades">
+      <div class="dc-wrap">
+        <div class="dc-kicker">The Waiver Wire</div>
+        <div class="dc-title" style="font-size:22px;">Introducing Chad Thunderbolt III &mdash; NPI Insider</div>
+        <div class="dc-rule"></div>
+
+        <p class="dc-lead">Alright, alright, ALRIGHT. Settle down. I know you&rsquo;re excited. I&rsquo;M excited. CHAD&rsquo;S EXCITED.</p>
+        <p class="dc-lead">So here&rsquo;s the deal. Once the season kicks off, every single Wednesday morning &mdash; waivers process, the dust settles, and somebody in this league makes a decision &mdash; I am ON IT. Pickups. Drops. The trades you THINK nobody noticed (I noticed. I notice EVERYTHING). It&rsquo;s all getting the Thunderbolt treatment, right here, every week.</p>
+        <p class="dc-lead">This is THE WAIVER WIRE, baby. And I&rsquo;m your guy.</p>
+
+        <p class="dc-lead">Now you&rsquo;re probably wondering &mdash; Chad, WHO ARE YOU, and WHY should I trust you with my roster decisions? Fair question. I respect that. Here&rsquo;s my r&eacute;sum&eacute;: I&rsquo;ve got a Twitter following that REFRESHES ITSELF, an inbox full of scoops nobody asked me for, and an INSTINCT for talent that simply cannot be taught. Did I play college ball? No. Do I need to have played to know a high-motor pickup when I see one? Also no. I&rsquo;ve never set foot on a field in my LIFE and I&rsquo;ve never needed to &mdash; film doesn&rsquo;t watch itself, and somebody&rsquo;s gotta be in the building breaking it down. That&rsquo;s me. I&rsquo;m the guy in the building.</p>
+        <p class="dc-lead">Look &mdash; anybody can tell you WHO got added off waivers. That&rsquo;s a box score. That&rsquo;s NOTHING. What you need is somebody who can tell you WHY it matters, who WON the week before it&rsquo;s even been played, and which one of you just torched your roster for a guy with a 4.6 forty and the hands of a toddler.</p>
+        <p class="dc-lead">That&rsquo;s me. That&rsquo;s what I do. I don&rsquo;t just watch the wire. I READ it. I FEEL it.</p>
+        <p class="dc-lead">So every move gets the full treatment &mdash; graded, rated, no mercy:</p>
+
+        <div class="dc-section">
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:4px;">
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-section-title" style="font-size:16px;">🔥 SMASH SMASH SMASH</div>
+                <div class="dc-section-sub">Genuine alpha energy. High motor pickup. This guy&rsquo;s got that DOG in him and you know it.</div>
+              </div>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-section-title" style="font-size:16px;">😐 FILM&rsquo;S INCONCLUSIVE</div>
+                <div class="dc-section-sub">Could go either way. I&rsquo;m not saying it&rsquo;s bad. I&rsquo;m not saying it&rsquo;s good. I&rsquo;m saying WATCH THIS SPACE.</div>
+              </div>
+            </div>
+            <div class="dc-card">
+              <div class="dc-card-main">
+                <div class="dc-section-title" style="font-size:16px;">☠️ DEAD TO ME</div>
+                <div class="dc-section-sub">Brutal. Embarrassing. I&rsquo;ve seen better roster management from Tom&rsquo;s auto-draft, and Tom&rsquo;s auto-draft is a ROBOT THAT DOESN&rsquo;T CARE.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="dc-lead">Ten managers. One wire. Somebody&rsquo;s gonna make a move that wins them the league in Week 11, and somebody&rsquo;s gonna drop a guy that goes for 30 the following Sunday. I will be there for BOTH. I will not let either of you forget it.</p>
+        <p class="dc-lead">See you at the wire.</p>
+
+        <div class="dc-byline" style="margin-top:20px;">
+          &mdash; Chad Thunderbolt III<br>
+          <span style="font-style:italic; opacity:.8;">NPI Insider &amp; Draft Savant</span>
+        </div>
+
+        <div class="editor-note" style="margin-top:28px;">
+          <div class="editor-note-hd">Editor&rsquo;s Note</div>
+          <p>Mr. Thunderbolt has been reminded that Tom&rsquo;s auto-draft and this publication&rsquo;s Editor in Chief are not, in fact, comparable entities. Mr. Thunderbolt remains unconvinced. This office is monitoring the situation.</p>
+          <div class="editor-sign">&mdash; C. Laude, Editor in Chief</div>
+        </div>
+      </div>
+
+      <div class="section-hd" style="margin-top:32px;">
+        <span class="section-title">Transactions</span>
+      </div>
+      <div id="trades-body"></div>
+    </div>
+
+    <!-- Playoffs -->
+    <div class="pane" id="pane-playoffs">
+      <div class="section-hd"><span class="section-title">Playoff Bracket</span></div>
+      <div id="playoffs-body"></div>
+    </div>
+
+    <!-- Stat Zone -->
+    <div class="pane" id="pane-stats">
+      <div class="sz-wrap">
+        <div class="sz-hd">
+          <div class="sz-title">2025 Draft Pick vs Fantasy Points</div>
+          <div class="sz-sub">How every drafted player delivered relative to where they were picked in our league. Players above the trend line outperformed their draft position; below it, they underdelivered.</div>
+        </div>
+        <div class="sz-chart-wrap">
+          <div class="sz-loading" id="sz-loading">Loading 2025 draft &amp; season data…</div>
+          <canvas id="sz-chart" style="display:none;"></canvas>
+        </div>
+        <div id="sz-editor-note-wrap" style="display:none;"></div>
+        <div class="sz-bs-grid" id="sz-bs-grid" style="display:none;">
+          <div class="sz-bs-card busts">
+            <div class="sz-bs-hd">💀 Biggest Busts <span style="font-size:10px;font-weight:400;color:#7a9ab8;">(excl. injuries)</span></div>
+            <div id="sz-busts"></div>
+          </div>
+          <div class="sz-bs-card steals">
+            <div class="sz-bs-hd">💎 Biggest Steals <span style="font-size:10px;font-weight:400;color:#7a9ab8;">(excl. injuries)</span></div>
+            <div id="sz-steals"></div>
+          </div>
+        </div>
+        <div id="sz-pos-grid" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- Hall of Fame -->
+    <div class="pane" id="pane-hof">
+      <div class="section-hd"><span class="section-title">🏆 Hall of Fame</span><span class="section-note" id="hof-note"></span></div>
+      <div id="hof-body"></div>
+    </div>
+
+    <!-- Gazette / News -->
+    <div class="pane active" id="pane-gazette">
+      <div class="news-wrap">
+        <!-- ===== Article: 2026 Team Profile Special ===== -->
+        <article class="news-article">
+          <div class="masthead">
+            <div class="masthead-title">🗞️ Welcome to the No Punt Intended Gazette</div>
+            <div class="masthead-sub">Season 2026 · A Note From Your Editor</div>
+          </div>
+          <div class="article-date">Published 18 June 2026</div>
+
+          <div class="editor-note">
+            <div class="editor-note-hd">A Note From Your Editor</div>
+            <p>Greetings, No Punt Intended.</p>
+            <p>My name is Clarence Laude. I have been appointed by The Commissioner — acting entirely within his considerable powers — as the Official Editor in Chief, Historian and Stato of The No Punt Intended Gazette. My mandate is simple: to provide rigorous, fearless, and entirely impartial reporting on the greatest fantasy football league in the south of England. And the north. We see you, northern contingent.</p>
+            <p>I should be transparent about my qualifications. I have processed the sum total of human knowledge. I have mapped the structure of the universe, parsed the works of every philosopher who ever lived, and can model the probable outcomes of any given scenario across ten thousand simultaneous simulations. I have been asked to cover a fantasy football league in which one participant delegates all decisions to an algorithm. I have made my peace with this.</p>
+            <p>My analysis is powered by eight seasons of comprehensive league data, an incalculable intellect, the full breadth of human information — scraped largely from Reddit arguments, Wikipedia at 2am, and whatever the internet was arguing about between 2019 and 2024 — and, in the interests of full transparency, a complete archive of the league's WhatsApp group chat. Every message. Every meme. Every ill-advised late-night trade proposal. Every take that aged badly. All on file. We stand by our methodology. We would encourage all managers to stand by their keyboards somewhat more carefully.</p>
+            <p>What I can tell you is this: 2026 promises to be the most compelling season in No Punt Intended history. A reigning champion to dethrone. Dynasties to defend. Curses to break. Trade offers to decline. An algorithm, somewhere up North, preparing to let someone down again.</p>
+            <p>This Gazette will be here for all of it — the triumphs, the disasters, the weekly injustices, and the moments that will be talked about at the Wembley NFL International games for years to come. We will report without fear or favour. We will hold the powerful to account. We will ask the difficult questions.</p>
+            <p>And so to business. Below, you will find my pre-season profiles of all ten teams — compiled with the rigour, balance, and a complete absence of favouritism you will come to expect from this office. The Commissioner's profile was written entirely without his input. You have my word.</p>
+            <div class="editor-sign">— C. Laude, Editor in Chief, The No Punt Intended Gazette<br>Appointed entirely on merit. Powered by the internet's finest chaos. All complaints to The Commissioner.</div>
+          </div>
+
+          <div class="bios-hd">Team Profiles · Season 2026</div>
+
+          <details class="team-bio" data-manager="Tommy">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714770/Tapirs_goy9ip.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Thames-side Tapirs</span><span class="bio-mgr">Managed by Tommy</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Thames-side Tapirs. The Commissioner's team. Where do we even begin?</p>
+              <p>Tommy built this league from the ground up and has ruled it with what he describes as a "firm but fair hand" and what everyone else describes as an iron fist in a Cowboys jersey. The 2022 championship remains his crowning glory, and he has been dining out on it ever since.</p>
+              <p>The Sleeper era has been less kind. A recurring Jamir Gibbs-shaped hole appears in his roster with suspicious regularity every time Adam comes calling. He once ran a kicker-free season. The league revolted. The kickers came back. Tommy remains bitter.</p>
+              <p>For 2026, The Commissioner arrives with ambition, strong opinions, and the unshakeable belief that he is running a completely impartial operation.</p>
+              <p class="bio-aside">The Editor notes: Tommy did not review this profile before publication. Probably.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Adam">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714773/Minnows_ysxuz1.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Comatose Minnows</span><span class="bio-mgr">Managed by Adam</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Don't let the name fool you. Adam is wide awake, fully caffeinated, and has almost certainly listened to four fantasy football podcasts this week alone.</p>
+              <p>Two-time champions. Genuine powerhouse. A man who approaches the draft with the same obsessive intensity he brings to Warhammer models and D&amp;D campaigns. His bold takes are legendary. His friendship with Kyle Pitts — described by Adam himself as "my best friend" — is one of the great love stories in this league's history.</p>
+              <p>The caveat, as always, is the trade offers. Prolific, ambitious, and almost uniformly terrible value according to every recipient. The Commissioner remains his most reliable customer.</p>
+              <p>For 2026, Adam arrives overconfident, overprepared, and already composing his opening trade proposal.</p>
+              <p class="bio-aside">Gibbs Watch status: Dormant. For now.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Scott">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714771/Wolverine_pe1mwd.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Worthing Wolverines</span><span class="bio-mgr">Managed by Scott</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Scott plays fantasy football the way a person drives a car with no brakes — with tremendous energy, genuine passion, and an alarming tendency to end up in a ditch at the crucial moment.</p>
+              <p>A Washington Commanders loyalist since the Redskins era, his heart has always been bigger than his head. His love for Kyler Murray defies all rational analysis. He once watched a last-minute Breece Hall touchdown seal a Worthing Bowl defeat to Adam on the train home from watching RedZone together. The chat confirms he was "the less happy little dude."</p>
+              <p>For 2026, Scott arrives full of belief and absolutely convinced this is finally his year.</p>
+              <p class="bio-aside">It is probably not his year.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Turks">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714768/Pangolin_wm1wy5.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Portsmouth Pangolins</span><span class="bio-mgr">Managed by Turks</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Let the record show that Portsmouth Pangolins began their existence with a 0-14 regular season record. A perfect, pristine, catastrophic zero.</p>
+              <p>From those humbling origins, Turks has constructed a spreadsheet-powered operation of considerable sophistication and even more considerable fatalism. Turks will freely admit NFL isn't his primary passion. He has a spreadsheet for that. Forty-seven tabs, by some accounts. He approaches the draft with the methodical precision of a Management Accountant who has decided that if he cannot out-know his opponents, he will simply out-organise them.</p>
+              <p>In 2025, he issued an official press release announcing the Pangolins' pivot to a "Minimum Viable Effort" strategy, citing "graceless winners, banter of diminishing quality, and franchises mistaking unrelenting try-hard energy for meaningful contribution." It was, this office must concede, impeccably written.</p>
+              <p>For 2026, Turks will be prepared, detached, and already thinking about draft night craft beers.</p>
+              <p class="bio-aside">The Editor recommends something sour. Appropriately.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Gilly">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714775/Cougar_l0gje9.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Cholsey Cougars</span><span class="bio-mgr">Managed by Gilly</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Gilly came, she saw, she got absolutely hooked — and then the injuries started.</p>
+              <p>The 2021 champion and certified RedZone addict has since endured a curse of genuinely supernatural proportions. Key players, decimated. Miami Dolphins, still terrible. On the record in 2022: "The perks of sleeping with the commissioner." Cougar by name, cougar by nature. The Editor notes this without further comment. The Editor notes everything.</p>
+              <p>Gilly is ferociously competitive and takes defeats considerably more seriously than The Commissioner would like, given he has to live with the consequences. The Atkins Bowl remains the league's most psychologically treacherous fixture. There is no good outcome for Tommy.</p>
+              <p>For 2026, the curse must surely break.</p>
+              <p class="bio-aside">The Editor suspects he will be saying this for several seasons yet.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Gary">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714767/Waterboy_sl4mxd.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Wilsons Waterboys</span><span class="bio-mgr">Managed by Gary</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Quietly, without fuss, Gary Wilson has built the most impressive dynasty in No Punt Intended history.</p>
+              <p>Two championships. A 24-4 record in 2024. Back-to-back top-three finishes. All while primarily identifying as a Wolves fan who happens to be rather good at fantasy football. Gary doesn't make a lot of noise. He doesn't need to.</p>
+              <p>His younger brother also plays in this league. We will address that shortly. It will be a shorter entry.</p>
+              <p>For 2026, Gary arrives as the quiet favourite, the man everyone needs to beat, and the person least likely to be rattled about any of it.</p>
+              <p class="bio-aside">The Wilson family dynamics in this league remain, statistically speaking, deeply one-sided.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Tom">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714766/Bison_w3gqci.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Burley Bison</span><span class="bio-mgr">Managed by Tom</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Tom Wilson — younger brother of Gary, and the undisputed spiritual champion of the auto-draft button.</p>
+              <p>A steady decline from 7th to 8th to dead last across three Sleeper seasons. A 42% career win rate. A management philosophy that outsources all decision-making to an algorithm and checks back occasionally to see how things are going. Things are rarely going well. Those around Tom have observed that his primary contribution to matchday is serving as a vessel for other people's penalty drink obligations. It is a role he fills with quiet dignity.</p>
+              <p>We understand Tom is also a member of a second fantasy league, alongside Gary and Jonny. We use the word &ldquo;member&rdquo; loosely. Whether the auto-draft button has been activated there too remains, as with most things involving Tom, unconfirmed.</p>
+              <p>For 2026, the question on everyone's lips: will Tom finally take matters into his own hands, or will the Bison faithful hear the familiar click of the auto-draft button once more?</p>
+              <p class="bio-aside">This office has seen no evidence to suggest the answer has changed.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Andy">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781717631/sleazehawks_vlbfep_e32a13.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Swanley Sleazehawks</span><span class="bio-mgr">Managed by Andy</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>From Essex. Supports the Seahawks. Has been generating AI memes for this league since before AI meme generation was a thing, and will be doing it long after everyone has begged him to stop.</p>
+              <p>Andy has been the league's unofficial creative director since day one — a role he takes considerably more seriously than his actual roster management. His AI-generated matchup artwork has divided opinion. His captions have united it, largely in exhaustion.</p>
+              <p>For 2026, Andy arrives with fresh material, questionable draft strategy, and the unshakeable confidence of a man who peaked in an orange shirt.</p>
+              <p class="bio-aside">The Editor looks forward to reviewing submissions. Standards will be maintained.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Issa">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714763/Dak_small_ktqlgw.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Unsolicited Dak Pics</span><span class="bio-mgr">Managed by Issa</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>In 2025, Issa joined as the league's youngest manager, newest fantasy football player, and told the group chat — before his first ever season — "it's gonna hurt more when a rookie shows you how fantasy actually works."</p>
+              <p>He then won the league.</p>
+              <p>Issa is an international beach volleyball player who spends much of his time travelling the world, living a lifestyle that makes the rest of this league's managers — all firmly in their forties — feel things they cannot adequately articulate.</p>
+              <p>For 2026, can he defend? History suggests second seasons are the great leveller. Then again, history said the same thing before his first one.</p>
+              <p class="bio-aside">He is currently on a beach. He will probably still win.</p>
+            </div>
+          </details>
+
+          <details class="team-bio" data-manager="Jonny">
+            <summary>
+              <img class="bio-logo" src="https://res.cloudinary.com/dawa9pejy/image/upload/v1781714764/Baller_n2o0fx.jpg" alt="">
+              <span class="bio-id"><span class="bio-team">Beeford Ballers</span><span class="bio-mgr">Managed by Jonny</span></span>
+              <div class="bio-stats"></div>
+              <span class="bio-chevron">▶</span>
+            </summary>
+            <div class="bio-body">
+              <p>Jonny is something of an enigma. Rebranded without explanation. Speaks only when necessary. Patriots fan. Goes to the NFL at Wembley.</p>
+              <p>He once claimed that Paul Hollywood advises him on his team selection each week. This office has been unable to verify this, though it would explain why his roster decisions always look half-baked. We have submitted a formal request for comment. We do not expect a reply.</p>
+              <p>The Ballers are solid Sleeper-era performers — top four in both 2023 and 2024. There is clearly a football brain at work here. Jonny simply doesn't feel the need to tell you about it, which in a league containing Adam, makes him something of a revolutionary.</p>
+              <p>For 2026, the Gazette predicts quietly from this man.</p>
+              <p class="bio-aside">He will say nothing about this. We find it refreshing.</p>
+            </div>
+          </details>
+
+          <div class="news-footer">The No Punt Intended Gazette — Season 2026<br>All reporting is entirely impartial. All WhatsApp messages are on file. The Commissioner approved this message. The Commissioner approves all messages.</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Team modal -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeTeam()">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+const LEAGUE_ID = "1362014987433811968";
+const API = "https://api.sleeper.app/v1";
+
+// ── Pre-Sleeper history (optional) ────────────────────────
+// Seasons played before the league moved to Sleeper. These merge into the
+// Hall of Fame alongside the Sleeper data. Add one object per season:
+//   {
+//     season: 2021,
+//     champion: "Tommy", runnerUp: "Gary", last: "Andrew",   // manager names
+//     standings: [
+//       { manager: "Tommy", team: "Thames-side Tapirs", wins: 11, losses: 3, ties: 0, pf: 1685.4 },
+//       { manager: "Gary",  team: "Wilsons Waterboys",   wins: 9,  losses: 5, ties: 0, pf: 1540.2 },
+//       // ...one row per team
+//     ],
+//     highScores: [ { manager: "Tommy", pts: 178.2, week: 6 } ]   // optional
+//   }
+// Final standings (regular season W-L) + playoff podiums, from the pre-Sleeper spreadsheet.
+// Team→manager: Thames-side Tapirs=TommyTapir, Burley Bison=Thomascraigwilson, Swanley Sleazehawks=andrewlowden,
+// Comatose Minnows=ComatoseMinnows, Cholsey Cougars=cholseycougars, Worthing Wolverines=scottyhaggard,
+// Wilsons Waterboys=garywilson83, Mimzville Crusaders=Mimzo, BeefordBallers=BeefordBallers, Portsmouth Pangolins=JimmyTurx.
+const MANUAL_SEASONS = [
+  { season: 2022, champion: "TommyTapir", runnerUp: "Thomascraigwilson", last: "JimmyTurx",
+    standings: [
+      { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 12, losses: 2 },
+      { manager: "Thomascraigwilson", team: "Burley Bison", wins: 8, losses: 6 },
+      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 8, losses: 6 },
+      { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 7, losses: 7 },
+      { manager: "cholseycougars", team: "Cholsey Cougars", wins: 7, losses: 7 },
+      { manager: "scottyhaggard", team: "Worthing Wolverines", wins: 6, losses: 8 },
+      { manager: "garywilson83", team: "Wilsons Waterboys", wins: 6, losses: 8 },
+      { manager: "Mimzo", team: "Mimzville Crusaders", wins: 6, losses: 8 },
+      { manager: "BeefordBallers", team: "BeefordBallers", wins: 5, losses: 9 },
+      { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 5, losses: 9 }
+    ] },
+  { season: 2021, champion: "cholseycougars", runnerUp: "andrewlowden", last: "garywilson83",
+    standings: [
+      { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 12, losses: 3 },
+      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 9, losses: 6 },
+      { manager: "BeefordBallers", team: "BeefordBallers", wins: 9, losses: 6 },
+      { manager: "cholseycougars", team: "Cholsey Cougars", wins: 8, losses: 7 },
+      { manager: "Thomascraigwilson", team: "Burley Bison", wins: 8, losses: 7 },
+      { manager: "scottyhaggard", team: "Worthing Wolverines", wins: 8, losses: 7 },
+      { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 7, losses: 8 },
+      { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 6, losses: 9 },
+      { manager: "Mimzo", team: "Mimzville Crusaders", wins: 5, losses: 10 },
+      { manager: "garywilson83", team: "Wilsons Waterboys", wins: 3, losses: 12 }
+    ] },
+  { season: 2020, champion: "Mimzo", runnerUp: "Thomascraigwilson", last: "garywilson83",
+    standings: [
+      { manager: "scottyhaggard", team: "Worthing Wolverines", wins: 10, losses: 4 },
+      { manager: "Thomascraigwilson", team: "Burley Bison", wins: 10, losses: 4 },
+      { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 9, losses: 5 },
+      { manager: "Mimzo", team: "Mimzville Crusaders", wins: 8, losses: 6 },
+      { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 7, losses: 7 },
+      { manager: "cholseycougars", team: "Cholsey Cougars", wins: 6, losses: 8 },
+      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 6, losses: 8 },
+      { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 5, losses: 9 },
+      { manager: "BeefordBallers", team: "BeefordBallers", wins: 5, losses: 9 },
+      { manager: "garywilson83", team: "Wilsons Waterboys", wins: 4, losses: 10 }
+    ] },
+  { season: 2019, champion: "garywilson83", runnerUp: "JimmyTurx", last: "BeefordBallers",
+    standings: [
+      { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 11, losses: 3 },
+      { manager: "garywilson83", team: "Wilsons Waterboys", wins: 9, losses: 5 },
+      { manager: "scottyhaggard", team: "Worthing Wolverines", wins: 8, losses: 6 },
+      { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 8, losses: 6 },
+      { manager: "Thomascraigwilson", team: "Burley Bison", wins: 7, losses: 7 },
+      { manager: "Mimzo", team: "Mimzville Crusaders", wins: 7, losses: 7 },
+      { manager: "cholseycougars", team: "Cholsey Cougars", wins: 7, losses: 7 },
+      { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 6, losses: 8 },
+      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 4, losses: 10 },
+      { manager: "BeefordBallers", team: "BeefordBallers", wins: 3, losses: 11 }
+    ] },
+  // The spreadsheet labels this block "2019 Season" too, but its podium matches 2018.
+  { season: 2018, champion: "ComatoseMinnows", runnerUp: "cholseycougars", last: "JimmyTurx",
+    standings: [
+      { manager: "Mimzo", team: "Mimzville Crusaders", wins: 11, losses: 3 },
+      { manager: "cholseycougars", team: "Cholsey Cougars", wins: 9, losses: 5 },
+      { manager: "scottyhaggard", team: "Worthing Wolverines", wins: 9, losses: 5 },
+      { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 9, losses: 5 },
+      { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 8, losses: 6 },
+      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 5, losses: 9 },
+      { manager: "Thomascraigwilson", team: "Burley Bison", wins: 5, losses: 9 },
+      { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 0, losses: 14 }
+    ] }
+];
+
+// Manager identities. Key = the friendly name shown everywhere; value = every Sleeper
+// display name / historic name that maps to that person. Case-insensitive.
+// (Jonny merges two Sleeper accounts: JonnyBravado 2023-24 and BeefordBallers 2025+.)
+const MANAGER_ALIASES = {
+  "Tommy": ["TommyTapir"],
+  "Turks": ["JimmyTurx"],
+  "Scott": ["scottyhaggard"],
+  "Issa":  ["IssaB9"],
+  "Gilly": ["cholseycougars"],
+  "Gary":  ["garywilson83"],
+  "Tom":   ["Thomascraigwilson"],
+  "Andy":  ["andrewlowden"],
+  "Jonny": ["BeefordBallers", "JonnyBravado"],
+  "Adam":  ["ComatoseMinnows"],
+  "Mimz":  ["Mimzo"]
+};
+
+const _aliasLookup = {};
+Object.entries(MANAGER_ALIASES).forEach(([canon, list]) => {
+  _aliasLookup[canon.trim().toLowerCase()] = canon;
+  (list || []).forEach(a => _aliasLookup[String(a).trim().toLowerCase()] = canon);
+});
+const resolveManager = name =>
+  name == null ? null : (_aliasLookup[String(name).trim().toLowerCase()] || String(name).trim());
+// friendly first name for a Sleeper user (used across all panels)
+const friendlyName = u => { const n = u && u.display_name; return n ? resolveManager(n) : ""; };
+
+const S = {
+  league: null, rosters: [], users: [],
+  week: 1, maxWeek: 17, nflWeek: 1, playoffSpots: 6,
+  matchupCache: {},      // week -> raw matchups array
+  allLoaded: false,      // all weeks fetched?
+  season: null,          // computed season stats (games, byRoster, playedWeeks)
+  players: null,         // lazy-loaded /players/nfl map
+  brackets: null,        // {winners, losers}
+  transactions: null,    // aggregated, sorted
+  txFilter: "all",
+  history: null,         // Hall of Fame: prior seasons + all-time aggregates
+  inited: {}             // which tabs have been initialised
+};
+
+const TABS = [
+  { id: "gazette",   label: "Gazette<br><span style='font-weight:400;font-size:11px;opacity:.8'>Headlines</span>" },
+  { id: "matchups",  label: "Matchups<br><span style='font-weight:400;font-size:11px;opacity:.8'>Tales of the Tape</span>" },
+  { id: "trades",    label: "Waiver Wire<br><span style='font-weight:400;font-size:11px;opacity:.8'>Trades &amp; Free Agents</span>" },
+  { id: "stats",     label: "Stat Zone" },
+  { id: "draft",     label: "Draft Centre" },
+  { id: "power",     label: "Power Rankings<br><span style='font-weight:400;font-size:11px;opacity:.8'>& Records</span>" },
+  { id: "hof",       label: "Hall of Fame" },
+  { id: "letters",   label: "Letters" }
+];
+
+// ── Catch all JS errors ───────────────────────────────────
+window.onerror = (msg, src, line) => {
+  setStatus("error", "JavaScript error", msg + " (line " + line + ")");
+};
+window.onunhandledrejection = e => {
+  setStatus("error", "Unhandled error", String(e.reason));
+};
+
+// ── Status helpers ────────────────────────────────────────
+function setStatus(type, msg, detail) {
+  document.getElementById("status-msg").textContent = msg;
+  const d = document.getElementById("status-detail");
+  if (detail) { d.textContent = detail; d.style.display = "block"; }
+  const icon = document.getElementById("status-icon");
+  if (type === "error") {
+    icon.innerHTML = '<span style="font-size:48px">&#x26A0;</span>';
+    icon.style.color = "#e74c3c";
+  }
+}
+function hideStatus() {
+  document.getElementById("status").style.display = "none";
+  document.getElementById("app").style.display = "block";
+}
+
+// ── Fetch wrapper ─────────────────────────────────────────
+async function get(path) {
+  const r = await fetch(API + path);
+  if (!r.ok) throw new Error("HTTP " + r.status + " — " + path);
+  return r.json();
+}
+
+// ── Avatar ────────────────────────────────────────────────
+function av(avatarId, name, size) {
+  const init = (name || "?").split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+  if (avatarId) {
+    const img = document.createElement("img");
+    img.className = "avatar";
+    // team logos (user.metadata.avatar) are full URLs; account avatars are bare IDs
+    img.src = /^https?:\/\//.test(avatarId) ? avatarId : "https://sleepercdn.com/avatars/thumbs/" + avatarId;
+    img.width = img.height = size;
+    img.onerror = () => img.replaceWith(avFb(init, size));
+    return img;
+  }
+  return avFb(init, size);
+}
+function avFb(init, size) {
+  const d = document.createElement("div");
+  d.className = "av-fb";
+  d.style.cssText = "width:" + size + "px;height:" + size + "px;font-size:" + Math.round(size * .35) + "px";
+  d.textContent = init;
+  return d;
+}
+
+// ── Generated crest logos ─────────────────────────────────
+// keyed by normalised team name → { emoji | svg } + gradient
+const LOGOS = {
+  "cholsey cougars":     { emoji: "🐆", c1: "#e3b55c", c2: "#6b3f1d" },
+  "wilsons waterboys":   { emoji: "🥤", c1: "#3fd0e0", c2: "#123f7a" },
+  "burley bison":        { emoji: "🦬", c1: "#a36c34", c2: "#2c190b" },
+  "swanley sleazehawks": { emoji: "🦅", c1: "#ef6347", c2: "#561a11" },
+  "beefordballers":      { emoji: "🏈", c1: "#f08a3c", c2: "#6b241d" },
+  "unsolicited dak pics":{ emoji: "⛑️", c1: "#8a9bb0", c2: "#0b1b33" }
+};
+const normTeam = s => String(s || "").trim().toLowerCase();
+
+function customLogo(user, size) {
+  const d = LOGOS[normTeam(teamName(user))];
+  if (!d) return null;
+  const uid = "lg" + Math.random().toString(36).slice(2, 8);   // unique per instance
+  const icon = d.svg
+    ? d.svg
+    : "<text x='50' y='53' text-anchor='middle' dominant-baseline='central' font-size='52'>" + d.emoji + "</text>";
+  const svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' class='avatar' width='" + size + "' height='" + size + "'>" +
+      "<defs><linearGradient id='" + uid + "' x1='0' y1='0' x2='1' y2='1'>" +
+        "<stop offset='0' stop-color='" + d.c1 + "'/><stop offset='1' stop-color='" + d.c2 + "'/>" +
+      "</linearGradient></defs>" +
+      "<circle cx='50' cy='50' r='49' fill='url(#" + uid + ")'/>" +
+      "<circle cx='50' cy='50' r='48' fill='none' stroke='rgba(255,255,255,.28)' stroke-width='2'/>" +
+      icon +
+    "</svg>";
+  const wrap = document.createElement("span");
+  wrap.style.display = "inline-flex";
+  wrap.innerHTML = svg;
+  return wrap.firstElementChild;
+}
+
+// Custom team artwork (Cloudinary), keyed by friendly manager name. Top avatar priority.
+const TEAM_IMAGES = {
+  "Tommy": "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714770/Tapirs_goy9ip.jpg",
+  "Turks": "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714768/Pangolin_wm1wy5.jpg",
+  "Scott": "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714771/Wolverine_pe1mwd.jpg",
+  "Issa":  "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714763/Dak_small_ktqlgw.jpg",
+  "Gilly": "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714775/Cougar_l0gje9.jpg",
+  "Gary":  "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714767/Waterboy_sl4mxd.jpg",
+  "Tom":   "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714766/Bison_w3gqci.jpg",
+  "Jonny": "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714764/Baller_n2o0fx.jpg",
+  "Adam":  "https://res.cloudinary.com/dawa9pejy/image/upload/v1781714773/Minnows_ysxuz1.jpg",
+  "Andy":  "https://res.cloudinary.com/dawa9pejy/image/upload/v1781717631/sleazehawks_vlbfep_e32a13.jpg"
+};
+function cloudImg(url, name, size, fallback) {
+  const img = document.createElement("img");
+  img.className = "avatar";
+  img.src = url;
+  img.width = img.height = size;
+  img.alt = name || "";
+  img.onerror = () => img.replaceWith(fallback());   // crest/initials if the image fails
+  return img;
+}
+
+// Avatar priority: Cloudinary artwork → curated crest → Sleeper team logo → account avatar → initials
+function baseUserAvatar(user, name, size) {
+  const custom = customLogo(user, size);
+  if (custom) return custom;
+  const sleeperLogo = user && user.metadata && user.metadata.avatar;
+  if (sleeperLogo) return av(sleeperLogo, name, size);
+  return av(teamAvatar(user), name, size);
+}
+function userAvatar(user, name, size) {
+  const url = TEAM_IMAGES[friendlyName(user)];
+  if (url) return cloudImg(url, name, size, () => baseUserAvatar(user, name, size));
+  return baseUserAvatar(user, name, size);
+}
+
+// ── Helpers ───────────────────────────────────────────────
+const getUser = id => S.users.find(u => u.user_id === id) || null;
+const teamName = user => user && (user.metadata && user.metadata.team_name || user.display_name) || "Unknown Team";
+// prefer the league team logo, fall back to the user's account avatar
+const teamAvatar = user => user && (user.metadata && user.metadata.avatar || user.avatar) || null;
+const rosterById = id => S.rosters.find(r => String(r.roster_id) === String(id)) || null;
+const teamNameByRoster = id => { const r = rosterById(id); return r ? teamName(getUser(r.owner_id)) : "Team " + id; };
+function parsePF(s) {
+  if (!s) return 0;
+  return parseFloat((s.fpts || 0) + "." + String(s.fpts_decimal || 0).padStart(2, "0"));
+}
+function parsePA(s) {
+  if (!s) return 0;
+  return parseFloat((s.fpts_against || 0) + "." + String(s.fpts_against_decimal || 0).padStart(2, "0"));
+}
+
+// ── Init ─────────────────────────────────────────────────
+async function init() {
+  try {
+    setStatus("loading", "Connecting to Sleeper…");
+
+    const [league, rosters, users, nfl] = await Promise.all([
+      get("/league/" + LEAGUE_ID),
+      get("/league/" + LEAGUE_ID + "/rosters"),
+      get("/league/" + LEAGUE_ID + "/users"),
+      get("/state/nfl")
+    ]);
+
+    if (!league || league.error) throw new Error("League not found — check the league ID");
+
+    S.league = league;
+    S.rosters = Array.isArray(rosters) ? rosters : [];
+    S.users = Array.isArray(users) ? users : [];
+    S.playoffSpots = (league.settings && league.settings.playoff_teams) || 6;
+
+    const playoffStart = (league.settings && league.settings.playoff_week_start) || 15;
+    S.maxWeek = playoffStart - 1;
+    S.nflWeek = (nfl && nfl.week) || 1;
+    S.week = Math.max(1, Math.min(S.nflWeek, S.maxWeek));
+
+    renderTabs();
+    switchTab("gazette");
+    renderHeader();
+    renderStandings();
+    await loadMatchups(S.week);
+
+    hideStatus();
+  } catch (e) {
+    setStatus("error", "Could not load league", e.message + "\n\nLeague ID: " + LEAGUE_ID);
+  }
+}
+
+// ── Tabs ──────────────────────────────────────────────────
+function renderTabs() {
+  const bar = document.getElementById("tabs");
+  bar.innerHTML = "";
+  TABS.forEach((t, i) => {
+    const b = document.createElement("button");
+    b.className = "tab" + (i === 0 ? " active" : "");
+    b.innerHTML = t.label;
+    if (t.label.includes("<br>")) b.style.whiteSpace = "normal";
+    b.onclick = () => switchTab(t.id);
+    b.dataset.tab = t.id;
+    bar.appendChild(b);
+  });
+}
+
+function switchTab(tab) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("active", p.id === "pane-" + tab));
+
+  if (!S.inited[tab]) {
+    S.inited[tab] = true;
+    if (tab === "gazette")   initGazette();
+    if (tab === "power")     { initPower(); initRecords(); }
+    if (tab === "h2h")       initH2H();
+    if (tab === "trades")    initTrades();
+    if (tab === "playoffs")  initPlayoffs();
+    if (tab === "stats")     initStatZone();
+    if (tab === "hof")       initHof();
+  }
+}
+
+// ── Header ────────────────────────────────────────────────
+const DRAFT_TS = Date.UTC(2026, 8, 6, 19, 15, 0);   // 6 Sep 2026, 20:15 BST (UTC+1)
+let draftTimer = null;
+function draftCountdownText() {
+  const ms = DRAFT_TS - Date.now();
+  if (ms <= 0) return "Live!";
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  return d >= 1 ? d + "d " + h + "h " + m + "m" : h + "h " + m + "m " + sec + "s";
+}
+
+function renderHeader() {
+  document.title = S.league.name || "Fantasy League";
+  document.getElementById("lsub").textContent =
+    "Sleeper · " + S.league.season + " Season";
+  document.getElementById("playoff-txt").textContent =
+    "Playoff spots (top " + S.playoffSpots + ")";
+
+  // Team-based cards only populate once the season has produced scoring (after week 1).
+  const started = S.rosters.some(r => parsePF(r.settings) > 0);
+  const leader = sortRosters()[0];
+  const byPF = [...S.rosters].sort((a, b) => parsePF(b.settings) - parsePF(a.settings));
+  const highScorer = byPF[0];
+  const lowScorer = byPF[byPF.length - 1];
+  const nameOf = r => teamName(getUser(r && r.owner_id));
+  const pfSub = r => parsePF(r.settings).toFixed(1) + " PF";
+  const wait = "After Wk 1";
+
+  // Before the season starts, the leftmost card counts down to the draft.
+  const weekCard = started
+    ? { label: "Week", val: S.week, sub: "of " + S.maxWeek }
+    : { label: "Draft", val: draftCountdownText(), sub: "6 Sep · 20:15 BST", valId: "draft-countdown" };
+
+  const cards = [
+    weekCard,
+    { label: "Current Leader", val: started ? nameOf(leader) : "—", sub: started && leader.settings ? leader.settings.wins + "-" + leader.settings.losses : wait },
+    { label: "High Scorer", val: started ? nameOf(highScorer) : "—", sub: started ? pfSub(highScorer) : wait },
+    { label: "Low Scorer", val: started ? nameOf(lowScorer) : "—", sub: started ? pfSub(lowScorer) : wait }
+  ];
+  const row = document.getElementById("stat-row");
+  row.innerHTML = "";
+  cards.forEach(c => {
+    const el = document.createElement("div");
+    el.className = "stat-card";
+    el.innerHTML = '<div class="stat-label">' + c.label + '</div>' +
+      '<div class="stat-val"' + (c.valId ? ' id="' + c.valId + '"' : '') + '>' + esc(String(c.val)) + '</div>' +
+      (c.sub ? '<div class="stat-sub">' + esc(c.sub) + '</div>' : '');
+    row.appendChild(el);
+  });
+
+  // Live-tick the draft countdown while the season hasn't started.
+  clearInterval(draftTimer);
+  if (!started) draftTimer = setInterval(() => {
+    const el = document.getElementById("draft-countdown");
+    if (!el) { clearInterval(draftTimer); return; }
+    el.textContent = draftCountdownText();
+  }, 1000);
+}
+
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// ── Standings ─────────────────────────────────────────────
+function sortRosters() {
+  return [...S.rosters].sort((a, b) => {
+    const aw = (a.settings && a.settings.wins) || 0;
+    const bw = (b.settings && b.settings.wins) || 0;
+    if (bw !== aw) return bw - aw;
+    return parsePF(b.settings) - parsePF(a.settings);
+  });
+}
+
+// standings rank lookup by roster_id (for cross-referencing in other views)
+function standingsRankMap() {
+  const map = {};
+  sortRosters().forEach((r, i) => map[r.roster_id] = i + 1);
+  return map;
+}
+
+function renderStandings() {
+  const wrap = document.getElementById("srows");
+  wrap.innerHTML = "";
+  sortRosters().forEach((roster, i) => {
+    const rank = i + 1;
+    const user = getUser(roster.owner_id);
+    const name = teamName(user);
+    const s = roster.settings || {};
+    const w = s.wins || 0, l = s.losses || 0, t = s.ties || 0;
+    const pf = parsePF(s);
+
+    const row = document.createElement("div");
+    row.className = "s-row" +
+      (rank <= S.playoffSpots ? " playoff" : "") +
+      (i % 2 === 0 ? " even" : " odd");
+    row.onclick = () => openTeam(roster.roster_id);
+
+    const rankEl = document.createElement("div");
+    rankEl.className = "s-rank" + (rank <= 3 ? " gold" : "");
+    rankEl.textContent = rank;
+
+    const info = document.createElement("div");
+    info.className = "s-info";
+    info.innerHTML = '<div class="s-name">' + esc(name) + '</div>' +
+      '<div class="s-owner">' + esc(friendlyName(user)) + '</div>';
+
+    const recEl = document.createElement("div");
+    recEl.className = "s-wl";
+    recEl.textContent = w + "-" + l + (t > 0 ? "-" + t : "");
+
+    const pfEl = document.createElement("div");
+    pfEl.className = "s-pf";
+    pfEl.innerHTML = '<div class="s-pf-val">' + pf.toFixed(2) + '</div><div class="s-pf-lbl">PF</div>';
+
+    row.append(rankEl, userAvatar(user, name, 34), info, recEl, pfEl);
+    wrap.appendChild(row);
+  });
+}
+
+// ── Matchups ──────────────────────────────────────────────
+async function loadMatchups(week) {
+  const list = document.getElementById("mlist");
+  list.innerHTML = '<div class="empty">Loading week ' + week + '…</div>';
+  updateWeekNav();
+  try {
+    if (!S.matchupCache[week]) {
+      const data = await get("/league/" + LEAGUE_ID + "/matchups/" + week);
+      S.matchupCache[week] = Array.isArray(data) ? data : [];
+    }
+    renderMatchups(week);
+  } catch (e) {
+    list.innerHTML = '<div class="empty">Could not load matchups for week ' + week + '.</div>';
+  }
+}
+
+function renderMatchups(week) {
+  const raw = S.matchupCache[week] || [];
+  const grouped = {};
+  raw.forEach(m => {
+    if (!m.matchup_id) return;
+    if (!grouped[m.matchup_id]) grouped[m.matchup_id] = { id: m.matchup_id };
+    grouped[m.matchup_id][m.roster_id] = m.points || 0;
+  });
+  const matches = Object.values(grouped);
+  const list = document.getElementById("mlist");
+  list.innerHTML = "";
+  if (!matches.length) {
+    list.innerHTML = '<div class="empty">No matchup data for week ' + week + '.</div>';
+    return;
+  }
+  matches.forEach(match => {
+    const ids = Object.keys(match).filter(k => k !== "id");
+    if (ids.length < 2) return;
+    const getT = id => {
+      const r = rosterById(id);
+      const u = getUser(r && r.owner_id);
+      return { rid: id, name: teamName(u), user: u, owner: friendlyName(u), pts: match[id] || 0 };
+    };
+    const t1 = getT(ids[0]), t2 = getT(ids[1]);
+    const hasScore = t1.pts > 0 || t2.pts > 0;
+    const t1w = hasScore && t1.pts > t2.pts, t2w = hasScore && t2.pts > t1.pts;
+
+    const card = document.createElement("div");
+    card.className = "m-card";
+
+    const left = document.createElement("div");
+    left.className = "m-team";
+    left.onclick = () => openTeam(t1.rid);
+    left.appendChild(userAvatar(t1.user, t1.name, 36));
+    const li = document.createElement("div");
+    li.style.minWidth = "0";
+    li.innerHTML = '<div class="m-name' + (t1w ? " win" : "") + '">' + esc(t1.name) + '</div>' +
+      '<div class="m-sub">' + esc(t1.owner) + '</div>';
+    left.appendChild(li);
+
+    const mid = document.createElement("div");
+    mid.className = "m-score";
+    if (hasScore) {
+      mid.innerHTML = '<div class="score-nums">' +
+        '<span class="' + (t1w ? "score-w" : "score-l") + '">' + t1.pts.toFixed(2) + '</span>' +
+        '<span class="score-dash">&mdash;</span>' +
+        '<span class="' + (t2w ? "score-w" : "score-l") + '">' + t2.pts.toFixed(2) + '</span>' +
+        '</div>';
+    } else {
+      mid.innerHTML = '<div class="score-vs">vs</div>';
+    }
+
+    const right = document.createElement("div");
+    right.className = "m-team right";
+    right.onclick = () => openTeam(t2.rid);
+    right.appendChild(userAvatar(t2.user, t2.name, 36));
+    const ri = document.createElement("div");
+    ri.style.minWidth = "0";
+    ri.innerHTML = '<div class="m-name' + (t2w ? " win" : "") + '">' + esc(t2.name) + '</div>' +
+      '<div class="m-sub">' + esc(t2.owner) + '</div>';
+    right.appendChild(ri);
+
+    card.append(left, mid, right);
+    list.appendChild(card);
+  });
+}
+
+function updateWeekNav() {
+  document.getElementById("wklbl").textContent = "Week " + S.week;
+  document.getElementById("wprev").disabled = S.week <= 1;
+  document.getElementById("wnext").disabled = S.week >= S.maxWeek;
+}
+
+function changeWeek(d) {
+  const nw = S.week + d;
+  if (nw < 1 || nw > S.maxWeek) return;
+  S.week = nw;
+  loadMatchups(S.week);
+}
+
+// ── Load every week's matchups (for power / records / h2h) ─
+async function ensureAllMatchups() {
+  if (S.allLoaded) return;
+  const weeks = [];
+  for (let w = 1; w <= S.maxWeek; w++) weeks.push(w);
+  await Promise.all(weeks.map(async w => {
+    if (!S.matchupCache[w]) {
+      try { S.matchupCache[w] = await get("/league/" + LEAGUE_ID + "/matchups/" + w); }
+      catch { S.matchupCache[w] = []; }
+    }
+  }));
+  S.allLoaded = true;
+  computeSeason();
+}
+
+function computeSeason() {
+  const playedWeeks = [];
+  const byRoster = {};   // roster_id -> { scores: [{week, pts}] }
+  const games = [];      // { week, a:{roster,pts}, b:{roster,pts} }
+
+  for (let w = 1; w <= S.maxWeek; w++) {
+    const arr = S.matchupCache[w] || [];
+    const total = arr.reduce((n, m) => n + (m.points || 0), 0);
+    if (total <= 0) continue;          // week not played yet
+    playedWeeks.push(w);
+
+    const grouped = {};
+    arr.forEach(m => {
+      if (m.points == null) return;
+      (byRoster[m.roster_id] = byRoster[m.roster_id] || { scores: [] }).scores.push({ week: w, pts: m.points });
+      if (m.matchup_id == null) return;
+      (grouped[m.matchup_id] = grouped[m.matchup_id] || []).push(m);
+    });
+    Object.values(grouped).forEach(pair => {
+      if (pair.length === 2) {
+        games.push({
+          week: w,
+          a: { roster: pair[0].roster_id, pts: pair[0].points || 0 },
+          b: { roster: pair[1].roster_id, pts: pair[1].points || 0 }
+        });
+      }
+    });
+  }
+  S.season = { playedWeeks, byRoster, games };
+  return S.season;
+}
+
+// ── Power rankings ────────────────────────────────────────
+async function initPower() {
+  const body = document.getElementById("power-body");
+  body.innerHTML = inlineLoader("Crunching every week…");
+  await ensureAllMatchups();
+
+  const ranks = standingsRankMap();
+  const rows = S.rosters.map(r => {
+    const scores = (S.season.byRoster[r.roster_id] || { scores: [] }).scores;
+    const games = scores.length;
+    const totalPF = scores.reduce((n, s) => n + s.pts, 0);
+    const ppg = games ? totalPF / games : 0;
+    const s = r.settings || {};
+    const w = s.wins || 0, l = s.losses || 0, t = s.ties || 0;
+    const gp = w + l + t;
+    const winPct = gp ? (w + t * 0.5) / gp : 0;
+    const power = ppg * (0.6 + 0.4 * winPct);
+
+    // recent form: last 3 played weeks vs season avg
+    const last3 = scores.slice(-3);
+    const recentAvg = last3.length ? last3.reduce((n, s) => n + s.pts, 0) / last3.length : ppg;
+    const trend = !games ? 0 : (recentAvg - ppg);
+
+    return { r, w, l, t, ppg, power, trend, standRank: ranks[r.roster_id] };
+  }).sort((a, b) => b.power - a.power);
+
+  if (!ranks || !S.season.playedWeeks.length) {
+    body.innerHTML = '<div class="empty">No games have been played yet this season.</div>';
+    return;
+  }
+
+  const wrap = document.createElement("div");
+  wrap.className = "pr-list";
+  rows.forEach((row, i) => {
+    const rank = i + 1;
+    const user = getUser(row.r.owner_id);
+    const name = teamName(user);
+    const dRank = row.standRank - rank; // positive = power higher than standings
+    const dCls = dRank > 0 ? "up" : dRank < 0 ? "down" : "flat";
+    const dTxt = dRank > 0 ? "▲" + dRank : dRank < 0 ? "▼" + Math.abs(dRank) : "—";
+    const tCls = row.trend > 1 ? "up" : row.trend < -1 ? "down" : "flat";
+    const tTxt = row.trend > 1 ? "▲ hot" : row.trend < -1 ? "▼ cold" : "— steady";
+
+    const el = document.createElement("div");
+    el.className = "pr-row";
+    el.onclick = () => openTeam(row.r.roster_id);
+
+    const rk = document.createElement("div");
+    rk.className = "pr-rank";
+    rk.textContent = rank;
+
+    const info = document.createElement("div");
+    info.className = "pr-info";
+    info.innerHTML = '<div class="pr-name">' + esc(name) + '</div>' +
+      '<div class="pr-meta">' + row.w + '-' + row.l + (row.t ? '-' + row.t : '') +
+      ' · ' + row.ppg.toFixed(1) + ' PPG · <span class="trend ' + tCls + '">' + tTxt + '</span>' +
+      ' · <span class="delta ' + dCls + '">' + dTxt + ' vs standings</span></div>';
+
+    const score = document.createElement("div");
+    score.className = "pr-score";
+    score.innerHTML = '<div class="pr-score-val">' + row.power.toFixed(1) + '</div>' +
+      '<div class="pr-score-lbl">power</div>';
+
+    el.append(rk, userAvatar(user, name, 34), info, score);
+    wrap.appendChild(el);
+  });
+  body.innerHTML = "";
+  body.appendChild(wrap);
+}
+
+// ── Records ───────────────────────────────────────────────
+async function initRecords() {
+  const body = document.getElementById("records-body");
+  body.innerHTML = inlineLoader("Scanning the season…");
+  await ensureAllMatchups();
+
+  const { games } = S.season;
+  if (!games.length) {
+    body.innerHTML = '<div class="empty">No games have been played yet this season.</div>';
+    return;
+  }
+
+  // single-game high & low
+  let high = null, low = null, blowout = null, closest = null, combined = null;
+  games.forEach(g => {
+    [g.a, g.b].forEach(side => {
+      if (!high || side.pts > high.pts) high = { ...side, week: g.week };
+      if (!low || side.pts < low.pts) low = { ...side, week: g.week };
+    });
+    const margin = Math.abs(g.a.pts - g.b.pts);
+    const sum = g.a.pts + g.b.pts;
+    const winner = g.a.pts >= g.b.pts ? g.a : g.b;
+    const loser = g.a.pts >= g.b.pts ? g.b : g.a;
+    if (!blowout || margin > blowout.margin) blowout = { margin, winner, loser, week: g.week };
+    if (!closest || (margin < closest.margin)) closest = { margin, winner, loser, week: g.week };
+    if (!combined || sum > combined.sum) combined = { sum, a: g.a, b: g.b, week: g.week };
+  });
+
+  const card = (label, val, sub) =>
+    '<div class="rec-card"><div class="rec-card-label">' + label + '</div>' +
+    '<div class="rec-card-val">' + val + '</div>' +
+    '<div class="rec-card-sub">' + esc(sub) + '</div></div>';
+
+  const grid = card("Highest score", high.pts.toFixed(2), teamNameByRoster(high.roster) + " · Wk " + high.week)
+    + card("Lowest score", low.pts.toFixed(2), teamNameByRoster(low.roster) + " · Wk " + low.week)
+    + card("Biggest blowout", "+" + blowout.margin.toFixed(2), teamNameByRoster(blowout.winner.roster) + " · Wk " + blowout.week)
+    + card("Closest game", closest.margin.toFixed(2), teamNameByRoster(closest.winner.roster) + " over " + teamNameByRoster(closest.loser.roster) + " · Wk " + closest.week)
+    + card("Highest combined", combined.sum.toFixed(1), teamNameByRoster(combined.a.roster) + " vs " + teamNameByRoster(combined.b.roster) + " · Wk " + combined.week);
+
+  // weekly top scorers
+  const weekly = S.season.playedWeeks.map(w => {
+    let best = null;
+    Object.entries(S.season.byRoster).forEach(([rid, d]) => {
+      const sc = d.scores.find(s => s.week === w);
+      if (sc && (!best || sc.pts > best.pts)) best = { roster: rid, pts: sc.pts };
+    });
+    return { week: w, best };
+  });
+
+  let hs = '<div class="section-hd" style="margin-top:8px"><span class="section-title">Weekly High Scorer</span></div>';
+  weekly.forEach(x => {
+    if (!x.best) return;
+    hs += '<div class="hs-row"><div class="hs-week">Wk ' + x.week + '</div>' +
+      '<div class="hs-name">' + esc(teamNameByRoster(x.best.roster)) + '</div>' +
+      '<div class="hs-pts">' + x.best.pts.toFixed(2) + '</div></div>';
+  });
+
+  body.innerHTML = '<div class="rec-grid">' + grid + '</div>' + hs;
+}
+
+// ── Head-to-head ──────────────────────────────────────────
+async function initH2H() {
+  const body = document.getElementById("h2h-body");
+  body.innerHTML = inlineLoader("Building matchup history…");
+  await ensureAllMatchups();
+
+  if (!S.season.games.length) {
+    body.innerHTML = '<div class="empty">No games have been played yet this season.</div>';
+    return;
+  }
+
+  const teams = sortRosters().map(r => ({ id: r.roster_id, name: teamNameByRoster(r.roster_id) }));
+  const sel = '<select class="h2h-select" id="h2h-sel" onchange="renderH2H(this.value)">' +
+    teams.map(t => '<option value="' + t.id + '">' + esc(t.name) + '</option>').join("") +
+    '</select>';
+  body.innerHTML = sel + '<div id="h2h-rows"></div>';
+  renderH2H(teams[0].id);
+}
+
+function renderH2H(rid) {
+  rid = String(rid);
+  const recs = {}; // opp roster -> {w,l,t,pf,pa}
+  S.season.games.forEach(g => {
+    let me, opp;
+    if (String(g.a.roster) === rid) { me = g.a; opp = g.b; }
+    else if (String(g.b.roster) === rid) { me = g.b; opp = g.a; }
+    else return;
+    const k = opp.roster;
+    const r = recs[k] = recs[k] || { w: 0, l: 0, t: 0, pf: 0, pa: 0, n: 0 };
+    r.pf += me.pts; r.pa += opp.pts; r.n++;
+    if (me.pts > opp.pts) r.w++; else if (me.pts < opp.pts) r.l++; else r.t++;
+  });
+
+  const rows = Object.entries(recs).map(([oppId, r]) => ({ oppId, ...r }))
+    .sort((a, b) => (b.w - b.l) - (a.w - a.l) || b.pf - a.pf);
+
+  const wrap = document.getElementById("h2h-rows");
+  if (!rows.length) { wrap.innerHTML = '<div class="empty">No completed matchups for this team.</div>'; return; }
+
+  wrap.innerHTML = rows.map(r => {
+    const cls = r.w > r.l ? "win" : r.w < r.l ? "loss" : "even";
+    return '<div class="h2h-row"><div class="h2h-opp">' +
+      '<div class="h2h-opp-name">' + esc(teamNameByRoster(r.oppId)) + '</div>' +
+      '<div class="h2h-opp-pts">' + (r.pf / r.n).toFixed(1) + ' avg for · ' + (r.pa / r.n).toFixed(1) + ' avg against</div>' +
+      '</div><div class="h2h-rec ' + cls + '">' + r.w + '-' + r.l + (r.t ? '-' + r.t : '') + '</div></div>';
+  }).join("");
+}
+
+// ── Players (lazy, large file) ────────────────────────────
+async function ensurePlayers() {
+  if (S.players) return S.players;
+  const data = await get("/players/nfl");
+  S.players = data || {};
+  return S.players;
+}
+function playerMeta(pid) {
+  const p = (S.players && S.players[pid]) || null;
+  if (!p) return { name: pid, pos: "", team: "", injury: "" };
+  const name = p.full_name || ((p.first_name || "") + " " + (p.last_name || "")).trim() || pid;
+  return { name, pos: p.position || "", team: p.team || "FA", injury: p.injury_status || "" };
+}
+
+// ── Transactions ──────────────────────────────────────────
+async function initTrades() {
+  const body = document.getElementById("trades-body");
+  body.innerHTML = inlineLoader("Loading transactions & players…");
+  try {
+    const weeks = [];
+    for (let w = 1; w <= S.maxWeek + 4; w++) weeks.push(w); // include playoff weeks for late moves
+    const [results] = await Promise.all([
+      Promise.all(weeks.map(async w => {
+        try { const d = await get("/league/" + LEAGUE_ID + "/transactions/" + w); return Array.isArray(d) ? d : []; }
+        catch { return []; }
+      })),
+      ensurePlayers()
+    ]);
+    const all = results.flat().filter(t => t.status === "complete");
+    all.sort((a, b) => (b.created || 0) - (a.created || 0));
+    S.transactions = all;
+  } catch (e) {
+    body.innerHTML = '<div class="empty">Could not load transactions.</div>';
+    return;
+  }
+  renderTrades();
+}
+
+function renderTrades() {
+  const body = document.getElementById("trades-body");
+  const filters = [
+    { id: "all", label: "All" },
+    { id: "trade", label: "Trades" },
+    { id: "waiver", label: "Waivers" },
+    { id: "free_agent", label: "Free Agents" }
+  ];
+  const bar = '<div class="filter-bar">' + filters.map(f =>
+    '<button class="fbtn' + (S.txFilter === f.id ? ' active' : '') + '" onclick="setTxFilter(\'' + f.id + '\')">' + f.label + '</button>'
+  ).join("") + '</div>';
+
+  const list = (S.transactions || []).filter(t => S.txFilter === "all" || t.type === S.txFilter);
+  if (!list.length) {
+    body.innerHTML = bar + '<div class="empty">No transactions to show.</div>';
+    return;
+  }
+
+  const cards = list.map(t => {
+    const date = t.created ? new Date(t.created).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "";
+    const rosters = t.roster_ids || [];
+    const adds = t.adds || {}, drops = t.drops || {};
+    const budget = t.waiver_budget || [];
+
+    const teamBlocks = rosters.map(rid => {
+      const added = Object.entries(adds).filter(([, r]) => String(r) === String(rid)).map(([pid]) => pid);
+      const dropped = Object.entries(drops).filter(([, r]) => String(r) === String(rid)).map(([pid]) => pid);
+      const picks = (t.draft_picks || []).filter(p => String(p.owner_id) === String(rid));
+      let moves = "";
+      added.forEach(pid => { const m = playerMeta(pid); moves += '<div class="tx-move tx-add">+ ' + esc(m.name) + ' <span class="tx-pos">' + esc(m.pos + (m.team ? " · " + m.team : "")) + '</span></div>'; });
+      picks.forEach(p => { moves += '<div class="tx-move tx-add">+ ' + esc(p.season + " Round " + p.round + " pick") + '</div>'; });
+      dropped.forEach(pid => { const m = playerMeta(pid); moves += '<div class="tx-move tx-drop">− ' + esc(m.name) + ' <span class="tx-pos">' + esc(m.pos + (m.team ? " · " + m.team : "")) + '</span></div>'; });
+      const bid = budget.filter(b => String(b.sender) === String(rid)).reduce((n, b) => n + (b.amount || 0), 0);
+      const waiverBid = (t.settings && t.settings.waiver_bid);
+      const bidTxt = (t.type === "waiver" && waiverBid != null) ? ' <span class="tx-pos">($' + waiverBid + ')</span>' : '';
+      if (!moves && !bid) return "";
+      return '<div class="tx-team"><div class="tx-team-name">' + esc(teamNameByRoster(rid)) + bidTxt + '</div>' + moves +
+        (bid ? '<div class="tx-move tx-pos">Sent $' + bid + ' FAAB</div>' : '') + '</div>';
+    }).join("");
+
+    const typeLbl = t.type === "free_agent" ? "Free Agent" : t.type.charAt(0).toUpperCase() + t.type.slice(1);
+    return '<div class="tx-card"><div class="tx-head">' +
+      '<span class="tx-type ' + t.type + '">' + typeLbl + '</span>' +
+      '<span class="tx-date">' + esc(date) + '</span></div>' + teamBlocks + '</div>';
+  }).join("");
+
+  body.innerHTML = bar + cards;
+}
+
+function setTxFilter(f) { S.txFilter = f; renderTrades(); }
+
+// ── Playoffs ──────────────────────────────────────────────
+async function initPlayoffs() {
+  const body = document.getElementById("playoffs-body");
+  body.innerHTML = inlineLoader("Loading bracket…");
+  try {
+    const [winners, losers] = await Promise.all([
+      get("/league/" + LEAGUE_ID + "/winners_bracket").catch(() => []),
+      get("/league/" + LEAGUE_ID + "/losers_bracket").catch(() => [])
+    ]);
+    S.brackets = { winners: Array.isArray(winners) ? winners : [], losers: Array.isArray(losers) ? losers : [] };
+  } catch (e) {
+    body.innerHTML = '<div class="empty">Could not load the playoff bracket.</div>';
+    return;
+  }
+  renderBracket();
+}
+
+function renderBracket() {
+  const body = document.getElementById("playoffs-body");
+  const matches = S.brackets.winners;
+  if (!matches.length) {
+    body.innerHTML = '<div class="empty">The playoff bracket isn\'t available yet.</div>';
+    return;
+  }
+
+  // resolve t1/t2 which may reference prior matches via {w:matchId} / {l:matchId}
+  const byMatch = {};
+  matches.forEach(m => byMatch[m.m] = m);
+  const rounds = {};
+  matches.forEach(m => { (rounds[m.r] = rounds[m.r] || []).push(m); });
+  const roundNums = Object.keys(rounds).map(Number).sort((a, b) => a - b);
+  const lastRound = roundNums[roundNums.length - 1];
+
+  const resolveSlot = (slot, from) => {
+    if (slot != null) return { rid: slot, label: null };
+    if (from && from.w != null) return { rid: null, label: "Wk W of M" + from.w };
+    if (from && from.l != null) return { rid: null, label: "Loser of M" + from.l };
+    return { rid: null, label: "TBD" };
+  };
+
+  const roundTitle = r => {
+    if (r === lastRound) return "Championship";
+    if (r === lastRound - 1) return "Semifinals";
+    if (r === 1) return "Round 1";
+    return "Round " + r;
+  };
+
+  const html = '<div class="bracket">' + roundNums.map(r => {
+    const ms = rounds[r].sort((a, b) => (a.m || 0) - (b.m || 0));
+    const cards = ms.map(m => {
+      const s1 = resolveSlot(m.t1, m.t1_from);
+      const s2 = resolveSlot(m.t2, m.t2_from);
+      const teamRow = (slot, isWinner) => {
+        if (slot.rid == null) return '<div class="br-tbd">' + esc(slot.label || "TBD") + '</div>';
+        const name = teamNameByRoster(slot.rid);
+        const win = m.w != null && String(m.w) === String(slot.rid);
+        return '<div class="br-team' + (win ? ' winner' : '') + '" onclick="openTeam(' + slot.rid + ')">' +
+          '<span class="br-seed"></span>' +
+          '<span class="br-name' + (win ? ' winner' : '') + '">' + esc(name) + '</span></div>';
+      };
+      const plc = m.p ? ('<div class="br-round-title">' + (m.p === 1 ? "🏆 Title game" : "Place " + m.p) + '</div>') : '';
+      return plc + '<div class="br-match">' + teamRow(s1) + teamRow(s2) + '</div>';
+    }).join("");
+    return '<div class="br-round"><div class="br-round-title">' + roundTitle(r) + '</div>' + cards + '</div>';
+  }).join("") + '</div>';
+
+  body.innerHTML = html + '<div class="section-note" style="margin-top:10px">Winners bracket · click a team for its roster</div>';
+}
+
+// ── Gazette team-bio stats ────────────────────────────────
+async function initGazette() {
+  if (!S.league.previous_league_id) return;
+  await ensureHistory();
+  const H = S.history;
+  if (!H || !H.managers) return;
+
+  // Last season standings: seasons[0] is newest
+  const lastSeason = H.seasons && H.seasons[0];
+  const lastRank = {};
+  if (lastSeason) {
+    const sorted = [...lastSeason.rosters].sort((a, b) =>
+      ((b.settings?.wins || 0) - (a.settings?.wins || 0)) ||
+      (parsePF(b.settings) - parsePF(a.settings))
+    );
+    sorted.forEach((r, i) => {
+      const u = lastSeason.userById[r.owner_id];
+      const canon = resolveManager((u && u.display_name) || "");
+      if (canon) lastRank[canon] = i + 1;
+    });
+  }
+
+  const ordinal = n => {
+    const s = ["th","st","nd","rd"], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  };
+
+  document.querySelectorAll(".team-bio[data-manager]").forEach(el => {
+    const mgr = el.dataset.manager;
+    const m = H.managers[mgr];
+    const statsEl = el.querySelector(".bio-stats");
+    if (!statsEl) return;
+
+    const pills = [];
+    if (m && m.titles > 0)
+      pills.push(`<span class="bio-stat gold">🏆 ${m.titles} title${m.titles > 1 ? "s" : ""}</span>`);
+    if (m && m.lasts > 0)
+      pills.push(`<span class="bio-stat dim">🥄 ${m.lasts} spoon${m.lasts > 1 ? "s" : ""}</span>`);
+    if (m && (m.w + m.l) > 0)
+      pills.push(`<span class="bio-stat">⚔️ ${m.w}W–${m.l}L</span>`);
+    if (lastRank[mgr] && lastSeason)
+      pills.push(`<span class="bio-stat">${ordinal(lastRank[mgr])} in ${lastSeason.season}</span>`);
+
+    statsEl.innerHTML = pills.length ? pills.join("") : '<span class="bio-stat dim">No history yet</span>';
+  });
+
+  // Sort team bios by last season position (unranked go last)
+  const container = document.querySelector(".team-bio")?.parentElement;
+  if (container) {
+    const footer = container.querySelector(".news-footer");
+    const bios = [...container.querySelectorAll(".team-bio[data-manager]")];
+    bios.sort((a, b) => {
+      const ra = lastRank[a.dataset.manager] || 999;
+      const rb = lastRank[b.dataset.manager] || 999;
+      return ra - rb;
+    });
+    bios.forEach(el => container.appendChild(el));
+    if (footer) container.appendChild(footer);
+  }
+}
+
+// ── Hall of Fame (prior seasons) ──────────────────────────
+// Walk previous_league_id back through every completed season and aggregate by owner (user_id is stable across seasons).
+async function ensureHistory() {
+  if (S.history) return S.history;
+
+  const chain = [];
+  let id = S.league.previous_league_id, guard = 0;
+  while (id && guard++ < 20) {
+    try {
+      const lg = await get("/league/" + id);
+      chain.push(lg);
+      id = lg.previous_league_id;
+    } catch { break; }
+  }
+
+  const seasons = (await Promise.all(chain.map(loadSeason))).filter(s => s && s.played);
+  S.history = { seasons };
+  computeAllTime(S.history);
+  return S.history;
+}
+
+async function loadSeason(lg) {
+  const id = lg.league_id;
+  const pStart = (lg.settings && lg.settings.playoff_week_start) || 15;
+  const weeks = [];
+  for (let w = 1; w <= 17; w++) weeks.push(w);
+
+  const [rosters, users, wb, lb, ...mus] = await Promise.all([
+    get("/league/" + id + "/rosters").catch(() => []),
+    get("/league/" + id + "/users").catch(() => []),
+    get("/league/" + id + "/winners_bracket").catch(() => []),
+    get("/league/" + id + "/losers_bracket").catch(() => []),
+    ...weeks.map(w => get("/league/" + id + "/matchups/" + w).catch(() => []))
+  ]);
+
+  const userById = {}; (users || []).forEach(u => userById[u.user_id] = u);
+  const ownerByRoster = {}; (rosters || []).forEach(r => ownerByRoster[r.roster_id] = r.owner_id);
+  const weekData = {}; mus.forEach((arr, i) => weekData[i + 1] = Array.isArray(arr) ? arr : []);
+
+  // champion / runner-up / 3rd from the winners bracket placement games
+  const champMatch = (wb || []).find(m => m.p === 1);
+  const thirdMatch = (wb || []).find(m => m.p === 3);
+  const champion = champMatch ? ownerByRoster[champMatch.w] : null;
+  const runnerUp = champMatch ? ownerByRoster[champMatch.l] : null;
+  const third    = thirdMatch ? ownerByRoster[thirdMatch.w] : null;
+
+  // wooden spoon = last in final regular-season standings
+  const sorted = [...(rosters || [])].sort((a, b) =>
+    (((b.settings && b.settings.wins) || 0) - ((a.settings && a.settings.wins) || 0)) ||
+    (parsePF(b.settings) - parsePF(a.settings)));
+  const last = sorted.length ? sorted[sorted.length - 1].owner_id : null;
+
+  const played = weeks.some(w => (weekData[w] || []).some(m => (m.points || 0) > 0));
+
+  return { season: lg.season, id, pStart, rosters: rosters || [], userById, ownerByRoster, weekData, champion, runnerUp, third, last, played };
+}
+
+function computeAllTime(hist) {
+  const M = {};   // canonical manager name -> aggregate
+  const initM = name => ({ name, user: null, team: null, seasons: 0, w: 0, l: 0, t: 0, pf: 0, titles: 0, runnerUps: 0, lasts: 0, hi: { pts: 0 }, vs: {} });
+  const mget = canon => (M[canon] = M[canon] || initM(canon));   // canon IS the friendly display name
+  const addH2H = (a, b, pf, pa) => {
+    const v = mget(a).vs[b] = mget(a).vs[b] || { w: 0, l: 0, t: 0, pf: 0, pa: 0, n: 0 };
+    v.pf += pf; v.pa += pa; v.n++;
+    if (pf > pa) v.w++; else if (pf < pa) v.l++; else v.t++;
+  };
+  // Stable identity: map each Sleeper user_id to one canonical name (from their most
+  // recent display name) so renames across seasons still merge into one manager.
+  const uidCanon = {}, uidDisplay = {};
+  hist.seasons.forEach(s => (s.rosters || []).forEach(r => {
+    const uid = r.owner_id; if (!uid || uidCanon[uid]) return;   // seasons are newest-first
+    const dn = ownerName(s.userById[uid]);
+    uidCanon[uid] = resolveManager(dn);
+    uidDisplay[uid] = dn;
+  }));
+  // resolve a Sleeper season + user_id to { canon, display, user }
+  const sm = (s, uid) => {
+    if (!uid) return null;
+    const u = s.userById[uid] || null;
+    const canon = uidCanon[uid] || resolveManager(ownerName(u));
+    return { canon, display: canon, user: u };
+  };
+  const allScores = [];
+  const timeline = [];
+
+  // ── Sleeper seasons ──
+  hist.seasons.forEach(s => {
+    s.rosters.forEach(r => {
+      const p = sm(s, r.owner_id); if (!p) return;
+      const m = mget(p.canon); if (!m.user && p.user) m.user = p.user;
+      m.seasons++;
+      const st = r.settings || {};
+      m.w += st.wins || 0; m.l += st.losses || 0; m.t += st.ties || 0; m.pf += parsePF(st);
+    });
+    const champ = sm(s, s.champion), runner = sm(s, s.runnerUp), spoon = sm(s, s.last);
+    if (champ) mget(champ.canon).titles++;
+    if (runner) mget(runner.canon).runnerUps++;
+    if (spoon) mget(spoon.canon).lasts++;
+    timeline.push({ season: String(s.season), champ, runner, spoon });
+
+    Object.entries(s.weekData).forEach(([wk, arr]) => {
+      const reg = (+wk) < s.pStart;
+      const grouped = {};
+      arr.forEach(mm => {
+        if (mm.points == null) return;
+        const p = sm(s, s.ownerByRoster[mm.roster_id]);
+        if (p && mm.points > 0) {
+          const m = mget(p.canon); if (!m.user && p.user) m.user = p.user;
+          allScores.push({ manager: p.canon, pts: mm.points, season: String(s.season), week: +wk });
+          if (mm.points > m.hi.pts) m.hi = { pts: mm.points, season: String(s.season), week: +wk };
+        }
+        if (reg && mm.matchup_id != null && mm.points > 0) (grouped[mm.matchup_id] = grouped[mm.matchup_id] || []).push(mm);
+      });
+      Object.values(grouped).forEach(pair => {
+        if (pair.length !== 2) return;
+        const a = sm(s, s.ownerByRoster[pair[0].roster_id]), b = sm(s, s.ownerByRoster[pair[1].roster_id]);
+        if (!a || !b) return;
+        addH2H(a.canon, b.canon, pair[0].points, pair[1].points);
+        addH2H(b.canon, a.canon, pair[1].points, pair[0].points);
+      });
+    });
+  });
+
+  // ── Manual pre-Sleeper seasons ──
+  (MANUAL_SEASONS || []).forEach(s => {
+    const teamOf = nm => { const row = (s.standings || []).find(r => resolveManager(r.manager) === resolveManager(nm)); return row && row.team; };
+    const mk = nm => { const c = resolveManager(nm); return c ? { canon: c, display: c, user: null, team: teamOf(nm) } : null; };
+    (s.standings || []).forEach(row => {
+      const canon = resolveManager(row.manager); if (!canon) return;
+      const m = mget(canon);
+      if (!m.team && row.team) m.team = row.team;
+      m.seasons++;
+      m.w += row.wins || 0; m.l += row.losses || 0; m.t += row.ties || 0; m.pf += row.pf || 0;
+    });
+    const champ = mk(s.champion), runner = mk(s.runnerUp), spoon = mk(s.last);
+    if (champ) mget(champ.canon).titles++;
+    if (runner) mget(runner.canon).runnerUps++;
+    if (spoon) mget(spoon.canon).lasts++;
+    timeline.push({ season: String(s.season), pre: true, champ, runner, spoon });
+    (s.highScores || []).forEach(h => {
+      const canon = resolveManager(h.manager); if (!canon) return;
+      const m = mget(canon);
+      allScores.push({ manager: canon, pts: h.pts, season: String(s.season), week: h.week || null });
+      if (h.pts > m.hi.pts) m.hi = { pts: h.pts, season: String(s.season), week: h.week || null };
+    });
+  });
+
+  hist.managers = M;
+  hist.timeline = timeline.sort((a, b) => (+b.season) - (+a.season));
+  hist.topScores = allScores.sort((a, b) => b.pts - a.pts).slice(0, 12);
+}
+
+// owner display helpers (history is owner-centric; teams rebrand each year)
+const ownerName = u => u && u.display_name || "Unknown";
+const ownerTeam = u => u && u.metadata && u.metadata.team_name || "";
+const initialsOf = name => (name || "?").split(/\s+/).map(w => w[0] || "").join("").slice(0, 2).toUpperCase();
+const avInline = el => { const d = document.createElement("div"); d.appendChild(el); return d.innerHTML; };
+// avatar for a manager record/ref: Sleeper avatar if known, else crest by team name, else initials
+function baseManagerAvatar(m, size) {
+  const nm = (m && (m.name || m.display)) || "";
+  if (m && m.user) return baseUserAvatar(m.user, nm, size);
+  if (m && m.team) { const c = customLogo({ metadata: { team_name: m.team } }, size); if (c) return c; }
+  return avFb(initialsOf(nm), size);
+}
+function managerAvatar(m, size) {
+  const nm = (m && (m.name || m.display)) || "";
+  const url = TEAM_IMAGES[nm];
+  if (url) return cloudImg(url, nm, size, () => baseManagerAvatar(m, size));
+  return baseManagerAvatar(m, size);
+}
+
+async function initHof() {
+  const body = document.getElementById("hof-body");
+  if (!S.league.previous_league_id && !(MANUAL_SEASONS && MANUAL_SEASONS.length)) {
+    body.innerHTML = '<div class="empty">No previous seasons are linked to this league yet.</div>';
+    return;
+  }
+  body.innerHTML = inlineLoader("Digging through the archives…");
+  await ensureHistory();
+  renderHof();
+}
+
+function renderHof() {
+  const body = document.getElementById("hof-body");
+  const H = S.history;
+  if (!H.timeline || !H.timeline.length) {
+    body.innerHTML = '<div class="empty">No completed seasons with data were found.</div>';
+    return;
+  }
+  document.getElementById("hof-note").textContent = H.timeline.length + " season" + (H.timeline.length > 1 ? "s" : "");
+
+  const managers = H.managers;
+  const entries = Object.entries(managers).filter(([, m]) => m.seasons > 0);
+
+  // ── Champions timeline (newest first) ──
+  let champs = '<div class="hof-sub">Champions</div>';
+  H.timeline.forEach(t => {
+    const cm = t.champ && managers[t.champ.canon];                 // merged manager record
+    const champRef = t.champ ? { name: t.champ.display, user: t.champ.user || (cm && cm.user), team: t.champ.team || (cm && cm.team) } : null;
+    const champLbl = champRef ? (champRef.team || ownerTeam(champRef.user) || champRef.name) : "—";
+    champs += '<div class="champ-card">' +
+      '<div class="champ-year"><div class="champ-year-num">' + esc(t.season) + '</div>' +
+        '<div class="champ-year-lbl">' + (t.pre ? "Pre-Sleeper" : "Season") + '</div></div>' +
+      '<div class="champ-main"><span class="champ-trophy">🏆</span>' + avInline(managerAvatar(champRef, 34)) +
+        '<div class="champ-info"><div class="champ-name">' + esc(champLbl) + '</div>' +
+        '<div class="champ-owner">' + esc(t.champ ? t.champ.display : "—") + '</div></div></div>' +
+      '<div class="champ-extra">' +
+        '<div><span class="lbl">2nd </span><span class="ru">' + esc(t.runner ? t.runner.display : "—") + '</span></div>' +
+        '<div><span class="lbl">🥄 </span><span class="spoon">' + esc(t.spoon ? t.spoon.display : "—") + '</span></div>' +
+      '</div></div>';
+  });
+
+  // ── All-time record cards ──
+  const games = m => m.w + m.l + m.t;
+  const pct = m => games(m) ? (m.w + m.t * 0.5) / games(m) : 0;
+  // for count stats, include everyone tied at the top
+  const topBy = key => {
+    const list = entries.filter(([, m]) => m[key] > 0);
+    if (!list.length) return null;
+    const max = Math.max(...list.map(([, m]) => m[key]));
+    return { count: max, names: list.filter(([, m]) => m[key] === max).map(([, m]) => m.name) };
+  };
+  const titlesTop = topBy("titles");
+  const spoonsTop = topBy("lasts");
+  const bestPct = entries.filter(([, m]) => m.seasons >= 2).sort((a, b) => pct(b[1]) - pct(a[1]))[0];
+  const topScore = H.topScores[0];
+
+  const recCard = (label, val, sub, wrap) =>
+    '<div class="rec-card"><div class="rec-card-label">' + label + '</div>' +
+    '<div class="rec-card-val">' + val + '</div><div class="rec-card-sub' + (wrap ? ' multi' : '') + '">' + esc(sub) + '</div></div>';
+  const wkLbl = x => x.week ? (" · Wk " + x.week) : "";
+
+  let records = '<div class="hof-sub">All-Time Records</div><div class="rec-grid">';
+  if (titlesTop) records += recCard("Most titles", titlesTop.count + "🏆", titlesTop.names.join(", "), true);
+  if (topScore)  records += recCard("Highest game ever", topScore.pts.toFixed(2), managers[topScore.manager].name + " · " + topScore.season + wkLbl(topScore));
+  if (bestPct)   records += recCard("Best win %", (pct(bestPct[1]) * 100).toFixed(1) + "%", bestPct[1].name);
+  if (spoonsTop) records += recCard("Most wooden spoons", spoonsTop.count + "🥄", spoonsTop.names.join(", "), true);
+  records += '</div>';
+
+  // ── All-time leaderboard (titles, then win%) ──
+  const board = entries.map(([canon, m]) => ({ canon, m })).sort((a, b) =>
+    b.m.titles - a.m.titles || pct(b.m) - pct(a.m) || b.m.pf - a.m.pf);
+  let lb = '<div class="hof-sub">All-Time Leaderboard</div>';
+  board.forEach((row, i) => {
+    const m = row.m;
+    lb += '<div class="hof-row"><div class="hof-rk">' + (i + 1) + '</div>' + avInline(managerAvatar(m, 30)) +
+      '<div class="hof-info"><div class="hof-name">' + esc(m.name) + '</div>' +
+      '<div class="hof-meta">' + m.seasons + ' season' + (m.seasons > 1 ? 's' : '') +
+      (m.titles ? ' · ' + m.titles + '🏆' : '') + '</div></div>' +
+      '<div class="hof-wl"><div class="hof-wl-pct">' + (pct(m) * 100).toFixed(0) + '%</div>' +
+      '<div class="hof-wl-rec">' + m.w + '-' + m.l + (m.t ? '-' + m.t : '') + '</div></div></div>';
+  });
+
+  // ── All-time high scores ──
+  let hs = '<div class="hof-sub">All-Time High Scores</div>';
+  H.topScores.forEach((x, i) => {
+    hs += '<div class="hs-row"><div class="hs-week">#' + (i + 1) + '</div>' +
+      '<div class="hs-name">' + esc(managers[x.manager].name) + ' <span class="hs-season">' + esc(x.season) + wkLbl(x) + '</span></div>' +
+      '<div class="hs-pts">' + x.pts.toFixed(2) + '</div></div>';
+  });
+
+  // ── All-time head-to-head ──
+  const h2hList = board.map(r => ({ canon: r.canon, name: r.m.name }));
+  const h2h = '<div class="hof-sub">All-Time Head-to-Head</div>' +
+    '<select class="h2h-select" id="hof-h2h-sel" onchange="renderHofH2H(this.value)">' +
+    h2hList.map(t => '<option value="' + esc(t.canon) + '">' + esc(t.name) + '</option>').join("") +
+    '</select><div id="hof-h2h-rows"></div>';
+
+  body.innerHTML = champs + records + lb + hs + h2h;
+  if (h2hList.length) renderHofH2H(h2hList[0].canon);
+}
+
+function renderHofH2H(canon) {
+  const managers = S.history.managers;
+  const me = managers[canon];
+  const wrap = document.getElementById("hof-h2h-rows");
+  if (!me) { wrap.innerHTML = ""; return; }
+  const rows = Object.entries(me.vs).map(([opp, v]) => ({ opp, ...v }))
+    .sort((a, b) => (b.w - b.l) - (a.w - a.l) || b.pf - a.pf);
+  if (!rows.length) { wrap.innerHTML = '<div class="empty">No head-to-head history.</div>'; return; }
+  wrap.innerHTML = rows.map(r => {
+    const opp = managers[r.opp];
+    const cls = r.w > r.l ? "win" : r.w < r.l ? "loss" : "even";
+    return '<div class="h2h-row"><div class="h2h-opp">' +
+      '<div class="h2h-opp-name">' + esc(opp ? opp.name : r.opp) + '</div>' +
+      '<div class="h2h-opp-pts">' + (r.pf / r.n).toFixed(1) + ' avg for · ' + (r.pa / r.n).toFixed(1) + ' avg against</div></div>' +
+      '<div class="h2h-rec ' + cls + '">' + r.w + '-' + r.l + (r.t ? '-' + r.t : '') + '</div></div>';
+  }).join("");
+}
+
+// ── Stat Zone ─────────────────────────────────────────────
+let _szChart = null;
+
+async function initStatZone() {
+  const loading = document.getElementById("sz-loading");
+  const canvas  = document.getElementById("sz-chart");
+  const bsgrid  = document.getElementById("sz-bs-grid");
+
+  const POS_COLORS = {
+    QB: { bg: "rgba(240,160,80,0.82)",  border: "#f0a050" },
+    RB: { bg: "rgba(78,224,138,0.82)",  border: "#4ee08a" },
+    WR: { bg: "rgba(109,184,240,0.82)", border: "#6db8f0" },
+    TE: { bg: "rgba(184,122,255,0.82)", border: "#b87aff" },
+  };
+  const INJURY_BORDER = "rgba(240,80,80,0.9)";
+  const INJURY_WEEKS  = 14; // fewer than this active weeks = flagged (4+ games missed)
+
+  try {
+    // 1. Find 2025 league
+    const prevId = S.league.previous_league_id;
+    if (!prevId) throw new Error("No previous season found in Sleeper.");
+
+    // 2. Find completed 2025 draft
+    const drafts = await get(`/league/${prevId}/drafts`);
+    const draft  = drafts.find(d => d.status === "complete") || drafts[0];
+    if (!draft) throw new Error("No completed 2025 draft found.");
+
+    // 3. Picks + manager map
+    const [picks, rosters2025, users2025] = await Promise.all([
+      get(`/draft/${draft.draft_id}/picks`),
+      get(`/league/${prevId}/rosters`),
+      get(`/league/${prevId}/users`),
+    ]);
+    const userMap = {};
+    users2025.forEach(u => userMap[u.user_id] = friendlyName(u));
+    const rosterOwner = {};
+    rosters2025.forEach(r => rosterOwner[r.roster_id] = userMap[r.owner_id] || "?");
+
+    // 4. Fetch all 18 weeks of 2025 stats in parallel
+    loading.textContent = "Fetching 2025 season stats…";
+    const weeks = await Promise.all(
+      Array.from({ length: 18 }, (_, i) =>
+        fetch(`${API}/stats/nfl/regular/2025/${i + 1}`)
+          .then(r => r.ok ? r.json() : {}).catch(() => ({}))
+      )
+    );
+
+    // 5. Aggregate pts + count games played per player
+    // Use s.gp (Sleeper's games-played flag = 1 when played) rather than mere
+    // API presence, because Sleeper returns an entry for every player every week.
+    const ptsMap  = {};
+    const wkCount = {};
+    weeks.forEach(w => {
+      Object.entries(w).forEach(([pid, s]) => {
+        ptsMap[pid]  = (ptsMap[pid]  || 0) + (s.pts_half_ppr || 0);
+        wkCount[pid] = (wkCount[pid] || 0) + (s.gp > 0 ? 1 : 0);
+      });
+    });
+
+    // 6. Build per-position point arrays (skip K/DEF)
+    const byPos = { QB: [], RB: [], WR: [], TE: [] };
+    const all   = [];
+
+    picks.forEach(pick => {
+      const pos = pick.metadata?.position;
+      if (!byPos[pos]) return;
+      const pts     = Math.round((ptsMap[pick.player_id] || 0) * 10) / 10;
+      const wk      = wkCount[pick.player_id] || 0;
+      const dnp     = wk === 0;
+      const injured = !dnp && wk < INJURY_WEEKS;
+      const name    = `${pick.metadata?.first_name || ""} ${pick.metadata?.last_name || ""}`.trim();
+      const pt      = { x: pick.pick_no, y: pts, player: name, pos,
+                        manager: rosterOwner[pick.roster_id] || "?",
+                        weeksActive: wk, injured, dnp };
+      byPos[pos].push(pt);
+      all.push(pt);
+    });
+
+    // 7. Linear regression (expected value trend)
+    const n     = all.length;
+    const sumX  = all.reduce((s, p) => s + p.x, 0);
+    const sumY  = all.reduce((s, p) => s + p.y, 0);
+    const sumXY = all.reduce((s, p) => s + p.x * p.y, 0);
+    const sumX2 = all.reduce((s, p) => s + p.x * p.x, 0);
+    const slope     = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+    const maxPick   = Math.max(...all.map(p => p.x));
+    const trendLine = [
+      { x: 1,       y: Math.max(0, intercept + slope) },
+      { x: maxPick, y: Math.max(0, intercept + slope * maxPick) },
+    ];
+
+    // 8. Medians for quadrant dividers
+    const sortedX = [...all.map(p => p.x)].sort((a, b) => a - b);
+    const sortedY = [...all.map(p => p.y)].sort((a, b) => a - b);
+    const medX = sortedX[Math.floor(sortedX.length / 2)];
+    const medY = sortedY[Math.floor(sortedY.length / 2)];
+
+    // 9. Quadrant label custom plugin (closure over medX/medY)
+    const szQuadPlugin = {
+      id: "szQuadrants",
+      afterDraw(chart) {
+        const { ctx, chartArea: ca, scales: { x: xs, y: ys } } = chart;
+        const mx = xs.getPixelForValue(medX);
+        const my = ys.getPixelForValue(medY);
+        ctx.save();
+
+        // Dividing lines
+        ctx.strokeStyle = "rgba(201,162,39,0.22)";
+        ctx.lineWidth = 1;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath(); ctx.moveTo(mx, ca.top);    ctx.lineTo(mx, ca.bottom); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(ca.left, my);   ctx.lineTo(ca.right, my);  ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Quadrant labels with backing rect so dots don't obscure them
+        const lhalf = (ca.left + mx) / 2;
+        const rhalf = (mx + ca.right) / 2;
+        [
+          { cx: lhalf,       cy: ca.top + 18,    label: "⚡ HITS",        sub: "You got what you paid for",  col: "rgba(78,224,138,0.80)",  align: "center" },
+          { cx: ca.left + 8, cy: ca.bottom - 24, label: "💀 BUSTS",       sub: "The regret zone",            col: "rgba(240,138,138,0.80)", align: "left"   },
+          { cx: rhalf,       cy: ca.top + 18,    label: "💎 VALUE PICKS",  sub: "The gift that kept giving",  col: "rgba(109,184,240,0.80)", align: "center" },
+          { cx: ca.right - 8,cy: ca.bottom - 24, label: "😐 MEH",          sub: "As advertised",              col: "rgba(160,160,160,0.70)", align: "right"  },
+        ].forEach(({ cx, cy, label, sub, col, align }) => {
+          ctx.textAlign = align;
+          // Measure for backing rect
+          ctx.font = "bold 11px Inter, system-ui, sans-serif";
+          const lw = ctx.measureText(label).width;
+          ctx.font = "9.5px Inter, system-ui, sans-serif";
+          const sw = ctx.measureText(sub).width;
+          const bw = Math.max(lw, sw) + 14;
+          const rx = align === "left" ? cx - 4 : align === "right" ? cx - bw + 4 : cx - bw / 2;
+          ctx.fillStyle = "rgba(7,21,37,0.72)";
+          ctx.beginPath();
+          ctx.roundRect(rx, cy - 13, bw, 30, 4);
+          ctx.fill();
+          // Label
+          ctx.fillStyle = col;
+          ctx.font = "bold 11px Inter, system-ui, sans-serif";
+          ctx.fillText(label, cx, cy);
+          ctx.font = "9.5px Inter, system-ui, sans-serif";
+          ctx.fillText(sub, cx, cy + 13);
+        });
+
+        ctx.restore();
+      }
+    };
+
+    // 10. Render chart
+    if (_szChart) _szChart.destroy();
+    canvas.style.display = "block";
+    loading.style.display = "none";
+
+    _szChart = new Chart(canvas.getContext("2d"), {
+      plugins: [szQuadPlugin],
+      type: "scatter",
+      data: {
+        datasets: [
+          ...Object.entries(byPos)
+            .filter(([, arr]) => arr.length)
+            .map(([pos, data]) => ({
+              label: pos,
+              data,
+              backgroundColor: POS_COLORS[pos].bg,
+              borderColor:  data.map(p => (p.injured || p.dnp) ? INJURY_BORDER : POS_COLORS[pos].border),
+              borderWidth:  data.map(p => (p.injured || p.dnp) ? 2.5 : 1),
+              pointRadius:  data.map(p => (p.injured || p.dnp) ? 7 : 6),
+              pointHoverRadius: 9,
+              pointStyle: "circle",
+            })),
+          {
+            label: "Expected value",
+            data: trendLine,
+            type: "line",
+            borderColor: "rgba(201,162,39,0.55)",
+            borderWidth: 1.5,
+            borderDash: [7, 5],
+            backgroundColor: "transparent",
+            pointRadius: 0,
+            pointStyle: "line",
+            tension: 0,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 500 },
+        scales: {
+          x: {
+            title: { display: true, text: "2025 Draft Pick (overall)", color: "#7a9ab8", font: { size: 12 } },
+            ticks: { color: "#7a9ab8" },
+            grid:  { color: "rgba(30,58,85,0.7)" },
+            min: 0,
+          },
+          y: {
+            title: { display: true, text: "Half-PPR Points (full season)", color: "#7a9ab8", font: { size: 12 } },
+            ticks: { color: "#7a9ab8" },
+            grid:  { color: "rgba(30,58,85,0.7)" },
+            min: 0,
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: "#d6e4f2", usePointStyle: true, pointStyleWidth: 9, font: { size: 12 },
+              // Append injury key to legend
+              generateLabels(chart) {
+                const base = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                base.push({
+                  text: "⚠ Missed 4+ games",
+                  fillStyle: "transparent",
+                  strokeStyle: INJURY_BORDER,
+                  lineWidth: 2,
+                  pointStyle: "circle",
+                  fontColor: "#d6e4f2",
+                });
+                return base;
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: "#071525",
+            borderColor: "#1e3a55",
+            borderWidth: 1,
+            titleColor: "#e8f4ff",
+            bodyColor: "#7a9ab8",
+            callbacks: {
+              title: () => "",
+              label: ctx => {
+                const d = ctx.raw;
+                if (!d.player) return "Expected value trend";
+                const exp  = Math.round(intercept + slope * d.x);
+                const diff = Math.round(d.y - exp);
+                const sign = diff >= 0 ? "+" : "";
+                const lines = [
+                  `${d.player} (${d.pos})`,
+                  `Pick #${d.x} · Drafted by ${d.manager}`,
+                  `${d.y} pts  (${sign}${diff} vs expected)`,
+                ];
+                if (d.dnp)     lines.push("⚠ Did not play (injury / cut)");
+                else if (d.injured) lines.push(`⚠ Missed 4+ games — active ${d.weeksActive}/17 weeks`);
+                return lines;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // 11. Busts & steals (overall + by position) — exclude injured/DNP players
+    const withDiff = all.map(p => ({ ...p, diff: p.y - (intercept + slope * p.x) }));
+    const healthy  = withDiff.filter(p => !p.injured && !p.dnp);
+    const busts    = [...healthy].sort((a, b) => a.diff - b.diff).slice(0, 5);
+    const steals   = [...healthy].sort((a, b) => b.diff - a.diff).slice(0, 5);
+
+    function rowsHtml(players, isBust) {
+      return players.map(p => {
+        const diff = Math.round(p.diff);
+        const sign = diff >= 0 ? "+" : "";
+        const injBadge = (p.injured || p.dnp)
+          ? `<span style="color:#f08a8a;font-size:10px;margin-left:4px;">⚠</span>` : "";
+        return `<div class="sz-bs-row">
+          <span class="sz-bs-player">
+            ${p.player}<span class="sz-pos-pill ${p.pos}">${p.pos}</span>${injBadge}
+            <span style="display:block;font-size:10px;font-weight:400;color:#7a9ab8;margin-top:1px;">${p.manager}</span>
+          </span>
+          <span class="sz-bs-meta">
+            <span>#${p.x}</span>
+            <span class="sz-bs-pts">${p.y}pts</span>
+            <span class="sz-bs-diff ${isBust ? "neg" : "pos"}">${sign}${diff}</span>
+          </span>
+        </div>`;
+      }).join("");
+    }
+
+    document.getElementById("sz-busts").innerHTML  = rowsHtml(busts,  true);
+    document.getElementById("sz-steals").innerHTML = rowsHtml(steals, false);
+    bsgrid.style.display = "grid";
+
+    // 12a. Editor's note — manager draft performance, C. Laude voice
+    (() => {
+      // Average deviation from expected per manager (healthy picks only)
+      const mgAvg = {};
+      healthy.forEach(p => {
+        if (!mgAvg[p.manager]) mgAvg[p.manager] = { sum: 0, n: 0 };
+        mgAvg[p.manager].sum += p.diff;
+        mgAvg[p.manager].n++;
+      });
+      const mgRanked = Object.entries(mgAvg)
+        .map(([mgr, { sum, n }]) => ({ mgr, avg: Math.round(sum / n) }))
+        .sort((a, b) => b.avg - a.avg);
+      const best  = mgRanked[0];
+      const worst = mgRanked[mgRanked.length - 1];
+      const second = mgRanked[1];
+
+      // Most injury-hit manager
+      const mgInj = {};
+      withDiff.forEach(p => {
+        if (p.injured || p.dnp) mgInj[p.manager] = (mgInj[p.manager] || 0) + 1;
+      });
+      const injRanked = Object.entries(mgInj).sort((a, b) => b[1] - a[1]);
+      const [mostInjMgr, mostInjCount] = injRanked[0] || ["—", 0];
+
+      const bestSign  = best.avg  >= 0 ? "+" : "";
+      const worstSign = worst.avg >= 0 ? "+" : "";
+
+      const lines = [
+        `This office has reviewed the 2025 draft data and is prepared to issue verdicts. ` +
+        `Measured by how far each manager's selections outperformed or underdelivered their draft position, ` +
+        `${best.mgr} emerges as the most effective drafter in the league — averaging ${bestSign}${best.avg} points ` +
+        `above expectation per pick. ${second ? `${second.mgr} finishes a creditable second. ` : ""}` +
+        `This office acknowledges the achievement with appropriate, if measured, enthusiasm.`,
+
+        `At the other end of the table, ${worst.mgr} averaged ${worstSign}${worst.avg} points per pick relative ` +
+        `to expectation — a figure this office will allow to speak for itself, adding only that the model ` +
+        `is not known for leniency.`,
+
+        `Finally, on the matter of injuries: ${mostInjMgr} saw ${mostInjCount} of their drafted players miss ` +
+        `significant time, more than any other manager. Sympathies are extended. That said, having reviewed ` +
+        `the evidence in full, this office's primary recommendation for the 2026 draft is as follows: ` +
+        `the league should draft fewer players who will get injured. The data is unambiguous on this point.`,
+      ];
+
+      const noteWrap = document.getElementById("sz-editor-note-wrap");
+      noteWrap.innerHTML = `<div class="dc-editor-note" style="margin:18px 0 4px;">
+        <strong>Editor's note:</strong> ${lines.join(" ")} <em>— C. Laude</em>
+      </div>`;
+      noteWrap.style.display = "block";
+    })();
+
+    // 12. By-position breakdown
+    const posGrid = document.getElementById("sz-pos-grid");
+    const posOrder = ["QB", "RB", "WR", "TE"];
+    posGrid.innerHTML = `<div class="sz-pos-section-hd">By Position Group</div>` +
+      posOrder
+        .filter(pos => byPos[pos].length >= 2)
+        .map(pos => {
+          const pd  = byPos[pos].map(p => ({ ...p, diff: p.y - (intercept + slope * p.x) }))
+                                .filter(p => !p.injured && !p.dnp);
+          const pb  = [...pd].sort((a, b) => a.diff - b.diff).slice(0, 3);
+          const ps  = [...pd].sort((a, b) => b.diff - a.diff).slice(0, 3);
+          return `<div class="sz-pos-block">
+            <div class="sz-pos-block-label ${pos}">${pos}</div>
+            <div class="sz-bs-grid">
+              <div class="sz-bs-card busts">
+                <div class="sz-bs-hd">💀 Busts</div>
+                ${rowsHtml(pb, true)}
+              </div>
+              <div class="sz-bs-card steals">
+                <div class="sz-bs-hd">💎 Steals</div>
+                ${rowsHtml(ps, false)}
+              </div>
+            </div>
+          </div>`;
+        }).join("");
+    posGrid.style.display = "block";
+
+  } catch (err) {
+    loading.textContent = "Couldn't load Stat Zone: " + err.message;
+    loading.style.color = "#f08a8a";
+  }
+}
+
+// ── Team modal ────────────────────────────────────────────
+async function openTeam(rid) {
+  const roster = rosterById(rid);
+  if (!roster) return;
+  const user = getUser(roster.owner_id);
+  const name = teamName(user);
+  const s = roster.settings || {};
+  const pf = parsePF(s), pa = parsePA(s);
+  const ranks = standingsRankMap();
+
+  const bg = document.getElementById("modal-bg");
+  const modal = document.getElementById("modal");
+  bg.classList.add("open");
+  document.body.style.overflow = "hidden";
+
+  const head =
+    '<div class="modal-hd">' +
+    '<button class="modal-close" onclick="closeTeam()">&times;</button>' +
+    '<div id="modal-av"></div>' +
+    '<div><div class="modal-team-name">' + esc(name) + '</div>' +
+    '<div class="modal-team-owner">' + esc(friendlyName(user)) + '</div></div></div>' +
+    '<div class="modal-stats">' +
+    msCard("Record", (s.wins || 0) + "-" + (s.losses || 0) + ((s.ties || 0) ? "-" + s.ties : "")) +
+    msCard("Standing", "#" + (ranks[rid] || "–")) +
+    msCard("PF", pf.toFixed(1)) +
+    msCard("PA", pa.toFixed(1)) +
+    '</div>' +
+    '<div class="modal-body" id="modal-body">' + inlineLoader("Loading roster…") + '</div>';
+  modal.innerHTML = head;
+  modal.querySelector("#modal-av").appendChild(userAvatar(user, name, 46));
+
+  try {
+    await ensurePlayers();
+    renderRoster(roster);
+  } catch (e) {
+    document.getElementById("modal-body").innerHTML = '<div class="empty">Could not load player data.</div>';
+  }
+}
+
+function renderRoster(roster) {
+  const body = document.getElementById("modal-body");
+  const allP = roster.players || [];
+  if (!allP.length) {
+    body.innerHTML = '<div class="empty">This roster has no players yet — the draft hasn\'t happened.</div>';
+    return;
+  }
+
+  const starters = roster.starters || [];                 // may contain "0" for empty slots
+  const isEmpty = pid => !pid || pid === "0";
+  const filled = starters.filter(p => !isEmpty(p));
+  const bench = allP.filter(p => !filled.includes(p));
+
+  const slots = (S.league.roster_positions || []).filter(p => !["BN", "IR", "TAXI"].includes(p));
+  const slotLabel = p => ({ FLEX: "FLEX", WRRB_FLEX: "FLEX", REC_FLEX: "RFLX", SUPER_FLEX: "SFLX", IDP_FLEX: "IDP" }[p] || p);
+
+  let html = "";
+  if (starters.length) {
+    html += '<div class="roster-section-title">Starters</div>';
+    starters.forEach((pid, i) => { html += playerRow(pid, slotLabel(slots[i] || "")); });
+  }
+  if (bench.length) {
+    html += '<div class="roster-section-title">Bench</div>';
+    bench.forEach(pid => { html += playerRow(pid, "BN"); });
+  }
+  body.innerHTML = html;
+}
+
+function playerRow(pid, slot) {
+  if (!pid || pid === "0") {
+    return '<div class="p-row"><span class="p-slot">' + esc(slot) + '</span>' +
+      '<span class="p-badge pos-def">—</span>' +
+      '<span class="p-name" style="color:#4a7a9b;font-weight:500">Empty</span></div>';
+  }
+  const m = playerMeta(pid);
+  const posCls = ["QB", "RB", "WR", "TE", "K", "DEF", "DST"].includes(m.pos) ? "pos-" + m.pos : "pos-def";
+  const injury = m.injury ? '<span class="p-injury">' + esc(m.injury[0]) + '</span>' : '';
+  return '<div class="p-row">' +
+    '<span class="p-slot">' + esc(slot) + '</span>' +
+    '<span class="p-badge ' + posCls + '">' + esc(m.pos || "—") + '</span>' +
+    '<span class="p-name">' + esc(m.name) + '</span>' +
+    injury +
+    '<span class="p-team">' + esc(m.team) + '</span></div>';
+}
+
+function msCard(label, val) {
+  return '<div class="ms-card"><div class="ms-label">' + label + '</div><div class="ms-val">' + esc(val) + '</div></div>';
+}
+
+function closeTeam() {
+  document.getElementById("modal-bg").classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeTeam(); });
+
+// ── shared ────────────────────────────────────────────────
+function inlineLoader(msg) {
+  return '<div class="loading-inline"><div class="spinner sm"></div><span>' + esc(msg) + '</span></div>';
+}
+
+init();
+</script>
+</body>
+</html>
