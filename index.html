@@ -81,6 +81,13 @@
     }
     .tab:hover { color: #cfe6ff; }
     .tab.active { background: #2ecc71; color: #071525; }
+    .tab.locked { opacity: .5; cursor: default; }
+    .tab.locked:hover { color: #7a9ab8; }
+    .tab-cs-badge { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: #C9A227; color: #071525; border-radius: 3px; padding: 1px 4px; margin-top: 4px; }
+    .coming-soon-pane { text-align: center; padding: 80px 20px; }
+    .coming-soon-pane .cs-icon { font-size: 42px; margin-bottom: 16px; }
+    .coming-soon-pane .cs-title { font-size: 22px; font-weight: 800; color: #e8f4ff; margin-bottom: 8px; }
+    .coming-soon-pane .cs-sub { font-size: 14px; color: #4a7a9b; }
 
     .content { max-width: 840px; margin: 0 auto; padding: 20px; }
     .pane { display: none; }
@@ -1142,11 +1149,11 @@ const S = {
 
 const TABS = [
   { id: "gazette",   label: "Gazette<br><span style='font-weight:400;font-size:11px;opacity:.8'>Headlines</span>" },
-  { id: "matchups",  label: "Matchups<br><span style='font-weight:400;font-size:11px;opacity:.8'>Tales of the Tape</span>", mobileLabel: "Matchups - Tales of the Tape" },
-  { id: "trades",    label: "Waiver Wire<br><span style='font-weight:400;font-size:11px;opacity:.8'>Trades &amp; Free Agents</span>", mobileLabel: "Waiver Wire, Trades & Free Agents" },
+  { id: "matchups",  label: "Matchups<br><span style='font-weight:400;font-size:11px;opacity:.8'>Tales of the Tape</span>", mobileLabel: "Matchups - Tales of the Tape", locked: true },
+  { id: "trades",    label: "Waiver Wire<br><span style='font-weight:400;font-size:11px;opacity:.8'>Trades &amp; Free Agents</span>", mobileLabel: "Waiver Wire, Trades & Free Agents", locked: true },
   { id: "stats",     label: "Stat Zone" },
-  { id: "draft",     label: "Draft Centre" },
-  { id: "power",     label: "Power Rankings<br><span style='font-weight:400;font-size:11px;opacity:.8'>& Records</span>" },
+  { id: "draft",     label: "Draft Centre", locked: true },
+  { id: "power",     label: "Power Rankings<br><span style='font-weight:400;font-size:11px;opacity:.8'>& Records</span>", locked: true },
   { id: "hof",       label: "Hall of Fame" },
   { id: "letters",   label: "Letters" }
 ];
@@ -1335,9 +1342,9 @@ function renderTabs() {
   sel.innerHTML = "";
   TABS.forEach((t, i) => {
     const b = document.createElement("button");
-    b.className = "tab" + (i === 0 ? " active" : "");
-    b.innerHTML = t.label;
-    if (t.label.includes("<br>")) b.style.whiteSpace = "normal";
+    b.className = "tab" + (i === 0 ? " active" : "") + (t.locked ? " locked" : "");
+    b.innerHTML = t.label + (t.locked ? '<br><span class="tab-cs-badge">Coming Soon</span>' : "");
+    b.style.whiteSpace = (t.label.includes("<br>") || t.locked) ? "normal" : "";
     b.onclick = () => switchTab(t.id);
     b.dataset.tab = t.id;
     bar.appendChild(b);
@@ -1352,10 +1359,28 @@ function renderTabs() {
 }
 
 function switchTab(tab) {
+  const tabCfg = TABS.find(t => t.id === tab);
   document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
-  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("active", p.id === "pane-" + tab));
   const sel = document.getElementById("tab-select");
   if (sel && sel.value !== tab) sel.value = tab;
+
+  if (tabCfg?.locked) {
+    document.querySelectorAll(".pane").forEach(p => p.classList.remove("active"));
+    let csPane = document.getElementById("pane-coming-soon");
+    if (!csPane) {
+      csPane = document.createElement("div");
+      csPane.id = "pane-coming-soon";
+      csPane.className = "pane active";
+      document.querySelector(".content").appendChild(csPane);
+    }
+    const label = tabCfg.label.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    csPane.innerHTML = `<div class="coming-soon-pane"><div class="cs-icon">🔒</div><div class="cs-title">${label}</div><div class="cs-sub">This section is coming soon. Editorial recruitment in progress.</div></div>`;
+    csPane.classList.add("active");
+    return;
+  }
+
+  document.getElementById("pane-coming-soon")?.classList.remove("active");
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("active", p.id === "pane-" + tab));
 
   if (!S.inited[tab]) {
     S.inited[tab] = true;
@@ -2417,7 +2442,7 @@ async function initStatZone() {
     // 9. Quadrant label custom plugin (closure over medX/medY)
     const szQuadPlugin = {
       id: "szQuadrants",
-      afterDraw(chart) {
+      afterDatasetsDraw(chart) {
         const { ctx, chartArea: ca, scales: { x: xs, y: ys } } = chart;
         const mx = xs.getPixelForValue(medX);
         const my = ys.getPixelForValue(medY);
