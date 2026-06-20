@@ -62,6 +62,17 @@
     /* Tabs — horizontally scrollable on small screens */
     .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; justify-content: center; }
     .tabs::-webkit-scrollbar { display: none; }
+    .tab-select {
+      display: none; width: 100%; padding: 10px 14px; font-size: 14px; font-weight: 600;
+      font-family: inherit; background: #0d2137; color: #cfe6ff;
+      border: 1px solid #1e3a55; border-radius: 8px; cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a9ab8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; margin-bottom: 4px;
+    }
+    @media (max-width: 600px) {
+      .tabs { display: none; }
+      .tab-select { display: block; }
+    }
     .tab {
       border: none; border-radius: 8px 8px 0 0; padding: 9px 11px;
       font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit;
@@ -465,6 +476,7 @@
         <div class="league-sub" id="lsub"></div>
       </div>
       <div class="stat-row" id="stat-row"></div>
+      <select class="tab-select" id="tab-select"></select>
       <div class="tabs" id="tabs"></div>
     </div>
   </div>
@@ -1309,7 +1321,9 @@ async function init() {
 // ── Tabs ──────────────────────────────────────────────────
 function renderTabs() {
   const bar = document.getElementById("tabs");
+  const sel = document.getElementById("tab-select");
   bar.innerHTML = "";
+  sel.innerHTML = "";
   TABS.forEach((t, i) => {
     const b = document.createElement("button");
     b.className = "tab" + (i === 0 ? " active" : "");
@@ -1318,12 +1332,23 @@ function renderTabs() {
     b.onclick = () => switchTab(t.id);
     b.dataset.tab = t.id;
     bar.appendChild(b);
+
+    const opt = document.createElement("option");
+    opt.value = t.id;
+    const tmp = document.createElement("div");
+    tmp.innerHTML = t.label.replace(/<[^>]+>/g, " ");
+    opt.textContent = tmp.textContent.replace(/\s+/g, " ").trim();
+    if (i === 0) opt.selected = true;
+    sel.appendChild(opt);
   });
+  sel.onchange = () => switchTab(sel.value);
 }
 
 function switchTab(tab) {
   document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
   document.querySelectorAll(".pane").forEach(p => p.classList.toggle("active", p.id === "pane-" + tab));
+  const sel = document.getElementById("tab-select");
+  if (sel && sel.value !== tab) sel.value = tab;
 
   if (!S.inited[tab]) {
     S.inited[tab] = true;
