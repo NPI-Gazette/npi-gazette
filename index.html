@@ -733,8 +733,9 @@
         <div class="dc-title" style="font-size:22px;">Introducing Chad Thunderbolt III &mdash; NPI Insider</div>
         <div class="dc-rule"></div>
 
-        <p class="dc-lead">Alright, alright, ALRIGHT. Settle down. I know you&rsquo;re excited. I&rsquo;M excited. CHAD&rsquo;S EXCITED.</p>
-        <p class="dc-lead">So here&rsquo;s the deal. Once the season kicks off, every single Wednesday morning &mdash; waivers process, the dust settles, and somebody in this league makes a decision &mdash; I am ON IT. Pickups. Drops. The trades you THINK nobody noticed (I noticed. I notice EVERYTHING). It&rsquo;s all getting the Thunderbolt treatment, right here, every week.</p>
+        <p class="dc-lead">Alright, alright, ALRIGHT. Settle down. Chad Thunderbolt III has entered the building &mdash; and yes, I&rsquo;m aware it&rsquo;s 38 degrees outside. Relax. Where I&rsquo;m from, we call that TUESDAY. You people and your Red Warnings. Put some ice in your water and let&rsquo;s get to work.</p>
+        <p class="dc-lead">The Gazette brought me in because they needed MUSCLE. Insider muscle. The kind of waiver-wire intelligence that separates the contenders from the managers who are going to spend October wondering why they ever trusted a running back from a two-tight-end set. That&rsquo;s where I come in. They found me. They called me. And I said yes, because frankly, this league NEEDS me.</p>
+        <p class="dc-lead">So here&rsquo;s the deal. Once the season kicks off, every single Wednesday morning &mdash; waivers process, the dust settles &mdash; I am ON IT. Pickups. Drops. The trades you THINK nobody noticed (I noticed. I notice EVERYTHING). It&rsquo;s all getting the Thunderbolt treatment, right here, every week.</p>
         <p class="dc-lead">This is THE WAIVER WIRE, baby. And I&rsquo;m your guy.</p>
 
         <p class="dc-lead">Now you&rsquo;re probably wondering &mdash; Chad, WHO ARE YOU, and WHY should I trust you with my roster decisions? Fair question. I respect that. Here&rsquo;s my r&eacute;sum&eacute;: I&rsquo;ve got a Twitter following that REFRESHES ITSELF, an inbox full of scoops nobody asked me for, and an INSTINCT for talent that simply cannot be taught. Did I play college ball? No. Do I need to have played to know a high-motor pickup when I see one? Also no. I&rsquo;ve never set foot on a field in my LIFE and I&rsquo;ve never needed to &mdash; film doesn&rsquo;t watch itself, and somebody&rsquo;s gotta be in the building breaking it down. That&rsquo;s me. I&rsquo;m the guy in the building.</p>
@@ -1154,7 +1155,7 @@ const S = {
 const TABS = [
   { id: "gazette",   label: "Gazette<br><span style='font-weight:400;font-size:11px;opacity:.8'>Headlines</span>" },
   { id: "matchups",  label: "Matchups<br><span style='font-weight:400;font-size:11px;opacity:.8'>Tales of the Tape</span>", mobileLabel: "Matchups - Tales of the Tape", locked: true },
-  { id: "trades",    label: "Waiver Wire<br><span style='font-weight:400;font-size:11px;opacity:.8'>Trades &amp; Free Agents</span>", mobileLabel: "Waiver Wire, Trades & Free Agents", locked: true },
+  { id: "trades",    label: "Waiver Wire<br><span style='font-weight:400;font-size:11px;opacity:.8'>Trades &amp; Free Agents</span>", mobileLabel: "Waiver Wire, Trades & Free Agents" },
   { id: "stats",     label: "Stat Zone" },
   { id: "draft",     label: "Draft Centre", locked: true },
   { id: "power",     label: "Power Rankings<br><span style='font-weight:400;font-size:11px;opacity:.8'>& Records</span>", locked: true },
@@ -1327,7 +1328,8 @@ async function init() {
     S.week = Math.max(1, Math.min(S.nflWeek, S.maxWeek));
 
     renderTabs();
-    switchTab("gazette");
+    const hashTab = location.hash.replace("#", "");
+    switchTab(TABS.find(t => t.id === hashTab) ? hashTab : "gazette");
     renderHeader();
     renderStandings();
     await loadMatchups(S.week);
@@ -1364,6 +1366,7 @@ function renderTabs() {
 
 function switchTab(tab) {
   const tabCfg = TABS.find(t => t.id === tab);
+  if (location.hash !== "#" + tab) history.replaceState(null, "", "#" + tab);
   document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
   const sel = document.getElementById("tab-select");
   if (sel && sel.value !== tab) sel.value = tab;
