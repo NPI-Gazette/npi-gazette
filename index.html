@@ -855,31 +855,6 @@
 
     <!-- Stat Zone -->
     <div class="pane" id="pane-stats">
-      <div class="sz-wrap">
-        <div class="sz-hd">
-          <div class="sz-title">2025 Draft Pick vs Fantasy Points</div>
-          <div class="sz-sub">How every drafted player delivered relative to where they were picked in our league. Players above the trend line outperformed their draft position; below it, they underdelivered.</div>
-        </div>
-        <div class="sz-mobile-tip">📱 Best viewed in landscape — or tap ⛶ to go fullscreen</div>
-        <div class="sz-chart-wrap" id="sz-chart-wrap">
-          <button class="sz-fs-btn" id="sz-fs-btn" title="Fullscreen">⛶ Fullscreen</button>
-          <div class="sz-loading" id="sz-loading">Loading 2025 draft &amp; season data…</div>
-          <canvas id="sz-chart" style="display:none;"></canvas>
-        </div>
-        <div id="sz-editor-note-wrap" style="display:none;"></div>
-        <div class="sz-bs-grid" id="sz-bs-grid" style="display:none;">
-          <div class="sz-bs-card busts">
-            <div class="sz-bs-hd">💀 Biggest Busts <span style="font-size:10px;font-weight:400;color:#7a9ab8;">(excl. injuries)</span></div>
-            <div id="sz-busts"></div>
-          </div>
-          <div class="sz-bs-card steals">
-            <div class="sz-bs-hd">💎 Biggest Steals <span style="font-size:10px;font-weight:400;color:#7a9ab8;">(excl. injuries)</span></div>
-            <div id="sz-steals"></div>
-          </div>
-        </div>
-        <div id="sz-pos-grid" style="display:none;"></div>
-      </div>
-
       <!-- PF vs PA Scatter Chart -->
       <div class="pf-section">
         <hr class="pf-section-divider">
@@ -1042,7 +1017,39 @@
 
       <div class="archive-section">
         <div class="archive-hd">Archive</div>
-        <p class="archive-empty">No previous articles yet.</p>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">2025 Draft Pick vs Fantasy Points</span>
+            <span class="archive-item-meta">Season 2025</span>
+            <span class="archive-chevron">▶</span>
+          </summary>
+          <div class="archive-body">
+            <div class="sz-wrap" style="max-width:none;margin:0;">
+              <div class="sz-hd">
+                <div class="sz-title">2025 Draft Pick vs Fantasy Points</div>
+                <div class="sz-sub">How every drafted player delivered relative to where they were picked in our league. Players above the trend line outperformed their draft position; below it, they underdelivered.</div>
+              </div>
+              <div class="sz-mobile-tip">📱 Best viewed in landscape — or tap ⛶ to go fullscreen</div>
+              <div class="sz-chart-wrap" id="sz-chart-wrap">
+                <button class="sz-fs-btn" id="sz-fs-btn" title="Fullscreen">⛶ Fullscreen</button>
+                <div class="sz-loading" id="sz-loading">Loading 2025 draft &amp; season data…</div>
+                <canvas id="sz-chart" style="display:none;"></canvas>
+              </div>
+              <div id="sz-editor-note-wrap" style="display:none;"></div>
+              <div class="sz-bs-grid" id="sz-bs-grid" style="display:none;">
+                <div class="sz-bs-card busts">
+                  <div class="sz-bs-hd">💀 Biggest Busts <span style="font-size:10px;font-weight:400;color:#7a9ab8;">(excl. injuries)</span></div>
+                  <div id="sz-busts"></div>
+                </div>
+                <div class="sz-bs-card steals">
+                  <div class="sz-bs-hd">💎 Biggest Steals <span style="font-size:10px;font-weight:400;color:#7a9ab8;">(excl. injuries)</span></div>
+                  <div id="sz-steals"></div>
+                </div>
+              </div>
+              <div id="sz-pos-grid" style="display:none;"></div>
+            </div>
+          </div>
+        </details>
       </div>
     </div>
 
