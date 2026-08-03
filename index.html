@@ -434,6 +434,21 @@
     .dc-verdict.dead { background: #4d1a20; color: #f08a8a; }
     .dc-editor-note { font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 13px; color: #C9A227; border-left: 2px solid #C9A227; padding: 9px 14px; margin: 16px 0 0; line-height: 1.62; background: rgba(201,162,39,.06); border-radius: 0 6px 6px 0; }
     .dc-editor-note strong { font-style: normal; font-weight: 600; }
+    /* ADP Reckoning table */
+    .rk-tbl { width: 100%; border-collapse: collapse; }
+    .rk-tbl th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: #7a9ab8; font-weight: 500; padding: 0 8px 6px 0; border-bottom: 1px solid #1e3a55; }
+    .rk-tbl td { padding: 9px 8px 9px 0; border-bottom: 1px solid rgba(30,58,85,.6); vertical-align: top; font-size: 13px; }
+    .rk-name { font-weight: 600; white-space: nowrap; font-size: 13px; }
+    .rk-meta { font-size: 10px; color: #7a9ab8; font-weight: 400; margin-top: 2px; }
+    .rk-move { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 12px; }
+    .rk-up { color: #4ec994; font-weight: 600; }
+    .rk-dn { color: #e06868; font-weight: 600; }
+    .rk-by { white-space: nowrap; font-size: 12px; font-weight: 600; color: #C9A227; }
+    .rk-say { color: #7a9ab8; font-size: 12px; line-height: 1.5; }
+    .rk-note { border-left: 2px solid #C9A227; padding: 2px 0 2px 14px; margin: 0; font-size: 13px; line-height: 1.6; font-style: italic; color: #7a9ab8; font-family: 'Source Serif 4', Georgia, serif; }
+    .rk-box { background: #0d2137; border-radius: 12px; padding: 16px 20px; }
+    .rk-callout { border-left: 3px solid #C9A227; padding: 2px 0 2px 16px; }
+    @media (max-width: 600px) { .rk-tbl td, .rk-tbl th { font-size: 11px; padding-right: 5px; } .rk-say { font-size: 11px; } }
 
     /* Stat Zone */
     .sz-wrap { max-width: 860px; margin: 0 auto; }
@@ -596,11 +611,105 @@
     <div class="pane" id="pane-draft">
       <div class="dc-wrap">
         <div class="dc-kicker">Draft Day Build-Up</div>
-        <div class="dc-title">Trade winds: the 2026 offseason gumbo</div>
-        <div class="dc-byline">by Chad Thunderbolt III — NPI Insider &amp; draft savant</div>
+        <div class="dc-title">The ADP reckoning: your 2025 draft board, one year on</div>
+        <div class="dc-byline">by Chad Thunderbolt III, NPI Insider &amp; Draft Savant · ADP correct as of 3 August 2026</div>
         <div class="dc-rule"></div>
 
-        <p class="dc-lead">Folks, I have not slept. And I want to address something before we even get to the football, because I have been BITING MY TONGUE for weeks now and I am DONE. Turn on any sports channel in this country right now and what do you get? Twenty-two men in shorts running around a field for two hours so they can finish 0-0 and hug it out. I&rsquo;m sorry &mdash; I respect the GLOBAL GAME, I respect the PAGEANTRY, but we are EIGHT WEEKS from a fantasy Draft that will resonate for ETERNITY and the entire planet is currently losing its mind over a CORNER KICK.</p>
+        <p class="dc-lead">Folks, I did something this week that no sane man would do. I pulled every single one of the 150 picks from your 2025 draft, laid them out on the floor of my apartment, and cross-referenced all of them against where the Sleeper market is taking those exact same players in 2026. My neighbours have questions. I have ANSWERS.</p>
+
+        <p class="rk-note">Editor&rsquo;s note: Mr Thunderbolt has not left this building in eleven weeks. The &ldquo;floor of his apartment&rdquo; is the floor beside the printer. His neighbours are the water cooler and a filing cabinet. &mdash; C.</p>
+
+        <p class="dc-lead" style="margin-top:1.1em;">Here&rsquo;s the headline: Adam&rsquo;s draft board has aged better than anybody&rsquo;s, and it&rsquo;s not particularly close. The man used the LAST PICK OF THE ENTIRE DRAFT &mdash; pick one-five-zero, the pick you make while you&rsquo;re already closing the app &mdash; on Drake Maye, who is now a top-five-round quarterback. He also had Rashee Rice at 90. On the other end, Andy owns three of the ten biggest fallers on this board and not a single riser, and Scott has three fallers, zero risers, and a running back who has left the sport&rsquo;s radar entirely. And I want to flag one beautiful thing nobody noticed at the time: Gilly made picks 100 and 101 back to back, and BOTH of them are in the top five risers. Two hundred and one seconds of pure, uncut draft savantry from the Cholsey Cougars.</p>
+
+        <p class="dc-lead">But this piece isn&rsquo;t about you people. It&rsquo;s about the FOOTBALL PLAYERS. So here&rsquo;s every big mover, and &mdash; critically &mdash; WHY they moved. Read it before you draft. Or don&rsquo;t. Finish last. See if I care.</p>
+
+        <div class="dc-section">
+          <div class="dc-section-title">The risers</div>
+          <div class="dc-section-sub">Where NPI took them in 2025 &rarr; where Sleeper has them in 2026</div>
+          <table class="rk-tbl">
+            <thead><tr><th>Player</th><th>Move</th><th>Drafted by</th><th>Chad says</th></tr></thead>
+            <tbody>
+              <tr><td><div class="rk-name">Drake Maye<div class="rk-meta">QB &middot; NE</div></div></td><td class="rk-move">150 &rarr; <span class="rk-up">51.2</span></td><td class="rk-by">Adam</td><td class="rk-say">Finished SECOND in MVP voting and led the entire NFL in completion percentage. Then they gave him A.J. Brown. The last pick of the draft is now a top-five QB.</td></tr>
+              <tr><td><div class="rk-name">Rashee Rice<div class="rk-meta">WR &middot; KC</div></div></td><td class="rk-move">90 &rarr; <span class="rk-up">22.7</span></td><td class="rk-by">Adam</td><td class="rk-say">A six-game suspension held him to EIGHT GAMES and he still finished fifth among all receivers in points per game. Led the league in yards after catch. Now do it for a full year.</td></tr>
+              <tr><td><div class="rk-name">Quinshon Judkins<div class="rk-meta">RB &middot; CLE</div></div></td><td class="rk-move">122 &rarr; <span class="rk-up">55.0</span></td><td class="rk-by">Tom</td><td class="rk-say">998 scrimmage yards as a rookie behind an offensive line that was frankly a CRIME SCENE. New line, no competition behind him, full-go at camp.</td></tr>
+              <tr><td><div class="rk-name">Javonte Williams<div class="rk-meta">RB &middot; DAL</div></div></td><td class="rk-move">101 &rarr; <span class="rk-up">38.3</span></td><td class="rk-by">Gilly</td><td class="rk-say">Career highs across the board in his first year in Dallas and fifth at the position in yards after contact. The man found his offense.</td></tr>
+              <tr><td><div class="rk-name">Colston Loveland<div class="rk-meta">TE &middot; CHI</div></div></td><td class="rk-move">100 &rarr; <span class="rk-up">41.2</span></td><td class="rk-by">Gilly</td><td class="rk-say">82 targets as a ROOKIE tight end. Then Chicago shipped DJ Moore to Buffalo. Eighty-five more targets just hit the floor and somebody has to eat them.</td></tr>
+              <tr><td><div class="rk-name">Dak Prescott<div class="rk-meta">QB &middot; DAL</div></div></td><td class="rk-move">144 &rarr; <span class="rk-up">90.3</span></td><td class="rk-by">Tommy</td><td class="rk-say">Went 144th and finished the season as the overall QB6. A league-high 404 completions for 4,552 yards and 30 scores. He has been top-six in BOTH of his last two healthy years.</td></tr>
+              <tr><td><div class="rk-name">Travis Etienne Jr.<div class="rk-meta">RB &middot; NO</div></div></td><td class="rk-move">86 &rarr; <span class="rk-up">36.7</span></td><td class="rk-by">Issa</td><td class="rk-say">Signed by New Orleans, who ran at a league-leading 2.2 plays per minute last year. More snaps per hour means more TOUCHES, people. That&rsquo;s just physics.</td></tr>
+              <tr><td><div class="rk-name">Chris Olave<div class="rk-meta">WR &middot; NO</div></div></td><td class="rk-move">75 &rarr; <span class="rk-up">26.4</span></td><td class="rk-by">Issa</td><td class="rk-say">Tyler Shough averaged nearly 23 points a game across his final eight starts and Olave was his ONLY legitimate weapon. That&rsquo;s a WR2 with a nuclear ceiling.</td></tr>
+              <tr><td><div class="rk-name">Caleb Williams<div class="rk-meta">QB &middot; CHI</div></div></td><td class="rk-move">129 &rarr; <span class="rk-up">82.9</span></td><td class="rk-by">Gary</td><td class="rk-say">Massive year-two jump under Ben Johnson &mdash; 4,000-plus through the air, 30-plus scores, 400-plus on the ground. He went from afterthought to a genuine QB1 conversation.</td></tr>
+              <tr><td><div class="rk-name">Cam Skattebo<div class="rk-meta">RB &middot; NYG</div></div></td><td class="rk-move">92 &rarr; <span class="rk-up">48.7</span></td><td class="rk-by">Gary</td><td class="rk-say">617 scrimmage yards and seven touchdowns before an ankle fracture ended it after eight games. The Giants then signed NOBODY to compete with him. Nobody!</td></tr>
+              <tr><td><div class="rk-name">DeVonta Smith<div class="rk-meta">WR &middot; PHI</div></div></td><td class="rk-move">84 &rarr; <span class="rk-up">44.9</span></td><td class="rk-by">Tommy</td><td class="rk-say">A.J. Brown lives in New England now. Smith doesn&rsquo;t split a single target with anybody. He is the alpha and the omega in Philadelphia.</td></tr>
+              <tr><td><div class="rk-name">Emeka Egbuka<div class="rk-meta">WR &middot; TB</div></div></td><td class="rk-move">81 &rarr; <span class="rk-up">45.8</span></td><td class="rk-by">Gilly</td><td class="rk-say">Mike Evans signed with San Francisco. Twelve years of Tampa Bay targets just came free and Egbuka is standing right there with his hands out.</td></tr>
+              <tr><td><div class="rk-name">Tyler Warren<div class="rk-meta">TE &middot; IND</div></div></td><td class="rk-move">85 &rarr; <span class="rk-up">50.1</span></td><td class="rk-by">Jonny</td><td class="rk-say">Comfortably the best rookie on the Colts and a better BLOCKER than anyone projected, which keeps him on the field on early downs. That&rsquo;s the whole ballgame at tight end.</td></tr>
+              <tr><td><div class="rk-name">Tucker Kraft<div class="rk-meta">TE &middot; GB</div></div></td><td class="rk-move">97 &rarr; <span class="rk-up">67.3</span></td><td class="rk-by">Tommy</td><td class="rk-say">Lost the season to injury and the entire Green Bay passing game went with him. He&rsquo;s back, and he&rsquo;s the only Packers pass-catcher anyone actually trusts.</td></tr>
+              <tr><td><div class="rk-name">Jaylen Warren<div class="rk-meta">RB &middot; PIT</div></div></td><td class="rk-move">104 &rarr; <span class="rk-up">74.8</span></td><td class="rk-by">Tommy</td><td class="rk-say">Pittsburgh drafted a rookie to replace him and then just&hellip; didn&rsquo;t. Warren took the carries. Warren kept the carries.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dc-section">
+          <div class="dc-section-title">The fallers</div>
+          <div class="dc-section-sub">Taken with confidence in 2025. Available in the bargain bin in 2026.</div>
+          <table class="rk-tbl">
+            <thead><tr><th>Player</th><th>Move</th><th>Drafted by</th><th>Chad says</th></tr></thead>
+            <tbody>
+              <tr><td><div class="rk-name">Calvin Ridley<div class="rk-meta">WR &middot; TEN</div></div></td><td class="rk-move">64 &rarr; <span class="rk-dn">227.7</span></td><td class="rk-by">Tommy</td><td class="rk-say">An injury-shortened year on top of visible decline. Tennessee are keeping him around mostly to help raise Cam Ward. That is not a fantasy role.</td></tr>
+              <tr><td><div class="rk-name">Cooper Kupp<div class="rk-meta">WR &middot; SEA</div></div></td><td class="rk-move">76 &rarr; <span class="rk-dn">235.2</span></td><td class="rk-by">Jonny</td><td class="rk-say">593 yards in sixteen games &mdash; his worst since 2018. He&rsquo;s 33, he&rsquo;s the WR2 behind Smith-Njigba, and Seattle ranked THIRTIETH in pass rate. Three separate problems.</td></tr>
+              <tr><td><div class="rk-name">Kaleb Johnson<div class="rk-meta">RB &middot; PIT</div></div></td><td class="rk-move">71 &rarr; <span class="rk-dn">217.5</span></td><td class="rk-by">Adam</td><td class="rk-say">Twenty-eight carries. Sixty-nine yards. EIGHT POINT EIGHT fantasy points across the entire season. I&rsquo;ve seen kickers do more damage.</td></tr>
+              <tr><td><div class="rk-name">Tyreek Hill<div class="rk-meta">WR &middot; free agent</div></div></td><td class="rk-move">33 &rarr; <span class="rk-dn">174.0</span></td><td class="rk-by">Andy</td><td class="rk-say">Dislocated his knee and tore multiple ligaments including the ACL in Week 4. Released by Miami in February. STILL UNSIGNED with training camps open. He may not play at all.</td></tr>
+              <tr><td><div class="rk-name">Christian Kirk<div class="rk-meta">WR &middot; SF</div></div></td><td class="rk-move">108 &rarr; <span class="rk-dn">241.7</span></td><td class="rk-by">Andy</td><td class="rk-say">San Francisco signed Mike Evans, then brought back Deebo Samuel, and Kirk&rsquo;s been nursing a calf. That receiver room got very crowded very fast.</td></tr>
+              <tr><td><div class="rk-name">Keon Coleman<div class="rk-meta">WR &middot; BUF</div></div></td><td class="rk-move">106 &rarr; <span class="rk-dn">234.8</span></td><td class="rk-by">Issa</td><td class="rk-say">Benched and suspended repeatedly for being LATE TO MEETINGS. Healthy scratch four times. Finished WR63 on a team crying out for literally anyone to catch a football.</td></tr>
+              <tr><td><div class="rk-name">Alvin Kamara<div class="rk-meta">RB &middot; NO</div></div></td><td class="rk-move">42 &rarr; <span class="rk-dn">157.7</span></td><td class="rk-by">Tom</td><td class="rk-say">New Orleans signed Travis Etienne, then spent the whole offseason refusing to commit to Kamara. He had to take a reworked deal just to stay. Read the room.</td></tr>
+              <tr><td><div class="rk-name">James Conner<div class="rk-meta">RB &middot; ARI</div></div></td><td class="rk-move">44 &rarr; <span class="rk-dn">152.2</span></td><td class="rk-by">Tommy</td><td class="rk-say">Season-ending ankle surgery in Week 3. Arizona then signed Tyler Allgeier AND spent the third overall pick on Jeremiyah Love. He&rsquo;s RB3 at best. Brutal.</td></tr>
+              <tr><td><div class="rk-name">Rashod Bateman<div class="rk-meta">WR &middot; BAL</div></div></td><td class="rk-move">127 &rarr; <span class="rk-dn">232.7</span></td><td class="rk-by">Scott</td><td class="rk-say">Nine touchdowns in 2024 became 224 yards and two scores in an injury-wrecked 2025. Baltimore then drafted Ja&rsquo;Kobi Lane and Elijah Sarratt, who have already jumped him.</td></tr>
+              <tr><td><div class="rk-name">Jerry Jeudy<div class="rk-meta">WR &middot; CLE</div></div></td><td class="rk-move">68 &rarr; <span class="rk-dn">173.5</span></td><td class="rk-by">Andy</td><td class="rk-say">A Pro Bowl 90-catch, 1,229-yard year in 2024 collapsed to 602 yards and two touchdowns. Among the very worst in football per route run, and Cleveland drafted two more receivers.</td></tr>
+              <tr><td><div class="rk-name">Deebo Samuel<div class="rk-meta">WR &middot; SF</div></div></td><td class="rk-move">63 &rarr; <span class="rk-dn">164.3</span></td><td class="rk-by">Turks</td><td class="rk-say">He was unsigned for most of the offseason, which is the ONLY reason he&rsquo;s this cheap. Then San Francisco brought him home and Ricky Pearsall&rsquo;s knee went. That 164 is a ghost number.</td></tr>
+              <tr><td><div class="rk-name">Isiah Pacheco<div class="rk-meta">RB &middot; DET</div></div></td><td class="rk-move">67 &rarr; <span class="rk-dn">167.2</span></td><td class="rk-by">Scott</td><td class="rk-say">Kansas City signed Kenneth Walker III and showed him the door. Detroit picked him up to run behind Jahmyr Gibbs, and nobody has ever won a title with the RB2 in Detroit.</td></tr>
+              <tr><td><div class="rk-name">Travis Hunter<div class="rk-meta">WR/CB &middot; JAX</div></div></td><td class="rk-move">74 &rarr; <span class="rk-dn">160.2</span></td><td class="rk-by">Scott</td><td class="rk-say">Jacksonville have flipped him to FULL-TIME CORNERBACK and part-time receiver, a straight reversal of his rookie usage. I love this man. Cornerbacks score zero fantasy points.</td></tr>
+              <tr><td><div class="rk-name">T.J. Hockenson<div class="rk-meta">TE &middot; MIN</div></div></td><td class="rk-move">66 &rarr; <span class="rk-dn">141.2</span></td><td class="rk-by">Issa</td><td class="rk-say">A career-low 8.6 yards a catch at 29, playing behind the worst quarterback room in football. Minnesota signed Jauan Jennings for the red zone.</td></tr>
+              <tr><td><div class="rk-name">Xavier Worthy<div class="rk-meta">WR &middot; KC</div></div></td><td class="rk-move">60 &rarr; <span class="rk-dn">134.9</span></td><td class="rk-by">Gilly</td><td class="rk-say">Dislocated his shoulder on Kansas City&rsquo;s THIRD offensive snap of the season. Andy Reid has admitted they cut his route tree to protect him. One touchdown in fourteen games.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dc-section">
+          <div class="rk-box">
+            <h3 style="font-size:16px;font-weight:800;margin:0 0 6px;color:#e8f4ff;">The disappeared</h3>
+            <p style="font-size:12px;color:#7a9ab8;margin:0 0 10px;">Five men drafted in NPI last year who no longer register on the Sleeper board at all. Not fallers. GONE.</p>
+            <p style="font-size:13px;line-height:1.9;margin:0;color:#e8f4ff;">
+              <strong>Evan Engram</strong> &mdash; pick 78, Turks<br>
+              <strong>Austin Ekeler</strong> &mdash; pick 107, Scott<br>
+              <strong>Nick Chubb</strong> &mdash; pick 112, Gary<br>
+              <strong>Efton Chism</strong> &mdash; pick 136, Jonny<br>
+              <strong>Ollie Gordon II</strong> &mdash; pick 140, Gilly
+            </p>
+            <p style="font-size:12px;color:#7a9ab8;margin:10px 0 0;font-style:italic;">Pour one out. Then move on, because sentiment has never won anybody a fantasy title.</p>
+          </div>
+        </div>
+
+        <div class="dc-section">
+          <div class="rk-callout">
+            <h3 style="font-size:16px;font-weight:800;margin:0 0 6px;color:#e8f4ff;">One the table missed</h3>
+            <p style="font-size:13px;line-height:1.7;color:#7a9ab8;margin:0;"><strong style="color:#e8f4ff;">Ricky Pearsall</strong> (pick 77, Tommy) shows up as barely moving &mdash; 77 to 99.8 &mdash; and that number is a LIE. He is undergoing season-ending surgery on his knee. The market hasn&rsquo;t repriced him yet. This is what I mean when I tell you ADP is a photograph, not a prophecy. Check the wire the morning of your draft. CHECK THE WIRE.</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="archive-section">
+        <div class="archive-hd">Archive</div>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">Trade winds: the 2026 offseason gumbo</span>
+            <span class="archive-item-meta">Draft Day Build-Up</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
+            <div class="dc-kicker" style="margin-top:4px;">Draft Day Build-Up</div>
+            <div class="dc-title" style="font-size:26px;">Trade winds: the 2026 offseason gumbo</div>
+            <div class="dc-byline">by Chad Thunderbolt III &mdash; NPI Insider &amp; draft savant</div>
+            <div class="dc-rule"></div>
+            <p class="dc-lead">Folks, I have not slept. And I want to address something before we even get to the football, because I have been BITING MY TONGUE for weeks now and I am DONE. Turn on any sports channel in this country right now and what do you get? Twenty-two men in shorts running around a field for two hours so they can finish 0-0 and hug it out. I&rsquo;m sorry &mdash; I respect the GLOBAL GAME, I respect the PAGEANTRY, but we are EIGHT WEEKS from a fantasy Draft that will resonate for ETERNITY and the entire planet is currently losing its mind over a CORNER KICK.</p>
         <p class="dc-lead">And then &mdash; THEN &mdash; soccer gave us this. Folarin Balogun gets a red card against Bosnia. Automatic one-game suspension, rules are rules, everyone understood, case closed. Except the President of the United States personally called the FIFA president to get it reviewed. The suspension got suspended. For a YEAR. UEFA called it &ldquo;unprecedented, incomprehensible and unjustifiable.&rdquo; Belgium issued a formal statement saying they were &ldquo;astonished.&rdquo; The entire footballing world was on fire. And after all of that &mdash; after bending the rules of international sport in front of a global audience &mdash; the US of A went out and lost FOUR-ONE (something happened involving the netminder that I have chosen not to fully understand). Bottom line &mdash; we moved HEAVEN AND EARTH and still got hammered by Belgium. I am done. DONE. Let us never speak of this again.</p>
         <p class="dc-lead">Now. REAL football. Because while all of that was happening, the NFL offseason was cooking a GUMBO that will define your fantasy season, and nobody was paying attention because they were watching Hans Vanaken celebrate.</p>
         <p class="dc-lead"><strong>Let&rsquo;s get you Brits up to speed.</strong></p>
@@ -715,10 +824,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="archive-section">
-        <div class="archive-hd">Archive</div>
-        <p class="archive-empty">No previous articles yet.</p>
+          </div>
+        </details>
       </div>
     </div>
 
