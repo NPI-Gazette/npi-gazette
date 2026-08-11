@@ -453,7 +453,19 @@
     .rk-note { border-left: 2px solid #C9A227; padding: 2px 0 2px 14px; margin: 0; font-size: 13px; line-height: 1.6; font-style: italic; color: #7a9ab8; font-family: 'Source Serif 4', Georgia, serif; }
     .rk-box { background: #0d2137; border-radius: 12px; padding: 16px 20px; }
     .rk-callout { border-left: 3px solid #C9A227; padding: 2px 0 2px 16px; }
-    @media (max-width: 600px) { .rk-tbl td, .rk-tbl th { font-size: 11px; padding-right: 5px; } .rk-say { font-size: 11px; } }
+    /* On a phone the 4-column layout squeezes the analysis to ~12 characters a line,
+       because the nowrap verdict badge and player name claim most of the width.
+       Stack each row instead: name + figure share the top line, badge and prose
+       each span the full width beneath. */
+    @media (max-width: 600px) {
+      .rk-tbl, .rk-tbl tbody { display: block; }
+      .rk-tbl thead { display: none; }
+      .rk-tbl tr { display: grid; grid-template-columns: 1fr auto; gap: 7px 10px; padding: 12px 0; border-bottom: 1px solid rgba(30,58,85,.6); }
+      .rk-tbl td { display: block; border: none; padding: 0; }
+      .rk-tbl td:nth-child(2) { text-align: right; }
+      .rk-tbl td:nth-child(3), .rk-tbl td:nth-child(4) { grid-column: 1 / -1; }
+      .rk-say { font-size: 11.5px; line-height: 1.55; }
+    }
 
     /* Stat Zone */
     .sz-wrap { max-width: 860px; margin: 0 auto; }
