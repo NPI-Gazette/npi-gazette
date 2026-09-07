@@ -473,6 +473,13 @@
     .sv-g-val { display: block; font-family: 'Archivo', system-ui, sans-serif; font-size: 17px; font-weight: 800; margin-top: 2px; }
     .gA { color: #4ec994; } .gB { color: #e8f4ff; } .gC { color: #e0a94a; } .gD { color: #e06868; }
     .sv-speak { font-size: 14px; line-height: 1.68; color: #d6e4f2; margin: 0 0 12px; }
+    /* Each critic keeps the face already associated with them elsewhere on the site:
+       Clarence the Gazette's editorial Source Serif, Alexa the Merriweather her
+       Matchups pane is set in. Merriweather runs larger on the same px, so it is
+       sized down a touch to sit level with Clarence's text.
+       Scoped through .news-article to outrank its blanket `p` rule. */
+    .news-article p.sv-clarence { font-family: 'Source Serif 4', Georgia, serif; font-size: 14.5px; line-height: 1.7; }
+    .news-article p.sv-alexa { font-family: 'Merriweather', Georgia, serif; font-size: 13.5px; line-height: 1.62; }
     .sv-tag { font-family: 'Archivo', system-ui, sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: .12em; color: #C9A227; margin-right: 7px; }
     .sv-tag.alexa { color: #6db8f0; }
     .sv-chad { background: rgba(224,104,104,.07); border-left: 3px solid #e06868; border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 0 0 10px; font-family: 'Archivo', system-ui, sans-serif; font-size: 12.5px; font-weight: 700; color: #f0a0a0; line-height: 1.5; }
@@ -1783,8 +1790,6 @@
 
           <p class="dc-lead">One standing note before we begin: <strong>Andy and Turks were not at the draft.</strong> Both rosters were assembled entirely by Sleeper&rsquo;s autopick. They are graded on the outcome that resulted, never on a decision, because no decision was made by either man. Hold the two things separately, as we have tried to.</p>
 
-          <p class="dc-lead">A second note, on arithmetic: every roster in this league starts ten players, not eight &mdash; one quarterback, two running backs, two receivers, one tight end, two flex, a kicker and a defense. The grades below cover all ten, including the two spots most draft coverage skips straight past. Nobody disappears into a footnote in this office&rsquo;s copy.</p>
-
           <div class="sv-team">
             <div class="sv-team-hd">Worthing Wolverines &mdash; Scott</div>
             <div class="sv-team-sub">Pick 1.01</div>
@@ -1793,8 +1798,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gB">B+</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B&minus;</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Calling this the strongest projected lineup in the league overstates it. Malik Nabers and Jaylen Waddle both cost more than their rank justified, and the Jordyn Tyson pick &mdash; 55 spots below his August rank &mdash; is not value, it is mechanism: Scott took an already-sidelined player specifically to occupy the IR slot and pick up a free kicker off waivers. Clever roster management. Not a lineup strength. B+.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Lower again from me. Strip out the Tyson trick and the WR3 spot is a rookie with no track record; Jacory Croskey-Merritt is now the RB2 insurance behind a single workhorse, also unproven. Good top of the roster, no adult in the room behind it. With kickoff two days out, that&rsquo;s the room that gets tested first. B&minus;.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>Calling this the strongest projected lineup in the league overstates it. Malik Nabers and Jaylen Waddle both cost more than their rank justified, and the Jordyn Tyson pick &mdash; 55 spots below his August rank &mdash; is not value, it is mechanism: Scott took an already-sidelined player specifically to occupy the IR slot and pick up a free kicker off waivers. Clever roster management. Not a lineup strength. B+.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>Lower again from me. Strip out the Tyson trick and the WR3 spot is a rookie with no track record; Jacory Croskey-Merritt is now the RB2 insurance behind a single workhorse, also unproven. Good top of the roster, no adult in the room behind it. With kickoff two days out, that&rsquo;s the room that gets tested first. B&minus;.</p>
           </div>
 
           <div class="sv-team">
@@ -1805,8 +1810,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gC">C&minus;</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B&minus;</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Kittle remains the worst value pick of the entire draft by this office&rsquo;s numbers &mdash; 43 spots above his rank &mdash; and Jordan Mason at pick 99 (30 spots above his) compounds it. &ldquo;Reached most consistently&rdquo; is generous. C&minus;.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>And I&rsquo;d go the other way entirely. Kyler Murray at pick 139 isn&rsquo;t a flier anymore &mdash; he&rsquo;s benched J.J. McCarthy and is Minnesota&rsquo;s Week 1 starter, for a 139th-round cost. Add Brian Thomas, Makai Lemon and Jake Ferguson all landing under cost, and there&rsquo;s a genuinely useful roster hiding behind one round-six disaster. B&minus;.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>Kittle remains the worst value pick of the entire draft by this office&rsquo;s numbers &mdash; 43 spots above his rank &mdash; and Jordan Mason at pick 99 (30 spots above his) compounds it. &ldquo;Reached most consistently&rdquo; is generous. C&minus;.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>And I&rsquo;d go the other way entirely. Kyler Murray at pick 139 isn&rsquo;t a flier anymore &mdash; he&rsquo;s benched J.J. McCarthy and is Minnesota&rsquo;s Week 1 starter, for a 139th-round cost. Add Brian Thomas, Makai Lemon and Jake Ferguson all landing under cost, and there&rsquo;s a genuinely useful roster hiding behind one round-six disaster. B&minus;.</p>
           </div>
 
           <div class="sv-team">
@@ -1817,8 +1822,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gB">B</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gC">C+</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Chase Brown and Omarion Hampton add real RB depth early, but Chris Godwin (20 above his rank) and Jayden Reed (9 above his) are two soft spots &ldquo;no weak slot&rdquo; glosses over. This office would also note, separately from value: Mike Washington in round fourteen is confirmed by multiple outlets as Ashton Jeanty&rsquo;s direct handcuff, which is doing real work for Turks&rsquo; grade below and deserves credit here too. B.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>This is where I disagree with Clarence, not just Chad. Godwin dislocated his ankle in 2024, missed most of 2025 to complications from the same injury, and given this league&rsquo;s running joke about Gilly and injuries, starting a wide receiver with that specific file in round nine isn&rsquo;t a value question at all &mdash; it&rsquo;s a medical one, and it drags the whole grade down further than either of you have it. Two days to kickoff and he still hasn&rsquo;t proven he&rsquo;s the player he was. C+.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>Chase Brown and Omarion Hampton add real RB depth early, but Chris Godwin (20 above his rank) and Jayden Reed (9 above his) are two soft spots &ldquo;no weak slot&rdquo; glosses over. This office would also note, separately from value: Mike Washington in round fourteen is confirmed by multiple outlets as Ashton Jeanty&rsquo;s direct handcuff, which is doing real work for Turks&rsquo; grade below and deserves credit here too. B.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>This is where I disagree with Clarence, not just Chad. Godwin dislocated his ankle in 2024, missed most of 2025 to complications from the same injury, and given this league&rsquo;s running joke about Gilly and injuries, starting a wide receiver with that specific file in round nine isn&rsquo;t a value question at all &mdash; it&rsquo;s a medical one, and it drags the whole grade down further than either of you have it. Two days to kickoff and he still hasn&rsquo;t proven he&rsquo;s the player he was. C+.</p>
           </div>
 
           <div class="sv-team">
@@ -1829,10 +1834,10 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gD">D+</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>This office&rsquo;s own figures, from the 11 August board, log the Stafford reach at 35 spots; Mr Thunderbolt&rsquo;s fresher numbers say fifty. Either way: a 37-year-old quarterback taken well above his market rank. This office will also, in the spirit of fairness it did not want to extend today, note that Brandon Aubrey at pick 84 is not a wasted pick in the way most round-nine kickers are &mdash; he is the consensus K1 for 2026, with a market ADP in the 120s to 140s, which still makes this a reach of 40-plus spots at the position, just a considerably more defensible one than it first appeared. &ldquo;Real core&rdquo; still undersells how much of this roster leans on players whose best years are behind them. D+.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>This office&rsquo;s own figures, from the 11 August board, log the Stafford reach at 35 spots; Mr Thunderbolt&rsquo;s fresher numbers say fifty. Either way: a 37-year-old quarterback taken well above his market rank. This office will also, in the spirit of fairness it did not want to extend today, note that Brandon Aubrey at pick 84 is not a wasted pick in the way most round-nine kickers are &mdash; he is the consensus K1 for 2026, with a market ADP in the 120s to 140s, which still makes this a reach of 40-plus spots at the position, just a considerably more defensible one than it first appeared. &ldquo;Real core&rdquo; still undersells how much of this roster leans on players whose best years are behind them. D+.</p>
             <div class="sv-chad">Thunderbolt (uninvited): &ldquo;STAFFORD&rsquo;S GOT THAT VETERAN DOG IN HIM. RINGS DON&rsquo;T RETIRE, BABY.&rdquo;</div>
             <div class="sv-ednote">Editor&rsquo;s note &mdash; This office notes Mr Thunderbolt gave this exact pick a C+ in his own published grade three days ago. Consistency, like CAPS LOCK, appears optional. &mdash; C.</div>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>I&rsquo;ll take the other side of this one hard. Jaxson Dart at pick 117 is an entrenched, full-time, second-year starting quarterback &mdash; not a dart throw, a plan that&rsquo;s already working. Add Aaron Jones and Xavier Worthy landing well under cost, and this roster is being graded on its worst pick instead of its best three. B.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>I&rsquo;ll take the other side of this one hard. Jaxson Dart at pick 117 is an entrenched, full-time, second-year starting quarterback &mdash; not a dart throw, a plan that&rsquo;s already working. Add Aaron Jones and Xavier Worthy landing well under cost, and this roster is being graded on its worst pick instead of its best three. B.</p>
           </div>
 
           <div class="sv-team">
@@ -1843,8 +1848,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gA">A&minus;</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gC">C+</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>By pure value this office would grade higher than Chad did: Josh Downs, Justin Herbert and Quinshon Judkins all landed comfortably under cost. This office notes, for its own comfort, that the machine did this without understanding why any of it worked. A&minus;.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Which is exactly the problem with grading it that high. Christian McCaffrey and Derrick Henry &mdash; nine and ten years into their careers respectively &mdash; anchor the first two picks, and running backs do not decline gradually, they fall off a shelf without warning. No one caught it because no one was deciding. Genuinely good roster built on ground a human would have thought twice about. C+.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>By pure value this office would grade higher than Chad did: Josh Downs, Justin Herbert and Quinshon Judkins all landed comfortably under cost. This office notes, for its own comfort, that the machine did this without understanding why any of it worked. A&minus;.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>Which is exactly the problem with grading it that high. Christian McCaffrey and Derrick Henry &mdash; nine and ten years into their careers respectively &mdash; anchor the first two picks, and running backs do not decline gradually, they fall off a shelf without warning. No one caught it because no one was deciding. Genuinely good roster built on ground a human would have thought twice about. C+.</p>
           </div>
 
           <div class="sv-team">
@@ -1855,8 +1860,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gA">A&minus;</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gC">C+</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Josh Jacobs, DK Metcalf, Michael Wilson and Kyle Monangai all landed well below cost &mdash; arguably the best value sheet in the league. This office separates value from startability, as its own house rules require, but on value alone: A&minus;.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>And on startability alone, with kickoff two days away, this is a genuine problem. Jeanty&rsquo;s ankle is a live story this week &mdash; multiple reports have him questionable for the opener, with his own coach unwilling to commit either way. Travis Kelce is 36, in his 14th season, and was reportedly close to retiring before this one. Neither of those facts changes because a bot picked well around them. C+.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>Josh Jacobs, DK Metcalf, Michael Wilson and Kyle Monangai all landed well below cost &mdash; arguably the best value sheet in the league. This office separates value from startability, as its own house rules require, but on value alone: A&minus;.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>And on startability alone, with kickoff two days away, this is a genuine problem. Jeanty&rsquo;s ankle is a live story this week &mdash; multiple reports have him questionable for the opener, with his own coach unwilling to commit either way. Travis Kelce is 36, in his 14th season, and was reportedly close to retiring before this one. Neither of those facts changes because a bot picked well around them. C+.</p>
           </div>
 
           <div class="sv-team">
@@ -1867,8 +1872,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gD">D+</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B+</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>The reach-heaviest sheet in the league by count &mdash; Blake Corum (24 above his rank), KC Concepcion (26 above), Sam LaPorta and Javonte Williams both above cost too. Brock Purdy at pick 127 is genuine value, arriving two rounds too late to save the grade. D+.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Look at the ages on Clarence&rsquo;s own reach list, though &mdash; Concepcion, McConkey, Corum, Drake Maye are all 25 or under. That&rsquo;s not overpaying for known quantities, that&rsquo;s a two-time champion betting on ceilings the August board hadn&rsquo;t caught up to. Ask me in November, but right now I&rsquo;d have this closer to a full letter above Clarence&rsquo;s number. B+.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>The reach-heaviest sheet in the league by count &mdash; Blake Corum (24 above his rank), KC Concepcion (26 above), Sam LaPorta and Javonte Williams both above cost too. Brock Purdy at pick 127 is genuine value, arriving two rounds too late to save the grade. D+.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>Look at the ages on Clarence&rsquo;s own reach list, though &mdash; Concepcion, McConkey, Corum, Drake Maye are all 25 or under. That&rsquo;s not overpaying for known quantities, that&rsquo;s a two-time champion betting on ceilings the August board hadn&rsquo;t caught up to. Ask me in November, but right now I&rsquo;d have this closer to a full letter above Clarence&rsquo;s number. B+.</p>
           </div>
 
           <div class="sv-team">
@@ -1879,8 +1884,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gC">C+</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Carnell Tate and Rome Odunze both landed as real rookie-receiver value, which Chad&rsquo;s one-liner skipped. This office also confirms the Pacheco pick is the same deliberate mechanic Scott ran &mdash; and in Pacheco&rsquo;s case it wasn&rsquo;t foresight, it&rsquo;s a documented back injury with no firm return date as of this week. Deliberate, and now unambiguously correct. C+.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Higher again from me. Saquon at year eight is still a bell-cow on a good line, not a decline case &mdash; that&rsquo;s paying full price for a sure thing, not a reach. The actual weakness is Swift and Dobbins both sitting behind him as complementary pieces: that&rsquo;s a running-back depth problem being graded as a QB/TE problem. B.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>Carnell Tate and Rome Odunze both landed as real rookie-receiver value, which Chad&rsquo;s one-liner skipped. This office also confirms the Pacheco pick is the same deliberate mechanic Scott ran &mdash; and in Pacheco&rsquo;s case it wasn&rsquo;t foresight, it&rsquo;s a documented back injury with no firm return date as of this week. Deliberate, and now unambiguously correct. C+.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>Higher again from me. Saquon at year eight is still a bell-cow on a good line, not a decline case &mdash; that&rsquo;s paying full price for a sure thing, not a reach. The actual weakness is Swift and Dobbins both sitting behind him as complementary pieces: that&rsquo;s a running-back depth problem being graded as a QB/TE problem. B.</p>
           </div>
 
           <div class="sv-team">
@@ -1891,8 +1896,8 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gA">A+*</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Jayden Daniels and Patrick Mahomes both landed among the three best value picks of the entire draft, delivering The Commissioner his long-sought two-quarterback build at a genuine discount. This office is aware A+ is not a real grade in its own system. This office is prepared to introduce one, for this pick only, and will not be taking questions on why.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Somebody has to be the questions. Rhamondre Stevenson&rsquo;s outlook this week depends entirely on which Tuesday&rsquo;s report you trust &mdash; some have TreVeyon Henderson still not fully cleared to practice, others have him good to go for Week 1, and Stevenson himself has genuinely outplayed him in camp regardless. That&rsquo;s not a settled mirage popping, that&rsquo;s a genuine coin flip sitting in the starting lineup two days before it counts. Great QB value. Real, live uncertainty everywhere else. B.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>Jayden Daniels and Patrick Mahomes both landed among the three best value picks of the entire draft, delivering The Commissioner his long-sought two-quarterback build at a genuine discount. This office is aware A+ is not a real grade in its own system. This office is prepared to introduce one, for this pick only, and will not be taking questions on why.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>Somebody has to be the questions. Rhamondre Stevenson&rsquo;s outlook this week depends entirely on which Tuesday&rsquo;s report you trust &mdash; some have TreVeyon Henderson still not fully cleared to practice, others have him good to go for Week 1, and Stevenson himself has genuinely outplayed him in camp regardless. That&rsquo;s not a settled mirage popping, that&rsquo;s a genuine coin flip sitting in the starting lineup two days before it counts. Great QB value. Real, live uncertainty everywhere else. B.</p>
           </div>
 
           <div class="sv-team">
@@ -1903,10 +1908,10 @@
               <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gD">D+</span></span>
               <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
             </div>
-            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Six picks graded as reaches of ten-plus spots, led by Caleb Williams (28 above his rank) and Jonathon Brooks (25 above his). On Brooks specifically: Chuba Hubbard, the man blocking him in Carolina, missed weeks of camp with a hamstring injury &mdash; which is why Brooks looked like a value play in August &mdash; and Hubbard has since returned to full practice. The mirage this office flagged in Camp Carnage has, in this one case, played out exactly as written. D+.</p>
+            <p class="sv-speak sv-clarence"><span class="sv-tag">CLARENCE</span>Six picks graded as reaches of ten-plus spots, led by Caleb Williams (28 above his rank) and Jonathon Brooks (25 above his). On Brooks specifically: Chuba Hubbard, the man blocking him in Carolina, missed weeks of camp with a hamstring injury &mdash; which is why Brooks looked like a value play in August &mdash; and Hubbard has since returned to full practice. The mirage this office flagged in Camp Carnage has, in this one case, played out exactly as written. D+.</p>
             <div class="sv-chad">Thunderbolt (uninvited): &ldquo;JEREMIYAH LOVE HAS THAT DOG IN HIM. CALLED IT IN FRESH MEAT.&rdquo;</div>
             <div class="sv-ednote">Editor&rsquo;s note &mdash; Love was selected by autopick software, not a person who had read Mr Thunderbolt&rsquo;s scouting report. The queue does not read Fresh Meat. Also, that player belongs to Andy&rsquo;s roster, not Issa&rsquo;s. &mdash; C.</div>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Brooks is a fair miss, I won&rsquo;t defend it &mdash; but Lamb and Jefferson at the 1/2 turn is as clean a foundation as anyone got all draft, and TreVeyon Henderson isn&rsquo;t a bust-in-waiting like Brooks is; his own path is live and contested, not blocked. I&rsquo;d have this a full letter above both of you. B.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>Brooks is a fair miss, I won&rsquo;t defend it &mdash; but Lamb and Jefferson at the 1/2 turn is as clean a foundation as anyone got all draft, and TreVeyon Henderson isn&rsquo;t a bust-in-waiting like Brooks is; his own path is live and contested, not blocked. I&rsquo;d have this a full letter above both of you. B.</p>
           </div>
 
           <div class="sv-team">
@@ -1927,8 +1932,8 @@
                 <tr><td>Issa</td><td data-l="Def">Denver Broncos</td><td data-l="Tier"><span class="sv-hi">Top 4</span></td><td data-l="K">Jason Myers</td><td data-l="Rank">K5</td></tr>
               </tbody>
             </table>
-            <p class="sv-speak" style="margin-top:14px;"><span class="sv-tag">CLARENCE</span>Worth stating plainly, since this office nearly didn&rsquo;t: Jonny, Gilly, Tom and Issa each rostered a top-four defense for 2026 &mdash; the Texans, Rams, Seahawks and Broncos, in that order, are the four best units in the league by consensus. All four of those managers also received a D+ or lower somewhere above in this piece. Their kicker and defense are quietly excellent. The other eight starters were frequently not.</p>
-            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>And two managers &mdash; Tom and Tommy &mdash; went and got the two best kickers in the league on purpose, three rounds apart from each other, which is either a coincidence or the first sign that &ldquo;never draft a kicker early&rdquo; is starting to go the way of &ldquo;never draft a running back in the first round.&rdquo; Turks&rsquo; bot, for what it&rsquo;s worth, still did it properly &mdash; Dicker at pick 135, exactly where a top-three kicker should go when nobody&rsquo;s overthinking it.</p>
+            <p class="sv-speak sv-clarence" style="margin-top:14px;"><span class="sv-tag">CLARENCE</span>Worth stating plainly, since this office nearly didn&rsquo;t: Jonny, Gilly, Tom and Issa each rostered a top-four defense for 2026 &mdash; the Texans, Rams, Seahawks and Broncos, in that order, are the four best units in the league by consensus. All four of those managers also received a D+ or lower somewhere above in this piece. Their kicker and defense are quietly excellent. The other eight starters were frequently not.</p>
+            <p class="sv-speak sv-alexa"><span class="sv-tag alexa">ALEXA</span>And two managers &mdash; Tom and Tommy &mdash; went and got the two best kickers in the league on purpose, three rounds apart from each other, which is either a coincidence or the first sign that &ldquo;never draft a kicker early&rdquo; is starting to go the way of &ldquo;never draft a running back in the first round.&rdquo; Turks&rsquo; bot, for what it&rsquo;s worth, still did it properly &mdash; Dicker at pick 135, exactly where a top-three kicker should go when nobody&rsquo;s overthinking it.</p>
           </div>
 
           <div class="sv-team">
