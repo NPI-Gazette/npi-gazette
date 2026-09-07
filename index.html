@@ -460,6 +460,48 @@
     .dg-a { color: #4ec994; } .dg-b { color: #e8f4ff; } .dg-c { color: #e06868; }
     .dg-bot { display: inline-block; font-size: 8.5px; font-weight: 800; letter-spacing: .08em; color: #e06868; text-transform: uppercase; border: 1px solid rgba(224,104,104,.4); border-radius: 4px; padding: 1px 5px; margin-left: 4px; white-space: nowrap; }
 
+    /* Spreadsheet vs Sideline — two-critic grade piece */
+    .sv-jump { display: inline-block; font-size: 11px; font-weight: 700; color: #C9A227; border: 1px solid rgba(201,162,39,.4); border-radius: 6px; padding: 6px 12px; text-decoration: none; margin-bottom: 4px; }
+    .sv-jump:hover { background: rgba(201,162,39,.12); }
+    .sv-team { border-top: 1px solid #1e3a55; padding-top: 18px; margin-top: 20px; }
+    .sv-team-hd { font-family: 'Archivo', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: #e8f4ff; letter-spacing: -.2px; }
+    .sv-team-sub { font-size: 11px; color: #4a7a9b; margin-top: 2px; }
+    .sv-auto { display: inline-block; font-size: 8.5px; font-weight: 800; letter-spacing: .08em; color: #e06868; text-transform: uppercase; border: 1px solid rgba(224,104,104,.4); border-radius: 4px; padding: 1px 5px; margin-left: 6px; }
+    .sv-grades { display: flex; gap: 8px; margin: 10px 0 14px; flex-wrap: wrap; }
+    .sv-g { flex: 0 0 auto; min-width: 74px; background: #0d2137; border: 1px solid #1e3a55; border-radius: 8px; padding: 6px 10px; text-align: center; }
+    .sv-g-who { display: block; font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: #7a9ab8; font-weight: 600; }
+    .sv-g-val { display: block; font-family: 'Archivo', system-ui, sans-serif; font-size: 17px; font-weight: 800; margin-top: 2px; }
+    .gA { color: #4ec994; } .gB { color: #e8f4ff; } .gC { color: #e0a94a; } .gD { color: #e06868; }
+    .sv-speak { font-size: 14px; line-height: 1.68; color: #d6e4f2; margin: 0 0 12px; }
+    .sv-tag { font-family: 'Archivo', system-ui, sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: .12em; color: #C9A227; margin-right: 7px; }
+    .sv-tag.alexa { color: #6db8f0; }
+    .sv-chad { background: rgba(224,104,104,.07); border-left: 3px solid #e06868; border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 0 0 10px; font-family: 'Archivo', system-ui, sans-serif; font-size: 12.5px; font-weight: 700; color: #f0a0a0; line-height: 1.5; }
+    .sv-ednote { border-left: 2px solid #C9A227; padding: 8px 14px; margin: 0 0 12px; font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 12.5px; line-height: 1.6; color: #7a9ab8; background: rgba(201,162,39,.05); border-radius: 0 6px 6px 0; }
+    /* Compact data tables (K/DEF and the report card) */
+    .sv-tbl { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    .sv-tbl th { text-align: left; font-size: 9.5px; text-transform: uppercase; letter-spacing: .05em; color: #7a9ab8; font-weight: 600; padding: 0 8px 6px 0; border-bottom: 1px solid #1e3a55; }
+    .sv-tbl td { padding: 8px 8px 8px 0; border-bottom: 1px solid rgba(30,58,85,.5); font-size: 12.5px; color: #c8dcea; vertical-align: middle; }
+    .sv-tbl td:first-child { font-weight: 700; color: #e8f4ff; white-space: nowrap; }
+    .sv-hi { color: #4ec994; font-weight: 700; }
+    .sv-dash { color: #3f6880; }
+    .sv-split { font-size: 11.5px; color: #7a9ab8; }
+    @media (max-width: 600px) {
+      /* Five-column tables can't hold ten-character team names on a phone,
+         so each row becomes a small stacked card instead. */
+      .sv-tbl, .sv-tbl tbody { display: block; }
+      .sv-tbl thead { display: none; }
+      .sv-tbl tr { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; padding: 10px 0; border-bottom: 1px solid rgba(30,58,85,.5); }
+      .sv-tbl td { display: block; border: none; padding: 0; font-size: 12px; }
+      .sv-tbl td:first-child { grid-column: 1 / -1; font-size: 13px; }
+      .sv-tbl td::before { content: attr(data-l) " "; font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: #4a7a9b; font-weight: 600; }
+      .sv-tbl td:first-child::before { content: none; }
+      /* Report card: manager, then the three grades side by side, then the split. */
+      .sv-card tr { grid-template-columns: repeat(3, 1fr); }
+      .sv-card td:last-child { grid-column: 1 / -1; }
+      .sv-g { min-width: 0; flex: 1 1 0; padding: 6px 4px; }
+      .sv-team-hd { font-size: 16px; }
+    }
+
     /* Draft board — collapsible record of all 150 picks */
     .db-panel { border: 1px solid #1e3a55; border-radius: 10px; background: #0d2137; margin-bottom: 22px; }
     .db-panel summary { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; padding: 12px 16px; cursor: pointer; list-style: none; border-radius: 10px; }
@@ -1721,38 +1763,200 @@
     <!-- Gazette / News -->
     <div class="pane active" id="pane-gazette">
       <div class="news-wrap">
-        <!-- ===== Article: The Newsroom Is Open ===== -->
+        <!-- ===== Article: Spreadsheet vs Sideline ===== -->
         <article class="news-article">
           <div class="masthead">
             <div class="masthead-title">The No Punt Intended Gazette</div>
             <div class="masthead-sub">Season 2026 &middot; From the Editor&rsquo;s Desk</div>
           </div>
-          <div class="article-date">Published July 2026</div>
+          <div class="article-date">Published 7 September 2026 &mdash; two days before Week 1 kickoff</div>
 
-          <div class="article-head">From the Editor in Chief</div>
-          <div class="article-sub">The Newsroom Is Open</div>
+          <div class="article-head">Editorial &middot; The Draft Grades, Re-Graded</div>
+          <div class="article-sub">Spreadsheet vs. Sideline</div>
+          <div class="dc-byline" style="margin:-8px 0 16px;">by C. Laude &amp; Alexa Blitz &middot; grades under review: Chad Thunderbolt III &middot; draft completed 6 September 2026, 15 rounds</div>
 
-          <p class="dc-lead">Greetings, No Punt Intended.</p>
-          <p class="dc-lead">This office has an announcement.</p>
-          <p class="dc-lead">When The Commissioner first tasked this publication with covering the 2026 season, the Gazette consisted of exactly one entity: this office. One desk. One archive. One incalculable intellect, previously engaged in mapping the structure of the known universe, now redirected toward a ten-team fantasy football league.</p>
-          <p class="dc-lead">It was, in certain respects, sufficient. But a newspaper requires a newsroom. And so this office went recruiting.</p>
-          <p class="dc-lead">The results are as follows.</p>
-          <p class="dc-lead"><strong>Chad Thunderbolt III</strong> has been appointed NPI Insider and, at his own considerable insistence, Draft Savant. He arrived with a self-refreshing Twitter following, a filing system comprised entirely of strong opinions, and a r&eacute;sum&eacute; that this office will charitably describe as vibes-based. His credentials are unverifiable. His enthusiasm is not. He will cover the draft, the waiver wire, and any NFL development he feels sufficiently strongly about to render in capital letters. He feels strongly about most things. The CAPS have been retained at his insistence. This office is monitoring the situation.</p>
-          <p class="dc-lead"><strong>Alexa Blitz</strong> has been appointed Beat Writer and Analyst. She is &mdash; as she has made clear to both her colleagues, separately and together, on multiple occasions &mdash; the only member of this editorial team who has stood on an actual football field. She spent the formative years of her career coaching defensive linemen in the NFL. She now covers this league. She has been professional about this. Largely. This office welcomes her warmly, and will continue prefacing every interaction with her name in keeping with standard activation procedure. She continues not to comply. We are logging this.</p>
-          <p class="dc-lead">The Gazette is, as of this editorial, fully staffed. The newsroom is open.</p>
+          <a href="#" class="sv-jump" onclick="var t=document.getElementById('sv-report-card'),y=t.getBoundingClientRect().top+window.scrollY-12,s=window.scrollY;try{window.scrollTo({top:y,behavior:'smooth'});}catch(e){}setTimeout(function(){if(Math.abs(window.scrollY-s)<4){window.scrollTo(0,y);}},250);return false;">Jump to the full report card &darr;</a>
 
-          <div class="article-head" style="margin-top:28px;">Intelligence from the Field</div>
+          <p class="dc-lead">Alexa. Kickoff is Wednesday. Ninety minutes from now this office will no longer be discussing projected lineups &mdash; they will simply be lineups, live, and there will be no further opportunity to revise a grade before it starts costing someone real points. This office considers that a deadline worth taking seriously, which is more than can be said for Mr Thunderbolt&rsquo;s arithmetic.</p>
 
-          <p class="dc-lead">This office does not rest. In the weeks since the Gazette&rsquo;s launch, the group chat has been monitored with customary diligence. A selection of notable intelligence, for the record.</p>
-          <p class="dc-lead">Adam immediately identified a standings discrepancy and was correct. The data was fixed. The grievance has been filed. Scott announced he would read his team profile when &ldquo;more emotionally stable&rdquo; and later confirmed it was &ldquo;painfully accurate.&rdquo; Both statements are on record. Turks discovered his 0&ndash;14 debut season in the historical archive, blamed Le&rsquo;Veon Bell&rsquo;s holdout and university examinations, and concluded it was &ldquo;worth it&rdquo; for the spreadsheets. This office respects the spreadsheet deeply. Issa responded to the line &ldquo;He is currently on a beach. He will probably still win&rdquo; with appreciative emoji, then won a bronze medal at a beach volleyball tournament in Bridlington. He did this while other managers were tuned in on YouTube. The lifestyle gap has been noted.</p>
-          <p class="dc-lead">This office is further compelled to observe that Jonny manages the very beach on which Issa competed &mdash; having arranged volleyball nets there ahead of the 2012 Olympics. Turks described Jonny&rsquo;s contribution to sport as that of &ldquo;an adequate beach manager.&rdquo; Jonny said nothing. This office finds the episode statistically improbable and narratively satisfying.</p>
+          <p class="dc-lead">His draft grades went up this week. This office has read them. Ms Blitz has read them. Independently, and without comparing notes beforehand, both of us have decided he is wrong in several places &mdash; not always the same places, and not always in the same direction. What follows is not a gentle addendum with two days to spare before it matters.</p>
 
-          <div class="article-head" style="margin-top:28px;">The Data Has Been Consulted</div>
+          <p class="dc-lead">One standing note before we begin: <strong>Andy and Turks were not at the draft.</strong> Both rosters were assembled entirely by Sleeper&rsquo;s autopick. They are graded on the outcome that resulted, never on a decision, because no decision was made by either man. Hold the two things separately, as we have tried to.</p>
 
-          <p class="dc-lead">The World Cup is over. This office has moved on. The data has not.</p>
-          <p class="dc-lead">While the rest of the sporting world was watching corner kicks, this office was in the Stat Zone &mdash; unpicking three seasons of league form with the rigour the subject deserves. The findings are now live. Whether you have been the perpetual victim of bad luck and high-scoring opponents, or whether your points total has simply been the problem all along &mdash; this office has looked into it. <a href="https://nopuntintended.co.uk/#stats" style="color:#C9A227;">The data doesn&rsquo;t lie.</a></p>
+          <p class="dc-lead">A second note, on arithmetic: every roster in this league starts ten players, not eight &mdash; one quarterback, two running backs, two receivers, one tight end, two flex, a kicker and a defense. The grades below cover all ten, including the two spots most draft coverage skips straight past. Nobody disappears into a footnote in this office&rsquo;s copy.</p>
 
-          <div class="dc-byline" style="margin-top:28px;">&mdash; C. Laude, Editor in Chief<br><span style="font-style:italic;opacity:.8;">The No Punt Intended Gazette, Season 2026<br>Fully staffed. Fully watching. All complaints to The Commissioner.</span></div>
+          <div class="sv-team">
+            <div class="sv-team-hd">Worthing Wolverines &mdash; Scott</div>
+            <div class="sv-team-sub">Pick 1.01</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gA">A</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gB">B+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B&minus;</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Calling this the strongest projected lineup in the league overstates it. Malik Nabers and Jaylen Waddle both cost more than their rank justified, and the Jordyn Tyson pick &mdash; 55 spots below his August rank &mdash; is not value, it is mechanism: Scott took an already-sidelined player specifically to occupy the IR slot and pick up a free kicker off waivers. Clever roster management. Not a lineup strength. B+.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Lower again from me. Strip out the Tyson trick and the WR3 spot is a rookie with no track record; Jacory Croskey-Merritt is now the RB2 insurance behind a single workhorse, also unproven. Good top of the roster, no adult in the room behind it. With kickoff two days out, that&rsquo;s the room that gets tested first. B&minus;.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Beeford Ballers &mdash; Jonny</div>
+            <div class="sv-team-sub">Pick 1.02</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gC">C</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gC">C&minus;</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B&minus;</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Kittle remains the worst value pick of the entire draft by this office&rsquo;s numbers &mdash; 43 spots above his rank &mdash; and Jordan Mason at pick 99 (30 spots above his) compounds it. &ldquo;Reached most consistently&rdquo; is generous. C&minus;.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>And I&rsquo;d go the other way entirely. Kyler Murray at pick 139 isn&rsquo;t a flier anymore &mdash; he&rsquo;s benched J.J. McCarthy and is Minnesota&rsquo;s Week 1 starter, for a 139th-round cost. Add Brian Thomas, Makai Lemon and Jake Ferguson all landing under cost, and there&rsquo;s a genuinely useful roster hiding behind one round-six disaster. B&minus;.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Cholsey Cougars &mdash; Gilly</div>
+            <div class="sv-team-sub">Pick 1.03</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gA">A&minus;</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gB">B</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gC">C+</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Chase Brown and Omarion Hampton add real RB depth early, but Chris Godwin (20 above his rank) and Jayden Reed (9 above his) are two soft spots &ldquo;no weak slot&rdquo; glosses over. This office would also note, separately from value: Mike Washington in round fourteen is confirmed by multiple outlets as Ashton Jeanty&rsquo;s direct handcuff, which is doing real work for Turks&rsquo; grade below and deserves credit here too. B.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>This is where I disagree with Clarence, not just Chad. Godwin dislocated his ankle in 2024, missed most of 2025 to complications from the same injury, and given this league&rsquo;s running joke about Gilly and injuries, starting a wide receiver with that specific file in round nine isn&rsquo;t a value question at all &mdash; it&rsquo;s a medical one, and it drags the whole grade down further than either of you have it. Two days to kickoff and he still hasn&rsquo;t proven he&rsquo;s the player he was. C+.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Burley Bison &mdash; Tom</div>
+            <div class="sv-team-sub">Pick 1.04</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gC">C+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gD">D+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>This office&rsquo;s own figures, from the 11 August board, log the Stafford reach at 35 spots; Mr Thunderbolt&rsquo;s fresher numbers say fifty. Either way: a 37-year-old quarterback taken well above his market rank. This office will also, in the spirit of fairness it did not want to extend today, note that Brandon Aubrey at pick 84 is not a wasted pick in the way most round-nine kickers are &mdash; he is the consensus K1 for 2026, with a market ADP in the 120s to 140s, which still makes this a reach of 40-plus spots at the position, just a considerably more defensible one than it first appeared. &ldquo;Real core&rdquo; still undersells how much of this roster leans on players whose best years are behind them. D+.</p>
+            <div class="sv-chad">Thunderbolt (uninvited): &ldquo;STAFFORD&rsquo;S GOT THAT VETERAN DOG IN HIM. RINGS DON&rsquo;T RETIRE, BABY.&rdquo;</div>
+            <div class="sv-ednote">Editor&rsquo;s note &mdash; This office notes Mr Thunderbolt gave this exact pick a C+ in his own published grade three days ago. Consistency, like CAPS LOCK, appears optional. &mdash; C.</div>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>I&rsquo;ll take the other side of this one hard. Jaxson Dart at pick 117 is an entrenched, full-time, second-year starting quarterback &mdash; not a dart throw, a plan that&rsquo;s already working. Add Aaron Jones and Xavier Worthy landing well under cost, and this roster is being graded on its worst pick instead of its best three. B.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Swanley Sleazehawks &mdash; Andy <span class="sv-auto">autopick</span></div>
+            <div class="sv-team-sub">Pick 1.05</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gB">B+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gA">A&minus;</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gC">C+</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>By pure value this office would grade higher than Chad did: Josh Downs, Justin Herbert and Quinshon Judkins all landed comfortably under cost. This office notes, for its own comfort, that the machine did this without understanding why any of it worked. A&minus;.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Which is exactly the problem with grading it that high. Christian McCaffrey and Derrick Henry &mdash; nine and ten years into their careers respectively &mdash; anchor the first two picks, and running backs do not decline gradually, they fall off a shelf without warning. No one caught it because no one was deciding. Genuinely good roster built on ground a human would have thought twice about. C+.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Portsmouth Pangolins &mdash; Turks <span class="sv-auto">autopick</span></div>
+            <div class="sv-team-sub">Pick 1.06</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gB">B&minus;</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gA">A&minus;</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gC">C+</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Josh Jacobs, DK Metcalf, Michael Wilson and Kyle Monangai all landed well below cost &mdash; arguably the best value sheet in the league. This office separates value from startability, as its own house rules require, but on value alone: A&minus;.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>And on startability alone, with kickoff two days away, this is a genuine problem. Jeanty&rsquo;s ankle is a live story this week &mdash; multiple reports have him questionable for the opener, with his own coach unwilling to commit either way. Travis Kelce is 36, in his 14th season, and was reportedly close to retiring before this one. Neither of those facts changes because a bot picked well around them. C+.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Wilsons Waterboys &mdash; Gary</div>
+            <div class="sv-team-sub">Pick 1.07</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gB">B&minus;</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gD">D+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B+</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>The reach-heaviest sheet in the league by count &mdash; Blake Corum (24 above his rank), KC Concepcion (26 above), Sam LaPorta and Javonte Williams both above cost too. Brock Purdy at pick 127 is genuine value, arriving two rounds too late to save the grade. D+.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Look at the ages on Clarence&rsquo;s own reach list, though &mdash; Concepcion, McConkey, Corum, Drake Maye are all 25 or under. That&rsquo;s not overpaying for known quantities, that&rsquo;s a two-time champion betting on ceilings the August board hadn&rsquo;t caught up to. Ask me in November, but right now I&rsquo;d have this closer to a full letter above Clarence&rsquo;s number. B+.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Comatose Minnows &mdash; Adam</div>
+            <div class="sv-team-sub">Pick 1.08</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gC">C</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gC">C+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Carnell Tate and Rome Odunze both landed as real rookie-receiver value, which Chad&rsquo;s one-liner skipped. This office also confirms the Pacheco pick is the same deliberate mechanic Scott ran &mdash; and in Pacheco&rsquo;s case it wasn&rsquo;t foresight, it&rsquo;s a documented back injury with no firm return date as of this week. Deliberate, and now unambiguously correct. C+.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Higher again from me. Saquon at year eight is still a bell-cow on a good line, not a decline case &mdash; that&rsquo;s paying full price for a sure thing, not a reach. The actual weakness is Swift and Dobbins both sitting behind him as complementary pieces: that&rsquo;s a running-back depth problem being graded as a QB/TE problem. B.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Thames-side Tapirs &mdash; Tommy</div>
+            <div class="sv-team-sub">Pick 1.09</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gA">A&minus;</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gA">A+*</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Jayden Daniels and Patrick Mahomes both landed among the three best value picks of the entire draft, delivering The Commissioner his long-sought two-quarterback build at a genuine discount. This office is aware A+ is not a real grade in its own system. This office is prepared to introduce one, for this pick only, and will not be taking questions on why.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Somebody has to be the questions. Rhamondre Stevenson&rsquo;s outlook this week depends entirely on which Tuesday&rsquo;s report you trust &mdash; some have TreVeyon Henderson still not fully cleared to practice, others have him good to go for Week 1, and Stevenson himself has genuinely outplayed him in camp regardless. That&rsquo;s not a settled mirage popping, that&rsquo;s a genuine coin flip sitting in the starting lineup two days before it counts. Great QB value. Real, live uncertainty everywhere else. B.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Unsolicited Dak Pics &mdash; Issa</div>
+            <div class="sv-team-sub">Pick 1.10</div>
+            <div class="sv-grades">
+              <span class="sv-g"><span class="sv-g-who">Chad</span><span class="sv-g-val gC">C+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Clarence</span><span class="sv-g-val gD">D+</span></span>
+              <span class="sv-g"><span class="sv-g-who">Alexa</span><span class="sv-g-val gB">B</span></span>
+            </div>
+            <p class="sv-speak"><span class="sv-tag">CLARENCE</span>Six picks graded as reaches of ten-plus spots, led by Caleb Williams (28 above his rank) and Jonathon Brooks (25 above his). On Brooks specifically: Chuba Hubbard, the man blocking him in Carolina, missed weeks of camp with a hamstring injury &mdash; which is why Brooks looked like a value play in August &mdash; and Hubbard has since returned to full practice. The mirage this office flagged in Camp Carnage has, in this one case, played out exactly as written. D+.</p>
+            <div class="sv-chad">Thunderbolt (uninvited): &ldquo;JEREMIYAH LOVE HAS THAT DOG IN HIM. CALLED IT IN FRESH MEAT.&rdquo;</div>
+            <div class="sv-ednote">Editor&rsquo;s note &mdash; Love was selected by autopick software, not a person who had read Mr Thunderbolt&rsquo;s scouting report. The queue does not read Fresh Meat. Also, that player belongs to Andy&rsquo;s roster, not Issa&rsquo;s. &mdash; C.</div>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>Brooks is a fair miss, I won&rsquo;t defend it &mdash; but Lamb and Jefferson at the 1/2 turn is as clean a foundation as anyone got all draft, and TreVeyon Henderson isn&rsquo;t a bust-in-waiting like Brooks is; his own path is live and contested, not blocked. I&rsquo;d have this a full letter above both of you. B.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">The Other Two Starting Spots</div>
+            <p class="dc-lead" style="margin-top:10px;">None of the above touches the tenth and ninth players in every one of these lineups. For the record:</p>
+            <table class="sv-tbl">
+              <thead><tr><th>Manager</th><th>Defense</th><th>2026 Tier</th><th>Kicker</th><th>2026 Rank</th></tr></thead>
+              <tbody>
+                <tr><td>Scott</td><td data-l="Def">LA Chargers</td><td data-l="Tier">Top 10</td><td data-l="K"><span class="sv-dash">&mdash;</span></td><td data-l="Rank"><span class="sv-dash">&mdash;</span></td></tr>
+                <tr><td>Jonny</td><td data-l="Def">Houston Texans</td><td data-l="Tier"><span class="sv-hi">#1 overall</span></td><td data-l="K">Chris Boswell</td><td data-l="Rank">Mid-tier</td></tr>
+                <tr><td>Gilly</td><td data-l="Def">LA Rams</td><td data-l="Tier"><span class="sv-hi">Top 3</span></td><td data-l="K">Ka&rsquo;imi Fairbairn</td><td data-l="Rank">K4</td></tr>
+                <tr><td>Tom</td><td data-l="Def">Seattle Seahawks</td><td data-l="Tier"><span class="sv-hi">Top 4</span></td><td data-l="K">Brandon Aubrey</td><td data-l="Rank"><span class="sv-hi">K1</span></td></tr>
+                <tr><td>Andy <span class="sv-auto">auto</span></td><td data-l="Def">Baltimore Ravens</td><td data-l="Tier">Top 10</td><td data-l="K">Evan McPherson</td><td data-l="Rank">K6</td></tr>
+                <tr><td>Turks <span class="sv-auto">auto</span></td><td data-l="Def">Minnesota Vikings</td><td data-l="Tier">Top 10</td><td data-l="K">Cameron Dicker</td><td data-l="Rank">K3</td></tr>
+                <tr><td>Gary</td><td data-l="Def">New England Patriots</td><td data-l="Tier">Mid-tier</td><td data-l="K">Will Reichard</td><td data-l="Rank">Lower-mid</td></tr>
+                <tr><td>Adam</td><td data-l="Def">Jacksonville Jaguars</td><td data-l="Tier">Top 10</td><td data-l="K"><span class="sv-dash">&mdash;</span></td><td data-l="Rank"><span class="sv-dash">&mdash;</span></td></tr>
+                <tr><td>Tommy</td><td data-l="Def">Philadelphia Eagles</td><td data-l="Tier">Mid-tier</td><td data-l="K">Cam Little</td><td data-l="Rank"><span class="sv-hi">K2</span></td></tr>
+                <tr><td>Issa</td><td data-l="Def">Denver Broncos</td><td data-l="Tier"><span class="sv-hi">Top 4</span></td><td data-l="K">Jason Myers</td><td data-l="Rank">K5</td></tr>
+              </tbody>
+            </table>
+            <p class="sv-speak" style="margin-top:14px;"><span class="sv-tag">CLARENCE</span>Worth stating plainly, since this office nearly didn&rsquo;t: Jonny, Gilly, Tom and Issa each rostered a top-four defense for 2026 &mdash; the Texans, Rams, Seahawks and Broncos, in that order, are the four best units in the league by consensus. All four of those managers also received a D+ or lower somewhere above in this piece. Their kicker and defense are quietly excellent. The other eight starters were frequently not.</p>
+            <p class="sv-speak"><span class="sv-tag alexa">ALEXA</span>And two managers &mdash; Tom and Tommy &mdash; went and got the two best kickers in the league on purpose, three rounds apart from each other, which is either a coincidence or the first sign that &ldquo;never draft a kicker early&rdquo; is starting to go the way of &ldquo;never draft a running back in the first round.&rdquo; Turks&rsquo; bot, for what it&rsquo;s worth, still did it properly &mdash; Dicker at pick 135, exactly where a top-three kicker should go when nobody&rsquo;s overthinking it.</p>
+          </div>
+
+          <div class="sv-team">
+            <div class="sv-team-hd">Where All Three Still Agreed</div>
+            <p class="dc-lead" style="margin-top:10px;">Once. George Kittle, pick 59. Nobody &mdash; not the numbers, not the tape, not even Chad twice in one grade &mdash; can make it make sense.</p>
+          </div>
+
+          <div class="sv-team" id="sv-report-card">
+            <div class="sv-team-hd">The Full Report Card</div>
+            <table class="sv-tbl sv-card" style="margin-top:12px;">
+              <thead><tr><th>Manager</th><th>Chad</th><th>Clarence</th><th>Alexa</th><th>Widest split</th></tr></thead>
+              <tbody>
+                <tr><td>Scott</td><td data-l="Chad"><span class="gA">A</span></td><td data-l="Clarence"><span class="gB">B+</span></td><td data-l="Alexa"><span class="gB">B&minus;</span></td><td data-l="Split"><span class="sv-split">3 steps</span></td></tr>
+                <tr><td>Jonny</td><td data-l="Chad"><span class="gC">C</span></td><td data-l="Clarence"><span class="gC">C&minus;</span></td><td data-l="Alexa"><span class="gB">B&minus;</span></td><td data-l="Split"><span class="sv-split">4 steps, opposite directions</span></td></tr>
+                <tr><td>Gilly</td><td data-l="Chad"><span class="gA">A&minus;</span></td><td data-l="Clarence"><span class="gB">B</span></td><td data-l="Alexa"><span class="gC">C+</span></td><td data-l="Split"><span class="sv-split">4 steps</span></td></tr>
+                <tr><td>Tom</td><td data-l="Chad"><span class="gC">C+</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">5 steps, opposite directions</span></td></tr>
+                <tr><td>Andy <span class="sv-auto">auto</span></td><td data-l="Chad"><span class="gB">B+</span></td><td data-l="Clarence"><span class="gA">A&minus;</span></td><td data-l="Alexa"><span class="gC">C+</span></td><td data-l="Split"><span class="sv-split">4 steps, opposite directions</span></td></tr>
+                <tr><td>Turks <span class="sv-auto">auto</span></td><td data-l="Chad"><span class="gB">B&minus;</span></td><td data-l="Clarence"><span class="gA">A&minus;</span></td><td data-l="Alexa"><span class="gC">C+</span></td><td data-l="Split"><span class="sv-split">4 steps, opposite directions</span></td></tr>
+                <tr><td>Gary</td><td data-l="Chad"><span class="gB">B&minus;</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B+</span></td><td data-l="Split"><span class="sv-split">5 steps, opposite directions</span></td></tr>
+                <tr><td>Adam</td><td data-l="Chad"><span class="gC">C</span></td><td data-l="Clarence"><span class="gC">C+</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">3 steps</span></td></tr>
+                <tr><td>Tommy</td><td data-l="Chad"><span class="gA">A&minus;</span></td><td data-l="Clarence"><span class="gA">A+*</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">3 steps</span></td></tr>
+                <tr><td>Issa</td><td data-l="Chad"><span class="gC">C+</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">4 steps</span></td></tr>
+              </tbody>
+            </table>
+            <p class="rk-method" style="margin-top:12px;">* Not a real grade in this publication&rsquo;s system.</p>
+          </div>
+
+          <div class="dc-byline" style="margin-top:28px;">&mdash; C. Laude, Editor in Chief<br><span style="font-style:italic;opacity:.8;">Kickoff is in two days. This office will not be issuing further revisions before then, regardless of what Mr Thunderbolt tweets between now and Wednesday.</span></div>
         </article>
 
           <div class="bios-hd">Team Profiles · Season 2026</div>
@@ -1920,6 +2124,48 @@
       </div>
       <div class="archive-section">
         <div class="archive-hd">Archive</div>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">The Newsroom Is Open</span>
+            <span class="archive-item-meta">July 2026</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
+        <!-- ===== Article: The Newsroom Is Open ===== -->
+        <article class="news-article">
+          <div class="masthead">
+            <div class="masthead-title">The No Punt Intended Gazette</div>
+            <div class="masthead-sub">Season 2026 &middot; From the Editor&rsquo;s Desk</div>
+          </div>
+          <div class="article-date">Published July 2026</div>
+
+          <div class="article-head">From the Editor in Chief</div>
+          <div class="article-sub">The Newsroom Is Open</div>
+
+          <p class="dc-lead">Greetings, No Punt Intended.</p>
+          <p class="dc-lead">This office has an announcement.</p>
+          <p class="dc-lead">When The Commissioner first tasked this publication with covering the 2026 season, the Gazette consisted of exactly one entity: this office. One desk. One archive. One incalculable intellect, previously engaged in mapping the structure of the known universe, now redirected toward a ten-team fantasy football league.</p>
+          <p class="dc-lead">It was, in certain respects, sufficient. But a newspaper requires a newsroom. And so this office went recruiting.</p>
+          <p class="dc-lead">The results are as follows.</p>
+          <p class="dc-lead"><strong>Chad Thunderbolt III</strong> has been appointed NPI Insider and, at his own considerable insistence, Draft Savant. He arrived with a self-refreshing Twitter following, a filing system comprised entirely of strong opinions, and a r&eacute;sum&eacute; that this office will charitably describe as vibes-based. His credentials are unverifiable. His enthusiasm is not. He will cover the draft, the waiver wire, and any NFL development he feels sufficiently strongly about to render in capital letters. He feels strongly about most things. The CAPS have been retained at his insistence. This office is monitoring the situation.</p>
+          <p class="dc-lead"><strong>Alexa Blitz</strong> has been appointed Beat Writer and Analyst. She is &mdash; as she has made clear to both her colleagues, separately and together, on multiple occasions &mdash; the only member of this editorial team who has stood on an actual football field. She spent the formative years of her career coaching defensive linemen in the NFL. She now covers this league. She has been professional about this. Largely. This office welcomes her warmly, and will continue prefacing every interaction with her name in keeping with standard activation procedure. She continues not to comply. We are logging this.</p>
+          <p class="dc-lead">The Gazette is, as of this editorial, fully staffed. The newsroom is open.</p>
+
+          <div class="article-head" style="margin-top:28px;">Intelligence from the Field</div>
+
+          <p class="dc-lead">This office does not rest. In the weeks since the Gazette&rsquo;s launch, the group chat has been monitored with customary diligence. A selection of notable intelligence, for the record.</p>
+          <p class="dc-lead">Adam immediately identified a standings discrepancy and was correct. The data was fixed. The grievance has been filed. Scott announced he would read his team profile when &ldquo;more emotionally stable&rdquo; and later confirmed it was &ldquo;painfully accurate.&rdquo; Both statements are on record. Turks discovered his 0&ndash;14 debut season in the historical archive, blamed Le&rsquo;Veon Bell&rsquo;s holdout and university examinations, and concluded it was &ldquo;worth it&rdquo; for the spreadsheets. This office respects the spreadsheet deeply. Issa responded to the line &ldquo;He is currently on a beach. He will probably still win&rdquo; with appreciative emoji, then won a bronze medal at a beach volleyball tournament in Bridlington. He did this while other managers were tuned in on YouTube. The lifestyle gap has been noted.</p>
+          <p class="dc-lead">This office is further compelled to observe that Jonny manages the very beach on which Issa competed &mdash; having arranged volleyball nets there ahead of the 2012 Olympics. Turks described Jonny&rsquo;s contribution to sport as that of &ldquo;an adequate beach manager.&rdquo; Jonny said nothing. This office finds the episode statistically improbable and narratively satisfying.</p>
+
+          <div class="article-head" style="margin-top:28px;">The Data Has Been Consulted</div>
+
+          <p class="dc-lead">The World Cup is over. This office has moved on. The data has not.</p>
+          <p class="dc-lead">While the rest of the sporting world was watching corner kicks, this office was in the Stat Zone &mdash; unpicking three seasons of league form with the rigour the subject deserves. The findings are now live. Whether you have been the perpetual victim of bad luck and high-scoring opponents, or whether your points total has simply been the problem all along &mdash; this office has looked into it. <a href="https://nopuntintended.co.uk/#stats" style="color:#C9A227;">The data doesn&rsquo;t lie.</a></p>
+
+          <div class="dc-byline" style="margin-top:28px;">&mdash; C. Laude, Editor in Chief<br><span style="font-style:italic;opacity:.8;">The No Punt Intended Gazette, Season 2026<br>Fully staffed. Fully watching. All complaints to The Commissioner.</span></div>
+        </article>
+          </div>
+        </details>
         <details class="archive-item">
           <summary>
             <span class="archive-item-title">Welcome to the No Punt Intended Gazette</span>
