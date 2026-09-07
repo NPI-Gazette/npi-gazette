@@ -504,7 +504,6 @@
       .sv-tbl td:first-child::before { content: none; }
       /* Report card: manager, then the three grades side by side, then the split. */
       .sv-card tr { grid-template-columns: repeat(3, 1fr); }
-      .sv-card td:last-child { grid-column: 1 / -1; }
       .sv-g { min-width: 0; flex: 1 1 0; padding: 6px 4px; }
       .sv-team-hd { font-size: 16px; }
     }
@@ -1784,7 +1783,7 @@
 
           <a href="#" class="sv-jump" onclick="var t=document.getElementById('sv-report-card'),y=t.getBoundingClientRect().top+window.scrollY-12,s=window.scrollY;try{window.scrollTo({top:y,behavior:'smooth'});}catch(e){}setTimeout(function(){if(Math.abs(window.scrollY-s)<4){window.scrollTo(0,y);}},250);return false;">Jump to the full report card &darr;</a>
 
-          <p class="dc-lead">This office does not, as a rule, share a byline, and it does not, as a further rule, mark another writer&rsquo;s homework in public. Both rules are suspended today. Mr Thunderbolt III&rsquo;s draft grades went up this week. Your editor in chief and Ms Blitz have, independently, decided they are wrong in several places &mdash; not always the same places, and not always in the same direction. What follows is not a gentle addendum with two days to spare before the season gets underway.</p>
+          <p class="dc-lead">This office does not, as a rule, share a byline, and it does not, as a further rule, mark another writer&rsquo;s homework in public. Both rules are suspended today. Mr Thunderbolt III&rsquo;s draft grades went up this week. Your editor in chief and Ms Blitz have, independently, decided they are wrong in several places &mdash; not always the same places, and not always in the same direction. What follows is a gentle addendum with two days to spare before the season gets underway.</p>
 
           <p class="dc-lead">One standing note before we begin: <strong>Andy and Turks were not at the draft.</strong> Both rosters were assembled entirely by Sleeper&rsquo;s autopick. They are graded on the outcome that resulted, never on a decision, because no decision was made by either man. Hold the two things separately, as we have tried to.</p>
 
@@ -1921,18 +1920,18 @@
           <div class="sv-team" id="sv-report-card">
             <div class="sv-team-hd">The Full Report Card</div>
             <table class="sv-tbl sv-card" style="margin-top:12px;">
-              <thead><tr><th>Manager</th><th>Chad</th><th>Clarence</th><th>Alexa</th><th>Widest split</th></tr></thead>
+              <thead><tr><th>Manager</th><th>Chad</th><th>Clarence</th><th>Alexa</th></tr></thead>
               <tbody>
-                <tr><td>Scott</td><td data-l="Chad"><span class="gA">A</span></td><td data-l="Clarence"><span class="gB">B+</span></td><td data-l="Alexa"><span class="gB">B&minus;</span></td><td data-l="Split"><span class="sv-split">3 steps</span></td></tr>
-                <tr><td>Jonny</td><td data-l="Chad"><span class="gC">C</span></td><td data-l="Clarence"><span class="gC">C&minus;</span></td><td data-l="Alexa"><span class="gB">B&minus;</span></td><td data-l="Split"><span class="sv-split">4 steps, opposite directions</span></td></tr>
-                <tr><td>Gilly</td><td data-l="Chad"><span class="gA">A&minus;</span></td><td data-l="Clarence"><span class="gB">B</span></td><td data-l="Alexa"><span class="gC">C+</span></td><td data-l="Split"><span class="sv-split">4 steps</span></td></tr>
-                <tr><td>Tom</td><td data-l="Chad"><span class="gC">C+</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">5 steps, opposite directions</span></td></tr>
-                <tr><td>Andy <span class="sv-auto">auto</span></td><td data-l="Chad"><span class="gB">B+</span></td><td data-l="Clarence"><span class="gA">A&minus;</span></td><td data-l="Alexa"><span class="gC">C+</span></td><td data-l="Split"><span class="sv-split">4 steps, opposite directions</span></td></tr>
-                <tr><td>Turks <span class="sv-auto">auto</span></td><td data-l="Chad"><span class="gB">B&minus;</span></td><td data-l="Clarence"><span class="gA">A&minus;</span></td><td data-l="Alexa"><span class="gC">C+</span></td><td data-l="Split"><span class="sv-split">4 steps, opposite directions</span></td></tr>
-                <tr><td>Gary</td><td data-l="Chad"><span class="gB">B&minus;</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B+</span></td><td data-l="Split"><span class="sv-split">5 steps, opposite directions</span></td></tr>
-                <tr><td>Adam</td><td data-l="Chad"><span class="gC">C</span></td><td data-l="Clarence"><span class="gC">C+</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">3 steps</span></td></tr>
-                <tr><td>Tommy</td><td data-l="Chad"><span class="gA">A&minus;</span></td><td data-l="Clarence"><span class="gA">A+</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">3 steps</span></td></tr>
-                <tr><td>Issa</td><td data-l="Chad"><span class="gC">C+</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B</span></td><td data-l="Split"><span class="sv-split">4 steps</span></td></tr>
+                <tr><td>Scott</td><td data-l="Chad"><span class="gA">A</span></td><td data-l="Clarence"><span class="gB">B+</span></td><td data-l="Alexa"><span class="gB">B&minus;</span></td></tr>
+                <tr><td>Jonny</td><td data-l="Chad"><span class="gC">C</span></td><td data-l="Clarence"><span class="gC">C&minus;</span></td><td data-l="Alexa"><span class="gB">B&minus;</span></td></tr>
+                <tr><td>Gilly</td><td data-l="Chad"><span class="gA">A&minus;</span></td><td data-l="Clarence"><span class="gB">B</span></td><td data-l="Alexa"><span class="gC">C+</span></td></tr>
+                <tr><td>Tom</td><td data-l="Chad"><span class="gC">C+</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B</span></td></tr>
+                <tr><td>Andy <span class="sv-auto">auto</span></td><td data-l="Chad"><span class="gB">B+</span></td><td data-l="Clarence"><span class="gA">A&minus;</span></td><td data-l="Alexa"><span class="gC">C+</span></td></tr>
+                <tr><td>Turks <span class="sv-auto">auto</span></td><td data-l="Chad"><span class="gB">B&minus;</span></td><td data-l="Clarence"><span class="gA">A&minus;</span></td><td data-l="Alexa"><span class="gC">C+</span></td></tr>
+                <tr><td>Gary</td><td data-l="Chad"><span class="gB">B&minus;</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B+</span></td></tr>
+                <tr><td>Adam</td><td data-l="Chad"><span class="gC">C</span></td><td data-l="Clarence"><span class="gC">C+</span></td><td data-l="Alexa"><span class="gB">B</span></td></tr>
+                <tr><td>Tommy</td><td data-l="Chad"><span class="gA">A&minus;</span></td><td data-l="Clarence"><span class="gA">A+</span></td><td data-l="Alexa"><span class="gB">B</span></td></tr>
+                <tr><td>Issa</td><td data-l="Chad"><span class="gC">C+</span></td><td data-l="Clarence"><span class="gD">D+</span></td><td data-l="Alexa"><span class="gB">B</span></td></tr>
               </tbody>
             </table>
           </div>
