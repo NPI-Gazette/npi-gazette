@@ -462,11 +462,14 @@
 
     /* Draft board — collapsible record of all 150 picks */
     .db-panel { border: 1px solid #1e3a55; border-radius: 10px; background: #0d2137; margin-bottom: 22px; }
-    .db-panel summary { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; list-style: none; border-radius: 10px; }
+    .db-panel summary { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; padding: 12px 16px; cursor: pointer; list-style: none; border-radius: 10px; }
     .db-panel summary::-webkit-details-marker { display: none; }
     .db-panel summary:hover { background: #11304d; }
-    .db-panel-title { font-family: 'Archivo', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: #e8f4ff; flex: 1; }
-    .db-panel-meta { font-size: 11px; color: #4a7a9b; flex-shrink: 0; }
+    .db-panel summary:hover .db-panel-hint { color: #e0bd4a; }
+    .db-panel-title { font-family: 'Archivo', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: #e8f4ff; flex: 0 0 auto; }
+    .db-panel-hint { font-size: 11px; color: #C9A227; flex: 1 1 auto; font-style: italic; }
+    .db-panel[open] .db-panel-hint { display: none; }
+    .db-panel-meta { font-size: 11px; color: #4a7a9b; flex-shrink: 0; margin-left: auto; }
     .db-panel-chevron { color: #4a7a9b; font-size: 11px; flex-shrink: 0; transition: transform .2s; }
     .db-panel[open] .db-panel-chevron { transform: rotate(90deg); }
     .db-body { padding: 0 12px 12px; border-top: 1px solid #1e3a55; }
@@ -506,6 +509,11 @@
       .db-nm { font-size: 10px; }
       .db-panel-title { font-size: 13px; }
       .db-panel-meta { display: none; }
+      /* Hint drops to its own line beneath the title, with the chevron
+         reordered up beside the title rather than stranded below the hint. */
+      .db-panel-title { order: 1; }
+      .db-panel-chevron { order: 2; margin-left: auto; }
+      .db-panel-hint { order: 3; flex: 1 1 100%; font-size: 10.5px; }
     }
     /* On a phone the 4-column layout squeezes the analysis to ~12 characters a line,
        because the nowrap verdict badge and player name claim most of the width.
@@ -696,10 +704,11 @@
         <div class="dc-byline">by Chad Thunderbolt III, NPI Insider &amp; Draft Savant · drafted Sunday 6 September 2026</div>
         <div class="dc-rule"></div>
 
-        <details class="db-panel" open>
+        <details class="db-panel">
           <summary>
             <span class="db-panel-title">The 2026 draft board</span>
-            <span class="db-panel-meta">150 picks &middot; 6 September 2026</span>
+            <span class="db-panel-hint">Click to view the full board &mdash; all 150 picks</span>
+            <span class="db-panel-meta">6 September 2026</span>
             <span class="db-panel-chevron">&#9658;</span>
           </summary>
           <div class="db-body">
