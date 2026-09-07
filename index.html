@@ -454,6 +454,59 @@
     .rk-box { background: #0d2137; border-radius: 12px; padding: 16px 20px; }
     .rk-callout { border-left: 3px solid #C9A227; padding: 2px 0 2px 16px; }
     .rk-method { font-size: 11px; color: #4a6070; margin: 16px 0 0; padding-top: 10px; border-top: 1px solid #1e3a55; line-height: 1.6; }
+
+    /* Draft grades */
+    .dg-grade { font-size: 18px; font-weight: 800; white-space: nowrap; font-family: 'Archivo', system-ui, sans-serif; }
+    .dg-a { color: #4ec994; } .dg-b { color: #e8f4ff; } .dg-c { color: #e06868; }
+    .dg-bot { display: inline-block; font-size: 8.5px; font-weight: 800; letter-spacing: .08em; color: #e06868; text-transform: uppercase; border: 1px solid rgba(224,104,104,.4); border-radius: 4px; padding: 1px 5px; margin-left: 4px; white-space: nowrap; }
+
+    /* Draft board — collapsible record of all 150 picks */
+    .db-panel { border: 1px solid #1e3a55; border-radius: 10px; background: #0d2137; margin-bottom: 22px; }
+    .db-panel summary { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; list-style: none; border-radius: 10px; }
+    .db-panel summary::-webkit-details-marker { display: none; }
+    .db-panel summary:hover { background: #11304d; }
+    .db-panel-title { font-family: 'Archivo', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: #e8f4ff; flex: 1; }
+    .db-panel-meta { font-size: 11px; color: #4a7a9b; flex-shrink: 0; }
+    .db-panel-chevron { color: #4a7a9b; font-size: 11px; flex-shrink: 0; transition: transform .2s; }
+    .db-panel[open] .db-panel-chevron { transform: rotate(90deg); }
+    .db-body { padding: 0 12px 12px; border-top: 1px solid #1e3a55; }
+    /* Scrolls sideways in its own frame so the page body never does. */
+    .db-scroll { overflow-x: auto; border: 1px solid #1e3a55; border-radius: 8px; background: #0a1b2b; margin-top: 12px; }
+    .db { border-collapse: collapse; min-width: 1010px; }
+    .db th { background: #0d2137; font-size: 9.5px; color: #C9A227; font-weight: 800; padding: 8px 6px; border-bottom: 1px solid #1e3a55; text-align: center; vertical-align: bottom; width: 98px; }
+    .db-team { display: block; text-transform: uppercase; letter-spacing: .04em; line-height: 1.25; }
+    .db-slot { display: block; color: #4a7a9b; font-weight: 600; font-size: 8.5px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+    .db td { border-bottom: 1px solid rgba(30,58,85,.5); border-right: 1px solid rgba(30,58,85,.35); padding: 6px; vertical-align: top; }
+    .db td:last-child { border-right: none; }
+    .db tr:last-child td { border-bottom: none; }
+    /* Round label stays put while the board scrolls sideways. */
+    .db-corner, .db-rd { position: sticky; left: 0; z-index: 2; background: #0d2137; width: 34px; min-width: 34px; }
+    .db-corner { border-bottom: 1px solid #1e3a55; border-right: 1px solid #1e3a55; }
+    .db-rd { color: #4a7a9b; font-size: 10px; font-weight: 800; text-align: center; border-right: 1px solid #1e3a55 !important; }
+    .db-pk { display: block; font-size: 8.5px; color: #3f6880; font-variant-numeric: tabular-nums; }
+    .db-nm { display: block; font-size: 10.5px; font-weight: 600; color: #e8f4ff; line-height: 1.25; margin: 1px 0 3px; }
+    .db-pos { display: inline-block; font-size: 8px; font-weight: 800; letter-spacing: .05em; padding: 1px 5px; border-radius: 4px; }
+    .db-pos.QB { background:#3a2200; color:#f0a050; }
+    .db-pos.RB { background:#0d3020; color:#4ee08a; }
+    .db-pos.WR { background:#0d2040; color:#6db8f0; }
+    .db-pos.TE { background:#200d3a; color:#b87aff; }
+    .db-pos.K  { background:#2a2a2a; color:#b0b0b0; }
+    .db-pos.DEF{ background:#12283a; color:#7fa8c4; }
+    .db-hint { font-size: 10px; color: #4a6070; margin: 8px 0 0; font-style: italic; }
+    /* The board is wider than the 760px article column, so on a big screen let it
+       spill evenly past the text rather than scrolling when there's room to spare. */
+    @media (min-width: 1120px) {
+      .db-panel { width: 1046px; margin-left: calc((100% - 1046px) / 2); }
+    }
+    @media (max-width: 600px) {
+      .db-body { padding: 0 8px 10px; }
+      .db { min-width: 880px; }
+      .db th { width: 84px; font-size: 9px; padding: 7px 4px; }
+      .db td { padding: 5px 4px; }
+      .db-nm { font-size: 10px; }
+      .db-panel-title { font-size: 13px; }
+      .db-panel-meta { display: none; }
+    }
     /* On a phone the 4-column layout squeezes the analysis to ~12 characters a line,
        because the nowrap verdict badge and player name claim most of the width.
        Stack each row instead: name + figure share the top line, badge and prose
@@ -468,6 +521,11 @@
       /* The header row is hidden here, so the lone figure needs naming. Scoped to
          the rookie board — the archived tables carry a move, not an ADP. */
       .rk-board td:nth-child(2)::before { content: '2026 ADP '; font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: #7a9ab8; font-weight: 600; }
+      /* This table leads with the pick number, not a name, so swap the two
+         so the player still gets the wide column when the row stacks. */
+      .rk-picks td:nth-child(1) { grid-column: 2; grid-row: 1; text-align: right; }
+      .rk-picks td:nth-child(2) { grid-column: 1; grid-row: 1; text-align: left; }
+      .rk-picks td:nth-child(1)::before { content: 'PICK '; font-size: 9px; letter-spacing: .06em; color: #7a9ab8; font-weight: 600; }
       .rk-say { font-size: 11.5px; line-height: 1.55; }
     }
 
@@ -633,8 +691,320 @@
     <!-- Draft Centre (Chad Thunderbolt) -->
     <div class="pane" id="pane-draft">
       <div class="dc-wrap">
-        <div class="dc-kicker">Draft Day Build-Up</div>
-        <div class="dc-title">Camp carnage: fifteen days that rearranged your draft board</div>
+        <div class="dc-kicker">Draft Centre</div>
+        <div class="dc-title">The reckoning room: all ten 2026 drafts, graded</div>
+        <div class="dc-byline">by Chad Thunderbolt III, NPI Insider &amp; Draft Savant · drafted Sunday 6 September 2026</div>
+        <div class="dc-rule"></div>
+
+        <details class="db-panel" open>
+          <summary>
+            <span class="db-panel-title">The 2026 draft board</span>
+            <span class="db-panel-meta">150 picks &middot; 6 September 2026</span>
+            <span class="db-panel-chevron">&#9658;</span>
+          </summary>
+          <div class="db-body">
+            <div class="db-scroll">
+              <table class="db">
+            <thead>
+              <tr>
+                <th class="db-corner"></th>
+                <th><span class="db-team">Worthing Wolverines</span><span class="db-slot">1.01</span></th>
+                <th><span class="db-team">Beeford Ballers</span><span class="db-slot">1.02</span></th>
+                <th><span class="db-team">Cholsey Cougars</span><span class="db-slot">1.03</span></th>
+                <th><span class="db-team">Burley Bison</span><span class="db-slot">1.04</span></th>
+                <th><span class="db-team">Swanley Sleazehawks</span><span class="db-slot">1.05</span></th>
+                <th><span class="db-team">Portsmouth Pangolins</span><span class="db-slot">1.06</span></th>
+                <th><span class="db-team">Wilsons Waterboys</span><span class="db-slot">1.07</span></th>
+                <th><span class="db-team">Comatose Minnows</span><span class="db-slot">1.08</span></th>
+                <th><span class="db-team">Thames-side Tapirs</span><span class="db-slot">1.09</span></th>
+                <th><span class="db-team">Unsolicited Dak Pics</span><span class="db-slot">1.10</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="db-rd">R1</td>
+                <td><span class="db-pk">1</span><span class="db-nm">Jahmyr Gibbs</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">2</span><span class="db-nm">Bijan Robinson</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">3</span><span class="db-nm">Ja'Marr Chase</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">4</span><span class="db-nm">Jonathan Taylor</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">5</span><span class="db-nm">Christian McCaffrey</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">6</span><span class="db-nm">Jaxon Smith-Njigba</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">7</span><span class="db-nm">Amon-Ra St. Brown</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">8</span><span class="db-nm">James Cook</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">9</span><span class="db-nm">Puka Nacua</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">10</span><span class="db-nm">CeeDee Lamb</span><span class="db-pos WR">WR</span></td>
+              </tr>
+              <tr><td class="db-rd">R2</td>
+                <td><span class="db-pk">20</span><span class="db-nm">Brock Bowers</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">19</span><span class="db-nm">Rashee Rice</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">18</span><span class="db-nm">Chase Brown</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">17</span><span class="db-nm">A.J. Brown</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">16</span><span class="db-nm">Derrick Henry</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">15</span><span class="db-nm">Ashton Jeanty</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">14</span><span class="db-nm">Kenneth Walker</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">13</span><span class="db-nm">Saquon Barkley</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">12</span><span class="db-nm">De'Von Achane</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">11</span><span class="db-nm">Justin Jefferson</span><span class="db-pos WR">WR</span></td>
+              </tr>
+              <tr><td class="db-rd">R3</td>
+                <td><span class="db-pk">21</span><span class="db-nm">Malik Nabers</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">22</span><span class="db-nm">Josh Allen</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">23</span><span class="db-nm">Omarion Hampton</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">24</span><span class="db-nm">Nico Collins</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">25</span><span class="db-nm">Trey McBride</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">26</span><span class="db-nm">Kyren Williams</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">27</span><span class="db-nm">Javonte Williams</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">28</span><span class="db-nm">Drake London</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">29</span><span class="db-nm">Breece Hall</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">30</span><span class="db-nm">DeVonta Smith</span><span class="db-pos WR">WR</span></td>
+              </tr>
+              <tr><td class="db-rd">R4</td>
+                <td><span class="db-pk">40</span><span class="db-nm">Jaylen Waddle</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">39</span><span class="db-nm">Travis Etienne</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">38</span><span class="db-nm">Colston Loveland</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">37</span><span class="db-nm">Cam Skattebo</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">36</span><span class="db-nm">Jeremiyah Love</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">35</span><span class="db-nm">George Pickens</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">34</span><span class="db-nm">Ladd McConkey</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">33</span><span class="db-nm">Zay Flowers</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">32</span><span class="db-nm">Chris Olave</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">31</span><span class="db-nm">Bucky Irving</span><span class="db-pos RB">RB</span></td>
+              </tr>
+              <tr><td class="db-rd">R5</td>
+                <td><span class="db-pk">41</span><span class="db-nm">Garrett Wilson</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">42</span><span class="db-nm">Davante Adams</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">43</span><span class="db-nm">Lamar Jackson</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">44</span><span class="db-nm">Tyler Warren</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">45</span><span class="db-nm">Emeka Egbuka</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">46</span><span class="db-nm">Tee Higgins</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">47</span><span class="db-nm">Drake Maye</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">48</span><span class="db-nm">D'Andre Swift</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">49</span><span class="db-nm">Tetairoa McMillan</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">50</span><span class="db-nm">TreVeyon Henderson</span><span class="db-pos RB">RB</span></td>
+              </tr>
+              <tr><td class="db-rd">R6</td>
+                <td><span class="db-pk">60</span><span class="db-nm">Jadarian Price</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">59</span><span class="db-nm">George Kittle</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">58</span><span class="db-nm">Jameson Williams</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">57</span><span class="db-nm">Terry McLaurin</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">56</span><span class="db-nm">Joe Burrow</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">55</span><span class="db-nm">Josh Jacobs</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">54</span><span class="db-nm">DJ Moore</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">53</span><span class="db-nm">Christian Watson</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">52</span><span class="db-nm">Tucker Kraft</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">51</span><span class="db-nm">Caleb Williams</span><span class="db-pos QB">QB</span></td>
+              </tr>
+              <tr><td class="db-rd">R7</td>
+                <td><span class="db-pk">61</span><span class="db-nm">Luther Burden</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">62</span><span class="db-nm">Bhayshul Tuten</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">63</span><span class="db-nm">David Montgomery</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">64</span><span class="db-nm">Matthew Stafford</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">65</span><span class="db-nm">Quinshon Judkins</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">66</span><span class="db-nm">Jalen Hurts</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">67</span><span class="db-nm">Sam LaPorta</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">68</span><span class="db-nm">Carnell Tate</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">69</span><span class="db-nm">Parker Washington</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">70</span><span class="db-nm">Harold Fannin</span><span class="db-pos TE">TE</span></td>
+              </tr>
+              <tr><td class="db-rd">R8</td>
+                <td><span class="db-pk">80</span><span class="db-nm">Alec Pierce</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">79</span><span class="db-nm">Brian Thomas</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">78</span><span class="db-nm">Courtland Sutton</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">77</span><span class="db-nm">Tony Pollard</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">76</span><span class="db-nm">Marvin Harrison</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">75</span><span class="db-nm">Kyle Pitts</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">74</span><span class="db-nm">Jaylen Warren</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">73</span><span class="db-nm">Rome Odunze</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">72</span><span class="db-nm">Rhamondre Stevenson</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">71</span><span class="db-nm">Mike Evans</span><span class="db-pos WR">WR</span></td>
+              </tr>
+              <tr><td class="db-rd">R9</td>
+                <td><span class="db-pk">81</span><span class="db-nm">Trevor Lawrence</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">82</span><span class="db-nm">Makai Lemon</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">83</span><span class="db-nm">Chris Godwin</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">84</span><span class="db-nm">Brandon Aubrey</span><span class="db-pos K">K</span></td>
+                <td><span class="db-pk">85</span><span class="db-nm">RJ Harvey</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">86</span><span class="db-nm">DK Metcalf</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">87</span><span class="db-nm">Blake Corum</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">88</span><span class="db-nm">J.K. Dobbins</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">89</span><span class="db-nm">MarShawn Lloyd</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">90</span><span class="db-nm">Matthew Golden</span><span class="db-pos WR">WR</span></td>
+              </tr>
+              <tr><td class="db-rd">R10</td>
+                <td><span class="db-pk">100</span><span class="db-nm">Dak Prescott</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">99</span><span class="db-nm">Jordan Mason</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">98</span><span class="db-nm">Los Angeles Rams</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">97</span><span class="db-nm">Michael Pittman</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">96</span><span class="db-nm">Chuba Hubbard</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">95</span><span class="db-nm">Rico Dowdle</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">94</span><span class="db-nm">KC Concepcion</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">93</span><span class="db-nm">De'Zhaun Stribling</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">92</span><span class="db-nm">Jayden Daniels</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">91</span><span class="db-nm">Jonathon Brooks</span><span class="db-pos RB">RB</span></td>
+              </tr>
+              <tr><td class="db-rd">R11</td>
+                <td><span class="db-pk">101</span><span class="db-nm">Jacory Croskey-Merritt</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">102</span><span class="db-nm">Houston Texans</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">103</span><span class="db-nm">Jayden Reed</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">104</span><span class="db-nm">Seattle Seahawks</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">105</span><span class="db-nm">Justin Herbert</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">106</span><span class="db-nm">Michael Wilson</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">107</span><span class="db-nm">Wan'Dale Robinson</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">108</span><span class="db-nm">Isaiah Likely</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">109</span><span class="db-nm">Quentin Johnston</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">110</span><span class="db-nm">Denver Broncos</span><span class="db-pos DEF">DEF</span></td>
+              </tr>
+              <tr><td class="db-rd">R12</td>
+                <td><span class="db-pk">120</span><span class="db-nm">Jordyn Tyson</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">119</span><span class="db-nm">Jake Ferguson</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">118</span><span class="db-nm">Jordan Addison</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">117</span><span class="db-nm">Jaxson Dart</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">116</span><span class="db-nm">Dalton Kincaid</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">115</span><span class="db-nm">Travis Kelce</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">114</span><span class="db-nm">Dallas Goedert</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">113</span><span class="db-nm">Kenny Gainwell</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">112</span><span class="db-nm">Cam Little</span><span class="db-pos K">K</span></td>
+                <td><span class="db-pk">111</span><span class="db-nm">Stefon Diggs</span><span class="db-pos WR">WR</span></td>
+              </tr>
+              <tr><td class="db-rd">R13</td>
+                <td><span class="db-pk">121</span><span class="db-nm">Woody Marks</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">122</span><span class="db-nm">Deebo Samuel</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">123</span><span class="db-nm">Ka'imi Fairbairn</span><span class="db-pos K">K</span></td>
+                <td><span class="db-pk">124</span><span class="db-nm">Mark Andrews</span><span class="db-pos TE">TE</span></td>
+                <td><span class="db-pk">125</span><span class="db-nm">Josh Downs</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">126</span><span class="db-nm">Kyle Monangai</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">127</span><span class="db-nm">Brock Purdy</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">128</span><span class="db-nm">Bo Nix</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">129</span><span class="db-nm">Patrick Mahomes</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">130</span><span class="db-nm">Juwan Johnson</span><span class="db-pos TE">TE</span></td>
+              </tr>
+              <tr><td class="db-rd">R14</td>
+                <td><span class="db-pk">140</span><span class="db-nm">Ja'Kobi Lane</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">139</span><span class="db-nm">Kyler Murray</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">138</span><span class="db-nm">Mike Washington</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">137</span><span class="db-nm">Aaron Jones</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">136</span><span class="db-nm">Baltimore Ravens</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">135</span><span class="db-nm">Cameron Dicker</span><span class="db-pos K">K</span></td>
+                <td><span class="db-pk">134</span><span class="db-nm">New England Patriots</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">133</span><span class="db-nm">Jacksonville Jaguars</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">132</span><span class="db-nm">Philadelphia Eagles</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">131</span><span class="db-nm">Jason Myers</span><span class="db-pos K">K</span></td>
+              </tr>
+              <tr><td class="db-rd">R15</td>
+                <td><span class="db-pk">141</span><span class="db-nm">Los Angeles Chargers</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">142</span><span class="db-nm">Chris Boswell</span><span class="db-pos K">K</span></td>
+                <td><span class="db-pk">143</span><span class="db-nm">Jared Goff</span><span class="db-pos QB">QB</span></td>
+                <td><span class="db-pk">144</span><span class="db-nm">Xavier Worthy</span><span class="db-pos WR">WR</span></td>
+                <td><span class="db-pk">145</span><span class="db-nm">Evan McPherson</span><span class="db-pos K">K</span></td>
+                <td><span class="db-pk">146</span><span class="db-nm">Minnesota Vikings</span><span class="db-pos DEF">DEF</span></td>
+                <td><span class="db-pk">147</span><span class="db-nm">Will Reichard</span><span class="db-pos K">K</span></td>
+                <td><span class="db-pk">148</span><span class="db-nm">Isiah Pacheco</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">149</span><span class="db-nm">Tyler Allgeier</span><span class="db-pos RB">RB</span></td>
+                <td><span class="db-pk">150</span><span class="db-nm">Jordan Love</span><span class="db-pos QB">QB</span></td>
+              </tr>
+            </tbody>
+              </table>
+            </div>
+            <p class="db-hint">Snake order, fifteen rounds. Scroll sideways to see all ten teams.</p>
+          </div>
+        </details>
+
+        <p class="dc-lead">EIGHTY-NINE MINUTES. One hundred and fifty picks. I have been through every single one of them, cross-referenced against the consensus half-PPR board, and I want to open with the thing that reframes this entire draft: two of you weren&rsquo;t there.</p>
+
+        <p class="dc-lead">Andy and Turks were both handled by the Sleeper autopick. And here is what nobody wants to hear &mdash; THE ROBOT DID FINE. On pure value against market, the machine finished third and fifth. On projected starting lineup strength, it finished second and fifth. It did not panic, it did not fall in love with anybody, and it did not reach for a quarterback. If you were hoping this article would be a hit piece on the autodraft, you have come to the wrong newspaper.</p>
+
+        <p class="dc-lead">And yet. The machine took Ashton Jeanty at pick fifteen &mdash; a man who has not practised since 23 August with a sprained ankle and whose Week 1 status is a genuine coin flip. It took Josh Jacobs at 55, a full thirty-four picks ahead of a consensus board that has moved sharply away from him. It gave Turks FOUR of his top eight players on the same bye week, in Week 11, which is the week six NFL teams are off simultaneously. The autopick is excellent at price and completely blind to context. It cannot read an injury report, it cannot read a calendar, and it cannot read a room. That gap is the entire story of this draft.</p>
+
+        <p class="rk-note">Editor&rsquo;s note: Mr Thunderbolt filed four thousand words on Andy&rsquo;s &ldquo;drafting philosophy,&rdquo; &ldquo;nerve&rdquo; and &ldquo;willingness to zig,&rdquo; and was informed only afterwards that Andy was not present. He has requested that the original version be preserved. It has not been. &mdash; C.</p>
+
+        <div class="dc-section">
+          <div class="dc-section-title">The grades</div>
+          <div class="dc-section-sub">Weighing value against market, projected lineup strength, positional build, bye exposure and risk</div>
+          <table class="rk-tbl">
+            <thead><tr><th>Manager</th><th>Grade</th><th>The verdict</th></tr></thead>
+            <tbody>
+              <tr><td><div class="rk-name">Scott<div class="rk-meta">Worthing Wolverines &middot; 1.01</div></div></td><td><span class="dg-grade dg-a">A&minus;</span></td><td class="rk-say">The strongest projected starting lineup in the league, and it isn&rsquo;t especially close. Gibbs at 1.01, Bowers, Nabers, Waddle, Garrett Wilson &mdash; that is five genuine starters before the sixth round. He also ran the smartest piece of roster management anybody managed all night: skip the kicker entirely, spend pick 120 on Jordyn Tyson knowing he&rsquo;s IR-eligible, move him there the moment the draft ends, and take a kicker off the wire for nothing. That&rsquo;s a free roster spot. Docked only for seven receivers and a single tight end, and for Alec Pierce at 80 being eighteen places early.</td></tr>
+              <tr><td><div class="rk-name">Gilly<div class="rk-meta">Cholsey Cougars &middot; 1.03</div></div></td><td><span class="dg-grade dg-a">A&minus;</span></td><td class="rk-say">The most complete draft made by a human being who was actually in the room. Chase at three, Lamar at 43, Loveland at 38, second-best value in the league, and a genuinely balanced roster in a draft where almost nobody managed one. And then the pick I keep going back to: Mike Washington Jr at 138. That is the handcuff to Ashton Jeanty, who is injured, and Jeanty belongs to somebody else. That is not luck. That is reading the injury report.</td></tr>
+              <tr><td><div class="rk-name">Tommy<div class="rk-meta">Thames-side Tapirs &middot; 1.09</div></div></td><td><span class="dg-grade dg-b">B+</span></td><td class="rk-say">Best value against market of anybody, and the quarterback discipline was outstanding &mdash; Jayden Daniels at 92 and Mahomes at 129 while eight of you were spending real picks on the position. Nacua, Achane, Hall and Olave is a fine spine. Three problems: Kraft at 52 was nineteen places early, Rhamondre Stevenson at 72 is the mirage I specifically warned about, and four of his squad &mdash; Nacua, Kraft, Stevenson and MarShawn Lloyd &mdash; are off in Week 11 together. He also holds Lloyd, which is the Josh Jacobs handcuff, so he&rsquo;s hedged somebody else&rsquo;s problem twice over.</td></tr>
+              <tr><td><div class="rk-name">Andy<div class="rk-meta">Swanley Sleazehawks &middot; 1.05 <span class="dg-bot">autopick</span></div></div></td><td><span class="dg-grade dg-b">B</span></td><td class="rk-say">Second-best projected lineup and third-best value, achieved by a man who was not in the building. McCaffrey, Henry, Jeremiyah Love, Judkins, Harvey and Hubbard is a legitimately deep backfield, and Josh Downs at 125 was the single best piece of value extracted all night. The problem is what the machine cannot weigh: SIX running backs and THREE receivers. That works right up until one receiver pulls a hamstring, and then it does not work at all.</td></tr>
+              <tr><td><div class="rk-name">Adam<div class="rk-meta">Comatose Minnows &middot; 1.08</div></div></td><td><span class="dg-grade dg-b">B&minus;</span></td><td class="rk-say">Deliberately punted quarterback and tight end to load up everywhere else, which is a real strategy and grades badly on a lineup-strength model that doesn&rsquo;t understand intent. He has the deepest bench in the league and Cook plus Barkley is a serious front two. He also ran the same IR-and-waiver kicker trick as Scott, using pick 148 on Pacheco. Stribling at 93 reads as the biggest reach on the board and I don&rsquo;t believe it is &mdash; 33rd overall NFL pick, eleven catches in two preseason games, Pearsall out for the year. He was early. Early is not wrong.</td></tr>
+              <tr><td><div class="rk-name">Turks<div class="rk-meta">Portsmouth Pangolins &middot; 1.06 <span class="dg-bot">autopick</span></div></div></td><td><span class="dg-grade dg-b">B&minus;</span></td><td class="rk-say">Smith-Njigba at six is a fine start and the middle rounds were reasonable. But this is where the machine&rsquo;s blind spots show up in one roster. Jeanty at fifteen, injured. Josh Jacobs at 55, thirty-four picks ahead of consensus. Four of the top eight sharing a Week 11 bye. And a tight end room of Kyle Pitts and a 37-year-old Travis Kelce, which is less a room than a waiting area. Both of his risky backs are handcuffed by other managers. There is a good team in here that needs a human to go and fix it.</td></tr>
+              <tr><td><div class="rk-name">Gary<div class="rk-meta">Wilsons Waterboys &middot; 1.07</div></div></td><td><span class="dg-grade dg-b">B&minus;</span></td><td class="rk-say">Sensible and slightly expensive. St. Brown and Kenneth Walker is a strong front two, and Drake Maye at 47 is the pick that tells you how far this board has moved &mdash; Adam had that man with the LAST PICK OF THE DRAFT twelve months ago. Corum at 87 and Concepcion at 94 were both overpays, and four of his roster sit out Week 11 together. Purdy at 127 got a chunk of it back.</td></tr>
+              <tr><td><div class="rk-name">Issa<div class="rk-meta">Unsolicited Dak Pics &middot; 1.10</div></div></td><td><span class="dg-grade dg-c">C+</span></td><td class="rk-say">The champion drew the turn and used it on Lamb and Jefferson back to back, and with DeVonta Smith, Mike Evans and Stefon Diggs behind them this is comfortably the best receiving room in the league. Everything else worries me. THREE running backs, one of whom is Jonathon Brooks, who I told you was a mirage. Fannin at 70 and Caleb Williams at 51 were both real reaches. And FIVE of his players are off in Week 11 &mdash; the worst bye exposure of anybody. The ceiling is a title. The floor is a very quiet November.</td></tr>
+              <tr><td><div class="rk-name">Tom<div class="rk-meta">Burley Bison &middot; 1.04</div></div></td><td><span class="dg-grade dg-c">C+</span></td><td class="rk-say">There is a real football team in here &mdash; Jonathan Taylor, A.J. Brown, Nico Collins, Skattebo, Tyler Warren. And then there is the process, which I need to talk about. Matthew Stafford at 64 was FIFTY places ahead of the consensus board, the single biggest skill-position reach of the draft. And Brandon Aubrey at 84. A kicker. In round nine. Twenty-eight picks before anybody else took one, in a league where two managers proved you don&rsquo;t need to draft one at all.</td></tr>
+              <tr><td><div class="rk-name">Jonny<div class="rk-meta">Beeford Ballers &middot; 1.02</div></div></td><td><span class="dg-grade dg-c">C</span></td><td class="rk-say">Bijan at two and Rashee Rice at nineteen is a serious opening and I want to be fair about that. But he paid over the odds more consistently than anybody in this draft, and George Kittle at 59 &mdash; forty-four places ahead of market, for a 33-year-old tight end &mdash; is the pick that defines it. When Kittle plays he&rsquo;s a top-three option at the position. The whole roster is built on that sentence being true for seventeen weeks. Deebo at 122 was his best moment.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dc-section">
+          <div class="rk-box">
+            <h3 style="font-size:16px;font-weight:800;margin:0 0 6px;color:#e8f4ff;">What the machine cannot see</h3>
+            <p style="font-size:13px;line-height:1.7;margin:0 0 .6rem;color:#7a9ab8;">I want to be precise about this because it matters for next year. The Sleeper autopick did not draft badly. It took best-available off its own board, it never reached for a quarterback, and both autodrafted teams finished in the top half for value. If your plan is to skip the draft and let the robot do it, the robot will not humiliate you.</p>
+            <p style="font-size:13px;line-height:1.7;margin:0;color:#7a9ab8;">What it will do is ignore four things a human weighs without thinking. <strong style="color:#e8f4ff;">Injury status:</strong> Jeanty at fifteen, three weeks after an ankle sprain, with no practice logged since. <strong style="color:#e8f4ff;">Stale pricing:</strong> Josh Jacobs at 55, when the consensus board has him at 89 &mdash; the market has been repricing him for weeks and Sleeper&rsquo;s own rankings refresh once or twice a month. <strong style="color:#e8f4ff;">The calendar:</strong> four of Turks&rsquo; top eight off in Week 11, the week six NFL teams have their bye. <strong style="color:#e8f4ff;">And the room:</strong> the bot cannot notice that another manager already holds the handcuff to the running back it just spent a second-rounder on. Gilly has Mike Washington Jr. Tommy has MarShawn Lloyd. Turks has Jeanty and Jacobs. Somebody is going to have an interesting conversation in about three weeks.</p>
+          </div>
+        </div>
+
+        <div class="dc-section">
+          <div class="dc-section-title">Six picks that mattered</div>
+          <table class="rk-tbl rk-picks">
+            <thead><tr><th>Pick</th><th>Player</th><th>Chad says</th></tr></thead>
+            <tbody>
+              <tr><td class="rk-adp">125</td><td><div class="rk-name">Josh Downs<div class="rk-meta">WR &middot; Andy</div></div></td><td class="rk-say">Market had him 85th. He went 125th. The largest single piece of value anybody got &mdash; and a robot got it, because eight humans were busy taking quarterbacks.</td></tr>
+              <tr><td class="rk-adp">138</td><td><div class="rk-name">Mike Washington Jr<div class="rk-meta">RB &middot; Gilly</div></div></td><td class="rk-say">Round fourteen. The direct handcuff to an injured second-round pick on somebody else&rsquo;s roster. This is the smartest thing anybody did all night and it cost nothing.</td></tr>
+              <tr><td class="rk-adp">64</td><td><div class="rk-name">Matthew Stafford<div class="rk-meta">QB &middot; Tom</div></div></td><td class="rk-say">Consensus 114. Taken 64th. A fifty-place reach on a 38-year-old quarterback in a ten-team league where Mahomes went 129th. I have no notes. I have only feelings.</td></tr>
+              <tr><td class="rk-adp">47</td><td><div class="rk-name">Drake Maye<div class="rk-meta">QB &middot; Gary</div></div></td><td class="rk-say">Pick 150 in 2025. Pick 47 in 2026. The clearest single measure of how far this board has travelled in twelve months.</td></tr>
+              <tr><td class="rk-adp">93</td><td><div class="rk-name">De&rsquo;Zhaun Stribling<div class="rk-meta">WR &middot; Adam</div></div></td><td class="rk-say">Grades as a reach against a number that hasn&rsquo;t caught up. Second-round NFL pick, eleven preseason catches, Pearsall&rsquo;s season over. This is what being early looks like before it looks clever.</td></tr>
+              <tr><td class="rk-adp">84</td><td><div class="rk-name">Brandon Aubrey<div class="rk-meta">K &middot; Tom</div></div></td><td class="rk-say">A kicker, in round nine, twenty-eight picks before the next one &mdash; on a night when two managers demonstrated you can simply not draft one and pick the same quality off waivers.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dc-section">
+          <div class="rk-box">
+            <h3 style="font-size:16px;font-weight:800;margin:0 0 6px;color:#e8f4ff;">Week 11 is coming for some of you</h3>
+            <p style="font-size:13px;line-height:1.7;margin:0 0 .6rem;color:#7a9ab8;">Six NFL teams are off in Week 11 &mdash; Atlanta, Cleveland, Green Bay, the Rams, New England and Seattle. That is the heaviest bye week of the season and it will gut somebody&rsquo;s lineup. <strong style="color:#e8f4ff;">Issa</strong> has five players in it. <strong style="color:#e8f4ff;">Turks, Tommy and Gary</strong> have four apiece, and in Turks&rsquo; case four of them are top-eight picks. <strong style="color:#e8f4ff;">Scott and Andy</strong> have one each and will barely notice.</p>
+            <p style="font-size:13px;line-height:1.7;margin:0;color:#7a9ab8;">Nobody drafts for byes in round two, and nor should you. But it&rsquo;s September, the waiver wire is wide open, and the people at the top of that list should be thinking about it now rather than on the Saturday of Week 11.</p>
+          </div>
+        </div>
+
+        <div class="dc-section">
+          <div class="rk-box">
+            <h3 style="font-size:16px;font-weight:800;margin:0 0 6px;color:#e8f4ff;">The mirage, revisited</h3>
+            <p style="font-size:13px;line-height:1.7;margin:0 0 .6rem;color:#7a9ab8;">Three weeks ago I told you Jonathon Brooks and Rhamondre Stevenson had risen for one reason &mdash; the man ahead of each was hurt &mdash; and that both of those men had since been cleared to play. I called it a trap with good lighting.</p>
+            <p style="font-size:13px;line-height:1.7;margin:0;color:#7a9ab8;"><strong style="color:#e8f4ff;">Tommy took Stevenson at 72. Issa took Brooks at 91.</strong> And the blockers are both rostered elsewhere in this league: Issa himself has TreVeyon Henderson at 50, and Andy&rsquo;s autopick landed Chuba Hubbard at 96. Somebody is going to be right about this. I have made my comment, it is in the archive, and it has a date on it.</p>
+          </div>
+        </div>
+
+        <div class="dc-section">
+          <div class="rk-callout">
+            <h3 style="font-size:16px;font-weight:800;margin:0 0 6px;color:#e8f4ff;">Before Sunday</h3>
+            <p style="font-size:13px;line-height:1.7;color:#7a9ab8;margin:0 0 .6rem;"><strong style="color:#e8f4ff;">Ashton Jeanty</strong> has not practised since 23 August and Las Vegas kept him off IR, which suggests they expect him back inside four weeks. Turks needs to be watching Wednesday&rsquo;s injury report harder than anybody in this league.</p>
+            <p style="font-size:13px;line-height:1.7;color:#7a9ab8;margin:0 0 .6rem;"><strong style="color:#e8f4ff;">Josh Jacobs</strong> is back in team drills after a groin problem, but the league has not resolved whether he faces discipline over an off-field matter from May. That uncertainty is most of why his price collapsed, and it has not gone away.</p>
+            <p style="font-size:13px;line-height:1.7;color:#7a9ab8;margin:0;"><strong style="color:#e8f4ff;">Scott and Adam</strong> have both already converted their IR-eligible picks and claimed kickers. If you&rsquo;re wondering why they drafted a man on injured reserve with the last pick of the draft, that&rsquo;s why. It was the plan.</p>
+          </div>
+        </div>
+
+        <div class="dc-section">
+          <div class="rk-callout">
+            <h3 style="font-size:16px;font-weight:800;margin:0 0 6px;color:#e8f4ff;">That&rsquo;s the board</h3>
+            <p style="font-size:13px;line-height:1.7;color:#7a9ab8;margin:0;">Ten grades, one hundred and fifty picks, two teams drafted by a machine that finished mid-table, and one furious American who has now read every one of them twice. Season starts now. I&rsquo;ll see you on the waiver wire, where I will be RIGHT.</p>
+          </div>
+        </div>
+
+        <p class="rk-method">Value is measured by comparing each player&rsquo;s position in the consensus half-PPR ADP order against the order in which NPI actually took them, rather than by comparing pick number to raw ADP &mdash; NPI is a ten-team league drafting 150 players against a board built for twelve teams, which pulls every pick earlier and would otherwise make all ten managers look like they reached. Kickers and defences are excluded from value figures for the same reason. Projected lineup strength sums the ADP of each manager&rsquo;s best legal starting eight. Grades weigh all of that against positional build, bye exposure and injury risk, and remain one desk-bound man&rsquo;s opinion. ADP source: FFToday consensus half-PPR, 3 September 2026.</p>
+
+      </div>
+      <div class="archive-section">
+        <div class="archive-hd">Archive</div>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">Camp carnage: fifteen days that rearranged your draft board</span>
+            <span class="archive-item-meta">Draft Day Build-Up</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
+        <div class="dc-kicker" style="margin-top:4px;">Draft Day Build-Up</div>
+        <div class="dc-title" style="font-size:26px;">Camp carnage: fifteen days that rearranged your draft board</div>
         <div class="dc-byline">by Chad Thunderbolt III, NPI Insider &amp; Draft Savant · movement measured 11&ndash;26 August 2026 · filed 1 September</div>
         <div class="dc-rule"></div>
 
@@ -713,9 +1083,8 @@
 
         <p class="rk-method">Movement is measured by each player&rsquo;s position on the board rather than by his raw draft price, since average draft position across the sample drifted earlier over the fortnight. Positions are relative to the 150 players tracked in both snapshots.</p>
 
-      </div>
-      <div class="archive-section">
-        <div class="archive-hd">Archive</div>
+          </div>
+        </details>
         <details class="archive-item">
           <summary>
             <span class="archive-item-title">Fresh meat: fourteen rookies and a cliff you can see from space</span>
