@@ -1781,7 +1781,7 @@
           <div class="article-sub">Spreadsheet vs. Sideline</div>
           <div class="dc-byline" style="margin:-8px 0 16px;">by C. Laude &amp; Alexa Blitz &middot; grades under review: Chad Thunderbolt III &middot; draft completed 6 September 2026, 15 rounds</div>
 
-          <div class="sv-ednote" style="margin-bottom:16px;">Editor&rsquo;s note &mdash; Between the filing of these grades and their publication, Andy renamed his franchise from the Swanley Sleazehawks to the <strong>Swainley Sleazehawks</strong>. This office has amended its records for the current season and has left the historical standings as they were, on the grounds that he was called the other thing at the time. No explanation for the additional letter has been offered, and this office has elected not to ask. &mdash; C.</div>
+          <div class="sv-ednote" style="margin-bottom:16px;">Editor&rsquo;s note &mdash; Between the filing of these grades and their publication, Andy renamed his franchise from the Swanley Sleazehawks to the <strong>Swainley Sleazehawks</strong>. This office has amended its records accordingly, the historical standings included, with the result that five completed seasons between 2018 and 2022 now stand to the credit of a franchise which did not go by that name at any point during them. This office has registered its objection to editing the archive and has been overruled by this office. No explanation for the additional letter has been offered, and this office has elected not to ask. &mdash; C.</div>
 
           <a href="#" class="sv-jump" onclick="var t=document.getElementById('sv-report-card'),y=t.getBoundingClientRect().top+window.scrollY-12,s=window.scrollY;try{window.scrollTo({top:y,behavior:'smooth'});}catch(e){}setTimeout(function(){if(Math.abs(window.scrollY-s)<4){window.scrollTo(0,y);}},250);return false;">Jump to the full report card &darr;</a>
 
@@ -2201,7 +2201,7 @@ const API = "https://api.sleeper.app/v1";
 //     highScores: [ { manager: "Tommy", pts: 178.2, week: 6 } ]   // optional
 //   }
 // Final standings (regular season W-L) + playoff podiums, from the pre-Sleeper spreadsheet.
-// Team→manager: Thames-side Tapirs=TommyTapir, Burley Bison=Thomascraigwilson, Swanley Sleazehawks=andrewlowden,
+// Team→manager: Thames-side Tapirs=TommyTapir, Burley Bison=Thomascraigwilson, Swainley Sleazehawks=andrewlowden,
 // Comatose Minnows=ComatoseMinnows, Cholsey Cougars=cholseycougars, Worthing Wolverines=scottyhaggard,
 // Wilsons Waterboys=garywilson83, Mimzville Crusaders=Mimzo, BeefordBallers=BeefordBallers, Portsmouth Pangolins=JimmyTurx.
 const MANUAL_SEASONS = [
@@ -2209,7 +2209,7 @@ const MANUAL_SEASONS = [
     standings: [
       { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 12, losses: 2 },
       { manager: "Thomascraigwilson", team: "Burley Bison", wins: 8, losses: 6 },
-      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 8, losses: 6 },
+      { manager: "andrewlowden", team: "Swainley Sleazehawks", wins: 8, losses: 6 },
       { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 7, losses: 7 },
       { manager: "cholseycougars", team: "Cholsey Cougars", wins: 7, losses: 7 },
       { manager: "scottyhaggard", team: "Worthing Wolverines", wins: 6, losses: 8 },
@@ -2221,7 +2221,7 @@ const MANUAL_SEASONS = [
   { season: 2021, champion: "cholseycougars", runnerUp: "andrewlowden", last: "garywilson83",
     standings: [
       { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 12, losses: 3 },
-      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 9, losses: 6 },
+      { manager: "andrewlowden", team: "Swainley Sleazehawks", wins: 9, losses: 6 },
       { manager: "BeefordBallers", team: "BeefordBallers", wins: 9, losses: 6 },
       { manager: "cholseycougars", team: "Cholsey Cougars", wins: 8, losses: 7 },
       { manager: "Thomascraigwilson", team: "Burley Bison", wins: 8, losses: 7 },
@@ -2239,7 +2239,7 @@ const MANUAL_SEASONS = [
       { manager: "Mimzo", team: "Mimzville Crusaders", wins: 8, losses: 6 },
       { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 7, losses: 7 },
       { manager: "cholseycougars", team: "Cholsey Cougars", wins: 6, losses: 8 },
-      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 6, losses: 8 },
+      { manager: "andrewlowden", team: "Swainley Sleazehawks", wins: 6, losses: 8 },
       { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 5, losses: 9 },
       { manager: "BeefordBallers", team: "BeefordBallers", wins: 5, losses: 9 },
       { manager: "garywilson83", team: "Wilsons Waterboys", wins: 4, losses: 10 }
@@ -2254,7 +2254,7 @@ const MANUAL_SEASONS = [
       { manager: "Mimzo", team: "Mimzville Crusaders", wins: 7, losses: 7 },
       { manager: "cholseycougars", team: "Cholsey Cougars", wins: 7, losses: 7 },
       { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 6, losses: 8 },
-      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 4, losses: 10 },
+      { manager: "andrewlowden", team: "Swainley Sleazehawks", wins: 4, losses: 10 },
       { manager: "BeefordBallers", team: "BeefordBallers", wins: 3, losses: 11 }
     ] },
   // The spreadsheet labels this block "2019 Season" too, but its podium matches 2018.
@@ -2265,7 +2265,7 @@ const MANUAL_SEASONS = [
       { manager: "scottyhaggard", team: "Worthing Wolverines", wins: 9, losses: 5 },
       { manager: "ComatoseMinnows", team: "Comatose Minnows", wins: 9, losses: 5 },
       { manager: "TommyTapir", team: "Thames-side Tapirs", wins: 8, losses: 6 },
-      { manager: "andrewlowden", team: "Swanley Sleazehawks", wins: 5, losses: 9 },
+      { manager: "andrewlowden", team: "Swainley Sleazehawks", wins: 5, losses: 9 },
       { manager: "Thomascraigwilson", team: "Burley Bison", wins: 5, losses: 9 },
       { manager: "JimmyTurx", team: "Portsmouth Pangolins", wins: 0, losses: 14 }
     ] }
