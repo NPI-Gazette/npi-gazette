@@ -60,7 +60,7 @@
     .stat-val { font-size: 20px; font-weight: 800; }
     /* Fluid size: the 4-up stat row squeezes hardest just above the 500px breakpoint,
        where the card has ~81px of inner width. Below 500px it goes 2-up and can take more. */
-    #draft-countdown { font-family: 'DSEG7-Classic', monospace; font-weight: 700; font-size: clamp(9px, 1.85vw, 17px); color: #C9A227; letter-spacing: normal; white-space: nowrap; }
+    #kickoff-countdown { font-family: 'DSEG7-Classic', monospace; font-weight: 700; font-size: clamp(9px, 1.85vw, 17px); color: #C9A227; letter-spacing: normal; white-space: nowrap; }
     .stat-sub { color: #4a7a9b; font-size: 11px; margin-top: 3px; }
 
     /* Tabs — horizontally scrollable on small screens */
@@ -424,6 +424,29 @@
     .dc-byline { font-family: 'Archivo', system-ui, sans-serif; color: #7a9ab8; font-size: 13px; font-weight: 500; font-style: italic; margin-top: 8px; }
     .dc-rule { height: 3px; background: #C9A227; border-radius: 2px; margin: 16px 0 20px; }
     .dc-lead { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; font-size: 15px; line-height: 1.68; color: #d6e4f2; margin: 0 0 1.1em; }
+
+    /* Tales of the Tape — weekly matchup preview cards (Alexa's beat) */
+    .tot-card { background: #0d2137; border: 1px solid #1e3a55; border-left: 3px solid #1e3a55; border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
+    .tot-card.marquee { border-left-color: #C9A227; background: linear-gradient(135deg, #0d2137 0%, #102a44 100%); }
+    .tot-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+    .tot-teams { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+    .tot-team { font-family: 'Archivo', system-ui, sans-serif; font-size: 15px; font-weight: 800; color: #e8f4ff; letter-spacing: -.2px; line-height: 1.2; }
+    .tot-vs { font-family: 'Archivo', system-ui, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #4a7a9b; }
+    .tot-scores { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+    .tot-score { display: flex; align-items: baseline; gap: 8px; }
+    .tot-score-l { font-size: 10px; color: #4a7a9b; letter-spacing: .04em; text-align: right; }
+    .tot-score-v { font-family: 'Archivo', system-ui, sans-serif; font-size: 13px; font-weight: 800; color: #c8dcea; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
+    .tot-score.lead .tot-score-v { color: #4ec994; }
+    .tot-tag { display: inline-block; font-family: 'Archivo', system-ui, sans-serif; font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #C9A227; border: 1px solid rgba(201,162,39,.4); border-radius: 4px; padding: 2px 7px; margin-bottom: 10px; }
+    .tot-rule { height: 1px; background: #1e3a55; margin-bottom: 12px; }
+    /* Alexa keeps the Merriweather face she is set in everywhere else on the site. */
+    .tot-copy { font-family: 'Merriweather', Georgia, serif; font-size: 13.5px; line-height: 1.68; color: #d6e4f2; margin: 0; }
+    @media (max-width: 600px) {
+      .tot-hd { flex-direction: column; gap: 10px; }
+      .tot-scores { flex-direction: row; align-items: baseline; gap: 16px; }
+      .tot-score-l { text-align: left; }
+      .tot-score-v { min-width: 0; }
+    }
     .dc-section { border-top: 1px solid #1e3a55; padding-top: 20px; margin-top: 22px; }
     .dc-section-title { font-family: 'Archivo', system-ui, sans-serif; font-size: 21px; font-weight: 800; color: #e8f4ff; letter-spacing: -.3px; }
     .dc-section-sub { font-family: 'Archivo', system-ui, sans-serif; color: #7a9ab8; font-size: 13px; font-weight: 500; margin: 4px 0 14px; }
@@ -661,7 +684,7 @@
       .m-sub, .s-pf { display: none; }
       .stat-card { min-width: calc(50% - 5px); }
       /* Cards go 2-up here, so there's room for a larger clock than vw-sizing gives. */
-      #draft-countdown { font-size: 15px; }
+      #kickoff-countdown { font-size: 15px; }
       .rec-grid { grid-template-columns: 1fr; }
       .champ-extra { display: none; }
       .dc-card { flex-wrap: wrap; gap: 10px; }
@@ -1431,6 +1454,124 @@
 
     <!-- Matchups -->
     <div class="pane" id="pane-matchups">
+      <div class="section-hd">
+        <span class="section-title">Matchups</span>
+        <div class="week-nav">
+          <button class="wk-btn" id="wprev" onclick="changeWeek(-1)">&#9664;</button>
+          <span class="wk-lbl" id="wklbl">Week 1</span>
+          <button class="wk-btn" id="wnext" onclick="changeWeek(1)">&#9654;</button>
+        </div>
+      </div>
+      <div id="mlist" class="m-list"></div>
+
+      <!-- ===== Article: Tales of the Tape — Week 1 Previews ===== -->
+      <div class="dc-wrap" style="margin-top:34px; padding-top:26px; border-top:2px solid #1e3a55;">
+        <div class="dc-kicker">Tales of the Tape</div>
+        <div class="dc-title">Week 1 Previews</div>
+        <div class="dc-byline">by Alexa Blitz &mdash; Beat Writer &amp; Analyst &middot; projections: Sleeper half-PPR, pulled 9 September 2026</div>
+        <div class="dc-rule"></div>
+
+        <p class="dc-lead">Here we go. Nine months of trash talk, podcast deep-dives, and extremely confident pre-draft opinions, and it all comes down to what happens on the field. I&rsquo;ve been through the rosters, I&rsquo;ve noted the injury tags, and I&rsquo;ve looked at what these matchups actually mean based on three years of history in this league. Two fixtures this week are worth your full attention &mdash; the Sleazehawks against the Minnows are separated by less than half a point on paper, and the Pangolins and Waterboys have flipped since the projections first dropped, with Turks now edging it by less than two. Both of those could go either way before kickoff, let alone after it. Here&rsquo;s what to watch.</p>
+
+        <!-- Issa vs Tom -->
+        <div class="tot-card">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Unsolicited Dak Pics</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Burley Bison</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score"><span class="tot-score-l">Dak Pics proj.</span><span class="tot-score-v">113.3</span></div>
+              <div class="tot-score lead"><span class="tot-score-l">Bison proj.</span><span class="tot-score-v">125.7</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <p class="tot-copy">These two met once before &mdash; the Dak Pics won by 1.82 points last season, which the Bison have presumably spent the intervening twelve months not thinking about because that&rsquo;s not really their process. Worth noting: the Bison actually showed up to the draft this year. In person. With opinions. The roster reflects it &mdash; Jonathan Taylor at RB1 is not an accident. Whether this is a permanent character development or a one-season experiment remains to be seen, but the Dak Pics won this league from the 1.06 slot last year and don&rsquo;t need the extra motivation.</p>
+        </div>
+
+        <!-- Gilly vs Jonny -->
+        <div class="tot-card">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Cholsey Cougars</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Beeford Ballers</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Cougars proj.</span><span class="tot-score-v">124.8</span></div>
+              <div class="tot-score"><span class="tot-score-l">Ballers proj.</span><span class="tot-score-v">116.5</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <p class="tot-copy">Two wins each in this series, and not one of the four meetings has finished inside twenty points &mdash; the Ballers took the most recent one by 20 last season, the Cougars won by 57 the year before that. Nobody here does close. The Cougars carry a strong projection this week, though Ja&rsquo;Marr Chase is still questionable and he&rsquo;s their WR1. If Chase sits, that number shrinks fast. The Ballers have Josh Allen and Bijan Robinson and will be fine telling anyone who&rsquo;ll listen about it.</p>
+        </div>
+
+        <!-- Andy vs Adam — marquee -->
+        <div class="tot-card marquee">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Swainley Sleazehawks</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Comatose Minnows</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Sleazehawks proj.</span><span class="tot-score-v">122.2</span></div>
+              <div class="tot-score"><span class="tot-score-l">Minnows proj.</span><span class="tot-score-v">121.9</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <span class="tot-tag">One to watch</span>
+          <p class="tot-copy">The Minnows have won four straight in this fixture and five of six overall. The one time the Sleazehawks won, they won by 39 points &mdash; so there&rsquo;s no middle ground in this series, it either gets away from someone or it doesn&rsquo;t. The projections currently have them 0.3 apart. That is not a margin, that is a coin toss with extra steps. Two of Andy&rsquo;s starters &mdash; Egbuka and Jeremiyah Love &mdash; are still questionable, and the Minnows have Zay Flowers and D&rsquo;Andre Swift carrying the same tag. Whoever has the cleaner injury news by Sunday morning is probably winning this one.</p>
+        </div>
+
+        <!-- Turks vs Gary — marquee -->
+        <div class="tot-card marquee">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Portsmouth Pangolins</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Wilsons Waterboys</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Pangolins proj.</span><span class="tot-score-v">123.6</span></div>
+              <div class="tot-score"><span class="tot-score-l">Waterboys proj.</span><span class="tot-score-v">121.7</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <span class="tot-tag">One to watch</span>
+          <p class="tot-copy">This fixture has form for the dramatic &mdash; 0.10 points separated these two in Week 2, 2024, and then 84 points separated them nine weeks later in the same season. There is genuinely no reading it. Since the projections first dropped, this one has flipped: Josh Jacobs came in with no projection and Turks moved Rico Dowdle into the FLEX &mdash; the obvious call, and the right one. The Pangolins now edge it by 1.9 on paper, and Turks leads this series 3&ndash;2. Watch Ashton Jeanty and Tee Higgins, both still questionable &mdash; if either sits, that margin shifts again before a ball is thrown.</p>
+        </div>
+
+        <!-- Tommy vs Scott -->
+        <div class="tot-card">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Thames-side Tapirs</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Worthing Wolverines</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Tapirs proj.</span><span class="tot-score-v">126.1</span></div>
+              <div class="tot-score"><span class="tot-score-l">Wolverines proj.</span><span class="tot-score-v">119.9</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <p class="tot-copy">The Wolverines have won four of five in this fixture, which is the kind of record that doesn&rsquo;t go away quietly. The Tapirs&rsquo; only win came last season by 4.18 points &mdash; and Breece Hall, who was starting two days ago, is now on the bench with a questionable tag and Stevenson has stepped up to RB2. The Tapirs are still projected to edge it by 6.2, but there&rsquo;s also the small matter of Jahmyr Gibbs sitting on the Wolverines&rsquo; roster projecting 21.4 points. The Tapirs and Gibbs have history. It is not comfortable history.</p>
+        </div>
+
+        <div class="news-footer">Alexa Blitz &mdash; Beat Writer &amp; Analyst, The No Punt Intended Gazette</div>
+      </div>
+
+      <div class="archive-section">
+        <div class="archive-hd">Archive</div>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">Introducing Alexa Blitz</span>
+            <span class="archive-item-meta">September 2026</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
       <div class="dc-wrap">
         <div class="dc-kicker">Tales of the Tape</div>
         <div class="dc-title" style="font-size:22px;">Introducing Alexa Blitz &mdash; Beat Writer &amp; Analyst</div>
@@ -1451,19 +1592,8 @@
           <div class="editor-sign">&mdash; C. Laude, Editor in Chief</div>
         </div>
       </div>
-
-      <div class="section-hd" style="margin-top:28px;">
-        <span class="section-title">Matchups</span>
-        <div class="week-nav">
-          <button class="wk-btn" id="wprev" onclick="changeWeek(-1)">&#9664;</button>
-          <span class="wk-lbl" id="wklbl">Week 1</span>
-          <button class="wk-btn" id="wnext" onclick="changeWeek(1)">&#9654;</button>
-        </div>
-      </div>
-      <div id="mlist" class="m-list"></div>
-      <div class="archive-section">
-        <div class="archive-hd">Archive</div>
-        <p class="archive-empty">No previous articles yet.</p>
+          </div>
+        </details>
       </div>
     </div>
 
@@ -2560,10 +2690,10 @@ function switchTab(tab) {
 }
 
 // ── Header ────────────────────────────────────────────────
-const DRAFT_TS = Date.UTC(2026, 8, 6, 19, 15, 0);   // 6 Sep 2026, 20:15 BST (UTC+1)
-let draftTimer = null;
-function draftCountdownText() {
-  const ms = DRAFT_TS - Date.now();
+const KICKOFF_TS = Date.UTC(2026, 8, 10, 0, 20, 0);   // NE @ SEA, the Week 1 opener: 8:20pm ET Wed 9 Sep 2026 = 01:20 BST Thu 10 Sep
+let kickoffTimer = null;
+function kickoffCountdownText() {
+  const ms = KICKOFF_TS - Date.now();
   const p = n => String(n).padStart(2, "0");
   if (ms <= 0) return "00:00:00";
   const s = Math.floor(ms / 1000);
@@ -2589,10 +2719,12 @@ function renderHeader() {
   const pfSub = r => parsePF(r.settings).toFixed(1) + " PF";
   const wait = "After Wk 1";
 
-  // Before the season starts, the leftmost card counts down to the draft.
+  // Before the first game, the leftmost card counts down to kickoff.
   const weekCard = started
     ? { label: "Week", val: S.week, sub: "of " + S.maxWeek }
-    : { label: "Draft", val: draftCountdownText(), sub: "6 Sep · 20:15 BST", valId: "draft-countdown" };
+    : Date.now() < KICKOFF_TS
+      ? { label: "Kickoff", val: kickoffCountdownText(), sub: "10 Sep · 01:20 BST", valId: "kickoff-countdown" }
+      : { label: "Week", val: S.week, sub: "of " + S.maxWeek };
 
   const cards = [
     weekCard,
@@ -2611,12 +2743,14 @@ function renderHeader() {
     row.appendChild(el);
   });
 
-  // Live-tick the draft countdown while the season hasn't started.
-  clearInterval(draftTimer);
-  if (!started) draftTimer = setInterval(() => {
-    const el = document.getElementById("draft-countdown");
-    if (!el) { clearInterval(draftTimer); return; }
-    el.textContent = draftCountdownText();
+  // Live-tick the kickoff countdown until the opener starts.
+  clearInterval(kickoffTimer);
+  if (!started && Date.now() < KICKOFF_TS) kickoffTimer = setInterval(() => {
+    const el = document.getElementById("kickoff-countdown");
+    if (!el) { clearInterval(kickoffTimer); return; }
+    // At zero, hand the card over to the week counter rather than sitting on 00:00:00.
+    if (Date.now() >= KICKOFF_TS) { clearInterval(kickoffTimer); renderHeader(); return; }
+    el.textContent = kickoffCountdownText();
   }, 1000);
 }
 
