@@ -158,6 +158,8 @@
     .m-team.right { flex-direction: row-reverse; text-align: right; }
     .m-name { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .m-name.win { color: #2ecc71; font-weight: 700; }
+    /* The short form is swapped in on phones, where the full name has ~94px and clips. */
+    .m-name-short { display: none; }
     .m-sub { color: #7a9ab8; font-size: 11px; }
     .m-score { text-align: center; flex-shrink: 0; }
     .score-nums { display: flex; align-items: center; gap: 7px; font-size: 19px; font-weight: 800; }
@@ -682,6 +684,8 @@
 
     @media(max-width:500px){
       .m-sub, .s-pf { display: none; }
+      .m-name-full { display: none; }
+      .m-name-short { display: inline; }
       .stat-card { min-width: calc(50% - 5px); }
       /* Cards go 2-up here, so there's room for a larger clock than vw-sizing gives. */
       #kickoff-countdown { font-size: 15px; }
@@ -2578,6 +2582,13 @@ function userAvatar(user, name, size) {
 // ── Helpers ───────────────────────────────────────────────
 const getUser = id => S.users.find(u => u.user_id === id) || null;
 const teamName = user => user && (user.metadata && user.metadata.team_name || user.display_name) || "Unknown Team";
+// Phones give the matchup card ~94px per side, so it shows the mascot half of the
+// name. The last word covers every team in the league except Issa's, which needs two.
+const SHORT_TEAM_NAMES = { "Unsolicited Dak Pics": "Dak Pics" };
+const shortTeamName = name => {
+  const n = String(name || "").trim();
+  return SHORT_TEAM_NAMES[n] || n.split(/\s+/).pop() || n;
+};
 // prefer the league team logo, fall back to the user's account avatar
 const teamAvatar = user => user && (user.metadata && user.metadata.avatar || user.avatar) || null;
 const rosterById = id => S.rosters.find(r => String(r.roster_id) === String(id)) || null;
@@ -2864,7 +2875,9 @@ function renderMatchups(week) {
     left.appendChild(userAvatar(t1.user, t1.name, 36));
     const li = document.createElement("div");
     li.style.minWidth = "0";
-    li.innerHTML = '<div class="m-name' + (t1w ? " win" : "") + '">' + esc(t1.name) + '</div>' +
+    li.innerHTML = '<div class="m-name' + (t1w ? " win" : "") + '">' +
+      '<span class="m-name-full">' + esc(t1.name) + '</span>' +
+      '<span class="m-name-short">' + esc(shortTeamName(t1.name)) + '</span></div>' +
       '<div class="m-sub">' + esc(t1.owner) + '</div>';
     left.appendChild(li);
 
@@ -2886,7 +2899,9 @@ function renderMatchups(week) {
     right.appendChild(userAvatar(t2.user, t2.name, 36));
     const ri = document.createElement("div");
     ri.style.minWidth = "0";
-    ri.innerHTML = '<div class="m-name' + (t2w ? " win" : "") + '">' + esc(t2.name) + '</div>' +
+    ri.innerHTML = '<div class="m-name' + (t2w ? " win" : "") + '">' +
+      '<span class="m-name-full">' + esc(t2.name) + '</span>' +
+      '<span class="m-name-short">' + esc(shortTeamName(t2.name)) + '</span></div>' +
       '<div class="m-sub">' + esc(t2.owner) + '</div>';
     right.appendChild(ri);
 
