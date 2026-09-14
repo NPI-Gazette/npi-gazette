@@ -164,7 +164,7 @@
     /* Both score rows are grid items of .m-score rather than self-contained
        rows, so the live and projected numbers share columns and line up under
        each other despite the difference in type size. */
-    .m-score { flex-shrink: 0; position: relative; display: grid; grid-template-columns: 1fr auto 1fr; column-gap: 7px; row-gap: 2px; align-items: baseline; }
+    .m-score { flex-shrink: 0; position: relative; display: grid; grid-template-columns: 1fr auto 1fr; column-gap: 4px; row-gap: 2px; align-items: baseline; }
     .score-nums, .score-proj { display: contents; }
     .score-nums > span { font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; }
     .score-nums > span:first-child { justify-self: end; }
@@ -699,12 +699,16 @@
 
     @media(max-width:500px){
       .m-sub, .s-pf { display: none; }
-      /* Smaller scores here buy width back for the team names either side. */
-      .m-score { column-gap: 5px; }
-      .score-nums > span { font-size: 15px; }
-      .score-dash { font-size: 11px !important; }
-      .score-proj > .pn { font-size: 10px; }
-      .score-proj > .pd { font-size: 9px; }
+      /* Smaller scores, and the avatars pushed out toward the card edges, to buy
+         width back for the team names between them. Avatar size is unchanged. */
+      .m-card { padding: 12px 10px; gap: 6px; }
+      .m-team { gap: 7px; }
+      .m-name { font-size: 12px; }
+      .m-score { column-gap: 2px; }
+      .score-nums > span { font-size: 12px; }
+      .score-dash { font-size: 8.5px !important; }
+      .score-proj > .pn { font-size: 8.5px; }
+      .score-proj > .pd { font-size: 7.5px; }
       /* No room for the label beside the smaller numbers here, and the row is
          already distinct enough: smaller, grey, and under the live score. */
       .score-proj > .pl { display: none; }
