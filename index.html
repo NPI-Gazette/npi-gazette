@@ -167,6 +167,11 @@
     .score-l { color: #e8f4ff; }
     .score-dash { color: #1e3a55; font-size: 13px; }
     .score-vs { color: #4a7a9b; font-size: 12px; font-style: italic; }
+    /* Live projected finish, shown under the running score. Once every game
+       involving a starter is over these match the live numbers exactly. */
+    .score-proj { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; font-weight: 700; color: #7a9ab8; margin-top: 3px; font-variant-numeric: tabular-nums; }
+    .score-proj .pl { color: #4a7a9b; font-size: 9px; }
+    .score-proj .pd { color: #1e3a55; }
 
     .avatar { border-radius: 50%; object-fit: cover; flex-shrink: 0; }
     .av-fb {
@@ -2434,6 +2439,7 @@ const S = {
   league: null, rosters: [], users: [],
   week: 1, maxWeek: 17, nflWeek: 1, playoffSpots: 6,
   matchupCache: {},      // week -> raw matchups array
+  projCache: {},         // week -> {pts, team, over} for live projected finishes
   allLoaded: false,      // all weeks fetched?
   season: null,          // computed season stats (games, byRoster, playedWeeks)
   players: null,         // lazy-loaded /players/nfl map
@@ -2842,7 +2848,9 @@ async function loadMatchups(week) {
 function renderMatchups(week) {
   const raw = S.matchupCache[week] || [];
   const grouped = {};
+  const byRoster = {};   // roster_id -> full entry, needed for projected finishes
   raw.forEach(m => {
+    if (m && m.roster_id != null) byRoster[m.roster_id] = m;
     if (!m.matchup_id) return;
     if (!grouped[m.matchup_id]) grouped[m.matchup_id] = { id: m.matchup_id };
     grouped[m.matchup_id][m.roster_id] = m.points || 0;
@@ -2883,6 +2891,8 @@ function renderMatchups(week) {
 
     const mid = document.createElement("div");
     mid.className = "m-score";
+    mid.dataset.r1 = t1.rid;
+    mid.dataset.r2 = t2.rid;
     if (hasScore) {
       mid.innerHTML = '<div class="score-nums">' +
         '<span class="' + (t1w ? "score-w" : "score-l") + '">' + t1.pts.toFixed(2) + '</span>' +
@@ -2907,6 +2917,80 @@ function renderMatchups(week) {
 
     card.append(left, mid, right);
     list.appendChild(card);
+  });
+  // Fills in once the projections land; the live scores are already on screen.
+  applyProjections(week, byRoster);
+}
+
+// ── Live projected finishes ───────────────────────────────
+// Sleeper serves projections and per-game status outside the /v1 namespace, so
+// these are fetched directly. The projections payload is ~2MB, so it is pulled
+// lazily once a week's matchups are on screen and then cached for the session.
+async function loadWeekProjections(week) {
+  if (S.projCache[week]) return S.projCache[week];
+  const season = (S.league && S.league.season) || new Date().getFullYear();
+  const qs = ["QB", "RB", "WR", "TE", "K", "DEF"].map(p => "position[]=" + p).join("&");
+  const [rows, games] = await Promise.all([
+    fetch("https://api.sleeper.app/projections/nfl/" + season + "/" + week +
+          "?season_type=regular&order_by=pts_half_ppr&" + qs).then(r => r.ok ? r.json() : []),
+    fetch("https://api.sleeper.app/scores/nfl/regular/" + season + "/" + week)
+      .then(r => r.ok ? r.json() : [])
+  ]);
+  const pts = {}, team = {}, over = {};
+  (Array.isArray(rows) ? rows : []).forEach(r => {
+    const id = r && r.player_id != null ? String(r.player_id) : "";
+    if (!id) return;
+    if (r.stats && r.stats.pts_half_ppr != null) pts[id] = Number(r.stats.pts_half_ppr);
+    if (r.team) team[id] = r.team;
+  });
+  (Array.isArray(games) ? games : []).forEach(g => {
+    const md = g && g.metadata;
+    if (!md) return;
+    if (md.home_team) over[md.home_team] = !!md.is_over;
+    if (md.away_team) over[md.away_team] = !!md.is_over;
+  });
+  S.projCache[week] = { pts, team, over };
+  return S.projCache[week];
+}
+
+// Projected finish for one roster: points already banked for players whose game
+// is over, projections for everyone still to play. Once every starter's game has
+// finished this equals the live score exactly.
+function projectedTotal(entry, data) {
+  if (!entry || !data) return null;
+  const scored = entry.players_points || {};
+  let total = 0, known = false;
+  (entry.starters || []).forEach(raw => {
+    const id = raw == null ? "" : String(raw);
+    if (!id || id === "0") return;
+    const actual = Number(scored[id] || 0);
+    const abbr = data.team[id];
+    const finished = abbr ? data.over[abbr] : undefined;
+    // No fixture found means a bye or a player the feed doesn't cover — nothing
+    // further is coming, so whatever is banked is the answer.
+    if (finished === undefined || finished) { total += actual; }
+    else if (data.pts[id] != null) { total += data.pts[id]; known = true; }
+    else { total += actual; }
+  });
+  return { total: total, hasProjection: known };
+}
+
+async function applyProjections(week, byRoster) {
+  let data;
+  try { data = await loadWeekProjections(week); } catch (e) { return; }
+  if (S.week !== week) return;   // user changed week while this was in flight
+  document.querySelectorAll("#mlist .m-score").forEach(mid => {
+    const a = projectedTotal(byRoster[mid.dataset.r1], data);
+    const b = projectedTotal(byRoster[mid.dataset.r2], data);
+    if (!a || !b) return;
+    if (!a.total && !b.total) return;
+    const old = mid.querySelector(".score-proj");
+    if (old) old.remove();
+    const el = document.createElement("div");
+    el.className = "score-proj";
+    el.innerHTML = '<span class="pl">PROJ</span>' + a.total.toFixed(2) +
+      '<span class="pd">&mdash;</span>' + b.total.toFixed(2);
+    mid.appendChild(el);
   });
 }
 
