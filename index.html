@@ -161,17 +161,27 @@
     /* The short form is swapped in on phones, where the full name has ~94px and clips. */
     .m-name-short { display: none; }
     .m-sub { color: #7a9ab8; font-size: 11px; }
-    .m-score { text-align: center; flex-shrink: 0; }
-    .score-nums { display: flex; align-items: center; gap: 7px; font-size: 19px; font-weight: 800; }
+    /* Both score rows are grid items of .m-score rather than self-contained
+       rows, so the live and projected numbers share columns and line up under
+       each other despite the difference in type size. */
+    .m-score { flex-shrink: 0; position: relative; display: grid; grid-template-columns: 1fr auto 1fr; column-gap: 7px; row-gap: 2px; align-items: baseline; }
+    .score-nums, .score-proj { display: contents; }
+    .score-nums > span { font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .score-nums > span:first-child { justify-self: end; }
+    .score-nums > span:last-child { justify-self: start; }
     .score-w { color: #2ecc71; }
     .score-l { color: #e8f4ff; }
-    .score-dash { color: #1e3a55; font-size: 13px; }
-    .score-vs { color: #4a7a9b; font-size: 12px; font-style: italic; }
-    /* Live projected finish, shown under the running score. Once every game
-       involving a starter is over these match the live numbers exactly. */
-    .score-proj { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; font-weight: 700; color: #7a9ab8; margin-top: 3px; font-variant-numeric: tabular-nums; }
-    .score-proj .pl { color: #4a7a9b; font-size: 9px; }
-    .score-proj .pd { color: #1e3a55; }
+    .score-dash { color: #1e3a55; font-size: 13px !important; font-weight: 400 !important; }
+    .score-vs { grid-column: 1 / -1; justify-self: center; color: #4a7a9b; font-size: 12px; font-style: italic; }
+    /* Live projected finish. Once every game involving a starter is over these
+       match the live numbers exactly, so a finished week needs no label. */
+    .score-proj > .pn { font-size: 11px; font-weight: 700; color: #7a9ab8; font-variant-numeric: tabular-nums; }
+    .score-proj > .pn-l { justify-self: end; }
+    .score-proj > .pn-r { justify-self: start; }
+    .score-proj > .pd { font-size: 10px; color: #1e3a55; }
+    /* The projected row is smaller than the live one, which leaves clear space
+       to the left of its first number for the label to sit in. */
+    .score-proj > .pl { position: absolute; left: 0; bottom: 0; font-size: 7.5px; font-weight: 700; letter-spacing: 0; color: #46708c; }
 
     .avatar { border-radius: 50%; object-fit: cover; flex-shrink: 0; }
     .av-fb {
@@ -689,6 +699,15 @@
 
     @media(max-width:500px){
       .m-sub, .s-pf { display: none; }
+      /* Smaller scores here buy width back for the team names either side. */
+      .m-score { column-gap: 5px; }
+      .score-nums > span { font-size: 15px; }
+      .score-dash { font-size: 11px !important; }
+      .score-proj > .pn { font-size: 10px; }
+      .score-proj > .pd { font-size: 9px; }
+      /* No room for the label beside the smaller numbers here, and the row is
+         already distinct enough: smaller, grey, and under the live score. */
+      .score-proj > .pl { display: none; }
       .m-name-full { display: none; }
       .m-name-short { display: inline; }
       .stat-card { min-width: calc(50% - 5px); }
@@ -2988,8 +3007,10 @@ async function applyProjections(week, byRoster) {
     if (old) old.remove();
     const el = document.createElement("div");
     el.className = "score-proj";
-    el.innerHTML = '<span class="pl">PROJ</span>' + a.total.toFixed(2) +
-      '<span class="pd">&mdash;</span>' + b.total.toFixed(2);
+    el.innerHTML = '<span class="pl">PROJ</span>' +
+      '<span class="pn pn-l">' + a.total.toFixed(2) + '</span>' +
+      '<span class="pd">&mdash;</span>' +
+      '<span class="pn pn-r">' + b.total.toFixed(2) + '</span>';
     mid.appendChild(el);
   });
 }
