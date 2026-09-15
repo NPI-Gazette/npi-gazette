@@ -2008,11 +2008,6 @@
         </div>
       </div>
 
-      <div class="section-hd">
-        <span class="section-title">Power Rankings</span>
-        <span class="section-note">Score = PPG × (0.6 + 0.4 × win%)</span>
-      </div>
-      <div id="power-body"></div>
       <div class="section-hd" style="margin-top:28px;">
         <span class="section-title">Season Records</span>
       </div>
@@ -3097,7 +3092,9 @@ function switchTab(tab) {
   if (!S.inited[tab]) {
     S.inited[tab] = true;
     if (tab === "gazette")   initGazette();
-    if (tab === "power")     { initPower(); initRecords(); }
+    // initPower() is left defined but uncalled: Chad's written rankings replaced
+    // the computed table, and keeping it makes that easy to reverse.
+    if (tab === "power")     { initRecords(); }
     if (tab === "h2h")       initH2H();
     if (tab === "trades")    initTrades();
     if (tab === "playoffs")  initPlayoffs();
