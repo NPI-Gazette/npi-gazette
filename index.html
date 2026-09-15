@@ -506,17 +506,18 @@
     .cpr-num { display: flex; align-items: center; justify-content: center; width: 42px; flex-shrink: 0; background: #0b1e30; color: #4a7a9b; font-family: 'Archivo', system-ui, sans-serif; font-size: 20px; font-weight: 800; }
     .cpr-num.top3 { color: #C9A227; background: #11304d; }
     .cpr-num.bot3 { color: #e06868; }
-    .cpr-body { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 13px; background: #0d2137; }
-    .cpr-left { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-    .cpr-team { font-size: 14px; font-weight: 700; color: #e8f4ff; line-height: 1.2; }
+    /* Grid rather than nested flex so the verdict can sit in the left column on
+       a wide screen and span the whole row as a drawer on a phone. */
+    .cpr-body { flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0,1fr) auto; column-gap: 12px; row-gap: 3px; align-items: center; padding: 9px 13px; background: #0d2137; }
+    .cpr-team { grid-column: 1; grid-row: 1; font-size: 14px; font-weight: 700; color: #e8f4ff; line-height: 1.2; }
     .cpr-team.top3 { color: #C9A227; }
     .cpr-team.bot3 { color: #7a9ab8; }
-    .cpr-verdict { font-size: 11.5px; line-height: 1.45; color: #7a9ab8; }
+    .cpr-verdict { grid-column: 1; grid-row: 2; font-size: 11.5px; line-height: 1.45; color: #7a9ab8; }
     .cpr-verdict em { font-style: normal; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #c8dcea; }
     /* Stats on the top row, form guide beneath them. The form row is
        left-aligned so chips start under the Wk column and fill rightward as
        the season adds weeks. */
-    .cpr-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; gap: 5px; }
+    .cpr-right { grid-column: 2; grid-row: 1 / span 2; flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; gap: 5px; }
     .cpr-stats { display: flex; align-items: stretch; justify-content: flex-end; gap: 10px; }
     .cpr-stat { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; min-width: 56px; }
     .cpr-stat-lbl { font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #4a7a9b; }
@@ -541,7 +542,14 @@
     .cpr-signoff strong { color: #e8f4ff; }
     .cpr-ed { margin-top: 10px; padding-top: 10px; border-top: 1px solid #1e3a55; font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 12px; color: #7a9ab8; }
     @media (max-width: 600px) {
-      .cpr-verdict { display: none; }
+      /* Chad's verdict becomes a tap-to-open drawer: hidden by default, and
+         spanning the full row width when open so it has room to read. */
+      .cpr-row { cursor: pointer; }
+      .cpr-verdict { grid-column: 1 / -1; grid-row: 2; display: none; padding-top: 6px; margin-top: 5px; border-top: 1px solid rgba(30,58,85,.8); }
+      .cpr-row.open .cpr-verdict { display: block; }
+      .cpr-right { grid-row: 1; }
+      .cpr-team::after { content: "\25BE"; margin-left: 6px; font-size: 9px; color: #4a7a9b; display: inline-block; transition: transform .18s; }
+      .cpr-row.open .cpr-team::after { transform: rotate(180deg); }
       .cpr-num, .cpr-tier { width: 34px; }
       .cpr-body { padding: 8px 10px; gap: 8px; }
       .cpr-stat { min-width: 48px; }
@@ -1828,10 +1836,8 @@
         <div class="cpr-row">
           <div class="cpr-num top3">1</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team top3">Comatose Minnows</span>
+            <span class="cpr-team top3">Comatose Minnows</span>
               <span class="cpr-verdict">Bo Nix scored FIVE POINTS. <em>Five.</em> Didn&rsquo;t matter. That dog in the depth chart hit COMPLETELY different this week.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
@@ -1845,10 +1851,8 @@
         <div class="cpr-row">
           <div class="cpr-num top3">2</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team top3">Wilsons Waterboys</span>
+            <span class="cpr-team top3">Wilsons Waterboys</span>
               <span class="cpr-verdict">Drake Maye missed his projection by half and they put up 150 anyway. <em>High motor</em> from those running backs. Unreal.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
@@ -1862,10 +1866,8 @@
         <div class="cpr-row">
           <div class="cpr-num top3">3</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team top3">Swainley Sleazehawks</span>
+            <span class="cpr-team top3">Swainley Sleazehawks</span>
               <span class="cpr-verdict">136 in a loss. Above the median, still a 1&ndash;1 week. Derrick Henry had that <em>alpha energy</em> all day long.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1879,10 +1881,8 @@
         <div class="cpr-row">
           <div class="cpr-num top3">4</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team top3">Unsolicited Dak Pics</span>
+            <span class="cpr-team top3">Unsolicited Dak Pics</span>
               <span class="cpr-verdict">Caleb Williams at 37 points, comfortably clear of the median. <em>Tape don&rsquo;t lie</em> &mdash; that&rsquo;s smash smash smash energy from a QB nobody circled on draft day.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
@@ -1896,10 +1896,8 @@
         <div class="cpr-row">
           <div class="cpr-num">5</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team">Portsmouth Pangolins</span>
+            <span class="cpr-team">Portsmouth Pangolins</span>
               <span class="cpr-verdict">Jeanty at 29. Coker on the BENCH at 29. Above the median but lost the matchup. That bench call is <em>inconclusive</em> at best.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1913,10 +1911,8 @@
         <div class="cpr-row">
           <div class="cpr-num">6</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team">Thames-side Tapirs</span>
+            <span class="cpr-team">Thames-side Tapirs</span>
               <span class="cpr-verdict">Won the matchup, missed the median. The Commissioner goes 1&ndash;1 and leaves Mahomes at 21 on the bench. <em>Inconclusive</em>.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1930,10 +1926,8 @@
         <div class="cpr-row">
           <div class="cpr-num">7</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team">Burley Bison</span>
+            <span class="cpr-team">Burley Bison</span>
               <span class="cpr-verdict">Showed up to the draft AND went 0&ndash;2. A.J. Brown left early with an ankle injury and is now on IR &mdash; that&rsquo;s not <em>low motor</em>, Tom, that&rsquo;s a real WR1 problem heading into Week 2.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
@@ -1947,10 +1941,8 @@
         <div class="cpr-row">
           <div class="cpr-num">8</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team">Beeford Ballers</span>
+            <span class="cpr-team">Beeford Ballers</span>
               <span class="cpr-verdict">Allen at 35, Bijan at 27, still only 112 and below the median. Won the matchup. Lost the week. The rest of that roster is <em>inconclusive</em>.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1964,10 +1956,8 @@
         <div class="cpr-row">
           <div class="cpr-num bot3">9</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team bot3">Worthing Wolverines</span>
+            <span class="cpr-team bot3">Worthing Wolverines</span>
               <span class="cpr-verdict">Gibbs at 31. Waddle at 0.7. Bowers out with a knee procedure, not benched by choice &mdash; hoping he&rsquo;s back as soon as Week 2. The film is not just inconclusive, the film is <em>concerning</em>.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
@@ -1981,10 +1971,8 @@
         <div class="cpr-row">
           <div class="cpr-num bot3">10</div>
           <div class="cpr-body">
-            <div class="cpr-left">
-              <span class="cpr-team bot3">Cholsey Cougars</span>
+            <span class="cpr-team bot3">Cholsey Cougars</span>
               <span class="cpr-verdict">Highest projected team. Lowest score. Chase at 2.2. Loveland at ZERO. Dead. To. Me.</span>
-            </div>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
@@ -3455,6 +3443,14 @@ function computeSeason() {
   S.season = { playedWeeks, byRoster, games };
   return S.season;
 }
+
+// Chad's rankings: tap a row to open its verdict. The verdict is always visible
+// on a wide screen, so the class toggles harmlessly there; only the phone
+// stylesheet acts on it. Delegated so the ten static rows need no handlers.
+document.addEventListener("click", e => {
+  const row = e.target.closest && e.target.closest("#pane-power .cpr-row");
+  if (row) row.classList.toggle("open");
+});
 
 // ── Power rankings ────────────────────────────────────────
 async function initPower() {
