@@ -495,6 +495,26 @@
     .rk-callout { border-left: 3px solid #C9A227; padding: 2px 0 2px 16px; }
     .rk-method { font-size: 11px; color: #4a6070; margin: 16px 0 0; padding-top: 10px; border-top: 1px solid #1e3a55; line-height: 1.6; }
 
+    /* Week recap — results strip, floated scoreboard, inline stat callouts */
+    .rc-results { display: flex; flex-direction: column; gap: 7px; margin: 4px 0 22px; padding-bottom: 20px; border-bottom: 1px solid #1e3a55; }
+    .rc-row { display: flex; align-items: center; gap: 12px; background: #0d2137; border: 1px solid #1e3a55; border-left: 3px solid #2ecc71; border-radius: 8px; padding: 9px 13px; }
+    .rc-lines { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .rc-line { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .rc-team { font-size: 13px; font-weight: 600; color: #e8f4ff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rc-pts { font-size: 13px; font-weight: 700; color: #e8f4ff; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+    .rc-line.lose .rc-team, .rc-line.lose .rc-pts { color: #7a9ab8; font-weight: 500; }
+    .rc-meta { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .rc-margin { font-size: 11px; color: #4a7a9b; font-variant-numeric: tabular-nums; }
+    .rc-upset { font-size: 8.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #C9A227; border: 1px solid rgba(201,162,39,.4); border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+    .rc-break { font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #C9A227; margin: 24px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #1e3a55; clear: none; }
+    .st { font-weight: 800; color: #e8f4ff; }
+    .st-up { font-weight: 800; color: #4ec994; }
+    .st-dn { font-weight: 800; color: #e06868; }
+    @media (max-width: 600px) {
+      .rc-team { font-size: 12px; }
+      .rc-row { gap: 8px; padding: 8px 10px; }
+    }
+
     /* Draft grades */
     .dg-grade { font-size: 18px; font-weight: 800; white-space: nowrap; font-family: 'Archivo', system-ui, sans-serif; }
     .dg-a { color: #4ec994; } .dg-b { color: #e8f4ff; } .dg-c { color: #e06868; }
@@ -1496,6 +1516,93 @@
       </div>
       <div id="mlist" class="m-list"></div>
 
+      <!-- ===== Article: Tales of the Tape — Week 1 Recap ===== -->
+      <div class="dc-wrap" style="margin-top:34px; padding-top:26px; border-top:2px solid #1e3a55;">
+        <div class="dc-kicker">Tales of the Tape</div>
+        <div class="dc-title">Week 1 Recap</div>
+        <div class="dc-byline">by Alexa Blitz &mdash; Beat Writer &amp; Analyst &middot; all 16 NFL games complete &middot; 15 September 2026</div>
+        <div class="dc-rule"></div>
+
+        <div class="rc-results">
+          <div class="rc-row">
+            <div class="rc-lines">
+              <div class="rc-line"><span class="rc-team">Unsolicited Dak Pics</span><span class="rc-pts">134.66</span></div>
+              <div class="rc-line lose"><span class="rc-team">Burley Bison</span><span class="rc-pts">114.20</span></div>
+            </div>
+            <div class="rc-meta"><span class="rc-upset">Upset</span><span class="rc-margin">+20.46</span></div>
+          </div>
+          <div class="rc-row">
+            <div class="rc-lines">
+              <div class="rc-line"><span class="rc-team">Beeford Ballers</span><span class="rc-pts">112.26</span></div>
+              <div class="rc-line lose"><span class="rc-team">Cholsey Cougars</span><span class="rc-pts">102.96</span></div>
+            </div>
+            <div class="rc-meta"><span class="rc-upset">Upset</span><span class="rc-margin">+9.30</span></div>
+          </div>
+          <div class="rc-row">
+            <div class="rc-lines">
+              <div class="rc-line"><span class="rc-team">Comatose Minnows</span><span class="rc-pts">162.74</span></div>
+              <div class="rc-line lose"><span class="rc-team">Swainley Sleazehawks</span><span class="rc-pts">136.76</span></div>
+            </div>
+            <div class="rc-meta"><span class="rc-upset">Upset</span><span class="rc-margin">+25.98</span></div>
+          </div>
+          <div class="rc-row">
+            <div class="rc-lines">
+              <div class="rc-line"><span class="rc-team">Wilsons Waterboys</span><span class="rc-pts">150.12</span></div>
+              <div class="rc-line lose"><span class="rc-team">Portsmouth Pangolins</span><span class="rc-pts">125.02</span></div>
+            </div>
+            <div class="rc-meta"><span class="rc-upset">Upset</span><span class="rc-margin">+25.10</span></div>
+          </div>
+          <div class="rc-row">
+            <div class="rc-lines">
+              <div class="rc-line"><span class="rc-team">Thames-side Tapirs</span><span class="rc-pts">121.16</span></div>
+              <div class="rc-line lose"><span class="rc-team">Worthing Wolverines</span><span class="rc-pts">104.90</span></div>
+            </div>
+            <div class="rc-meta"><span class="rc-margin">+16.26</span></div>
+          </div>
+        </div>
+
+        <p class="dc-lead" style="font-style:italic;">I told you the two fixtures to watch were the Sleazehawks against the Minnows and the Pangolins against the Waterboys. I said both were too close to call. I was right about that. I was wrong about everything else.</p>
+
+        <p class="dc-lead">The Minnows won by 26. The Waterboys won by 25. Both teams I flagged as marginal underdogs put up 150-plus on the board, and the projections that had us within a point in either matchup turned out to be worth roughly what projections are usually worth in Week 1 of a new season: not much. I&rsquo;ve been in enough film sessions after games like this to know when to put my hand up. Consider it up.</p>
+
+        <p class="dc-lead">Now. What actually happened out there.</p>
+
+        <div class="rc-break">The Minnows</div>
+
+        <p class="dc-lead">The Minnows put up <span class="st">162.74</span> &mdash; the highest score of the week by a distance, and one of the more unusual 162s I&rsquo;ve seen. Bo Nix scored <span class="st-dn">5.44</span>. Saquon Barkley scored <span class="st-dn">8.50</span>. James Cook scored <span class="st-dn">8.40</span>. Drake London scored <span class="st-dn">4.50</span>. Those four projected starters combined for just under 27 points &mdash; less than D&rsquo;Andre Swift scored by himself. Swift put up <span class="st-up">31.90</span>. Christian Watson put up <span class="st-up">29.70</span>. Isaiah Likely &mdash; projected at 7.6 &mdash; went for <span class="st-up">23.80</span>. Zay Flowers added <span class="st-up">23.50</span>. Those four players scored 108.90 points between them, and the starters everyone actually knew about barely showed up. I don&rsquo;t know how you game-plan against a roster that can go 162 with Bo Nix at 5 points, but I&rsquo;d like to find out.</p>
+
+        <div class="rc-break">The Waterboys</div>
+
+        <p class="dc-lead">Gary&rsquo;s <span class="st">150.12</span> deserves a separate mention. Drake Maye scored <span class="st-dn">9.82</span> against a projection of nearly 20 &mdash; the quarterback they paid up for in the draft, and he gave them less than a third of their eventual total&rsquo;s worth of help. And they still put up 150. Kenneth Walker went for <span class="st-up">32.60</span>. Javonte Williams went for <span class="st-up">21.70</span>. Amon-Ra St. Brown went for <span class="st-up">23.70</span>. When your quarterback misses his projection by half and you still win comfortably, your running backs had a very good Sunday. The Waterboys were the cleaner sheet in a chaotic week.</p>
+
+        <div class="rc-break">The Pangolins</div>
+
+        <p class="dc-lead">The Turks situation is harder to watch. I said before kickoff that Rico Dowdle was the obvious call for the FLEX with Jacobs unavailable, projecting 11.2. Turks made that call. Dowdle scored <span class="st-dn">3.10</span>. And Jalen Coker &mdash; sitting on the Pangolins&rsquo; bench, carrying no pre-season projection because nobody had him on the radar &mdash; put up <span class="st-up">29.80</span>. The margin of defeat was 25.10. With Coker starting, the Pangolins win by 1.60. Nobody could have known Coker was going to do that. But it&rsquo;s going to feel like they should have for a while.</p>
+
+        <div class="rc-break">The Cougars</div>
+
+        <p class="dc-lead">Gilly had the week nobody wants in Week 1. Projected highest score in the league at 124.8. Final score: <span class="st-dn">102.96</span>. Ja&rsquo;Marr Chase &mdash; their WR1, the one I flagged as the number to watch &mdash; scored <span class="st-dn">2.20</span>. Colston Loveland scored zero. David Montgomery went for <span class="st-up">27.40</span> and it barely mattered. Lamar Jackson went for nearly 25 and it barely mattered. The Ballers came in below their own projection and still won by 9. That&rsquo;s not bad luck &mdash; that&rsquo;s a week where the wrong players showed up, and it cost them.</p>
+
+        <div class="rc-break">The Tapirs &amp; Wolverines</div>
+
+        <p class="dc-lead">The only matchup that went roughly to script was the Tapirs against the Wolverines &mdash; Tommy winning by 16. Breece Hall came off the bench and scored <span class="st-up">18.80</span>, which suggests keeping him active after moving him out of the starting lineup during the week was the right call, even if it wasn&rsquo;t the original plan. Gibbs went for <span class="st-up">31.10</span> as promised and it still wasn&rsquo;t enough. Scott started Trevor Lawrence over Dak Prescott &mdash; Lawrence scored 26.10, Prescott scored 14.40 on the bench &mdash; so Scott read that one right. It just didn&rsquo;t matter on the night.</p>
+
+        <p class="dc-lead">Week 1 told us four of the five projected winners were wrong, the highest-scoring team had four starters in single figures, and the two closest matchups on paper weren&rsquo;t close at all. This league has form for chaos, and it wasted no time reminding me of that.</p>
+
+        <p class="dc-lead" style="font-style:italic;">Week 2 previews land before Thursday.</p>
+
+        <div class="news-footer">Alexa Blitz &mdash; Beat Writer &amp; Analyst, The No Punt Intended Gazette</div>
+      </div>
+
+      <div class="archive-section">
+        <div class="archive-hd">Archive</div>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">Week 1 Previews</span>
+            <span class="archive-item-meta">9 September 2026</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
       <!-- ===== Article: Tales of the Tape — Week 1 Previews ===== -->
       <div class="dc-wrap" style="margin-top:34px; padding-top:26px; border-top:2px solid #1e3a55;">
         <div class="dc-kicker">Tales of the Tape</div>
@@ -1594,9 +1701,8 @@
 
         <div class="news-footer">Alexa Blitz &mdash; Beat Writer &amp; Analyst, The No Punt Intended Gazette</div>
       </div>
-
-      <div class="archive-section">
-        <div class="archive-hd">Archive</div>
+          </div>
+        </details>
         <details class="archive-item">
           <summary>
             <span class="archive-item-title">Introducing Alexa Blitz</span>
