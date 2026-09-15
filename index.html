@@ -3121,10 +3121,9 @@ function projectedTotal(entry, data) {
     else if (data.pts[id] != null) { total += data.pts[id]; known = true; }
     else { total += actual; }
   });
-  // A manager who has not set a lineup yet has no starters to project, and a
-  // one-sided projection would read as though they were on nought.
-  if (!counted) return null;
-  return { total: total, hasProjection: known };
+  // An unset lineup has no starters to project and comes through as 0.00,
+  // which is shown as-is rather than hiding the opponent's figure too.
+  return { total: total, hasProjection: known, counted: counted };
 }
 
 async function applyProjections(week, byRoster) {
