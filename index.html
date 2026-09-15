@@ -513,7 +513,11 @@
     .cpr-team.bot3 { color: #7a9ab8; }
     .cpr-verdict { font-size: 11.5px; line-height: 1.45; color: #7a9ab8; }
     .cpr-verdict em { font-style: normal; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #9fb6c9; }
-    .cpr-right { flex-shrink: 0; display: flex; align-items: stretch; gap: 10px; }
+    /* Stats on the top row, form guide beneath them. The form row is
+       left-aligned so chips start under the Wk column and fill rightward as
+       the season adds weeks. */
+    .cpr-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; gap: 5px; }
+    .cpr-stats { display: flex; align-items: stretch; justify-content: flex-end; gap: 10px; }
     .cpr-stat { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; min-width: 56px; }
     .cpr-stat-lbl { font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #46708c; }
     .cpr-score { font-family: 'Archivo', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: #e8f4ff; line-height: 1.1; font-variant-numeric: tabular-nums; }
@@ -525,7 +529,7 @@
     .cpr-div { width: 1px; background: #1e3a55; }
     /* Head-to-head result, which can differ from the record once the median
        bonus is applied — a team can lose the fixture and still finish 1-1. */
-    .cpr-form { display: flex; gap: 3px; align-items: center; }
+    .cpr-form { display: flex; gap: 3px; align-items: center; justify-content: flex-start; }
     .cpr-chip { width: 17px; height: 17px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; }
     .cpr-chip.w { background: #1e7a4a; }
     .cpr-chip.l { background: #7a1f15; }
@@ -1829,9 +1833,9 @@
               <span class="cpr-verdict">Bo Nix scored FIVE POINTS. <em>Five.</em> Didn&rsquo;t matter. That dog in the depth chart hit COMPLETELY different this week.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div></div>
               <div class="cpr-form"><span class="cpr-chip w">W</span></div>
             </div>
           </div>
@@ -1846,9 +1850,9 @@
               <span class="cpr-verdict">Drake Maye missed his projection by half and they put up 150 anyway. <em>High motor</em> from those running backs. Unreal.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div></div>
               <div class="cpr-form"><span class="cpr-chip w">W</span></div>
             </div>
           </div>
@@ -1863,9 +1867,9 @@
               <span class="cpr-verdict">136 in a loss. Above the median, still a 1&ndash;1 week. Derrick Henry had that <em>alpha energy</em> all day long.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div></div>
               <div class="cpr-form"><span class="cpr-chip l">L</span></div>
             </div>
           </div>
@@ -1880,9 +1884,9 @@
               <span class="cpr-verdict">Caleb Williams at 37 points, comfortably clear of the median. <em>Tape don&rsquo;t lie</em> &mdash; that&rsquo;s smash smash smash energy from a QB nobody circled on draft day.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div></div>
               <div class="cpr-form"><span class="cpr-chip w">W</span></div>
             </div>
           </div>
@@ -1897,9 +1901,9 @@
               <span class="cpr-verdict">Jeanty at 29. Coker on the BENCH at 29. Above the median but lost the matchup. That bench call is <em>inconclusive</em> at best.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div></div>
               <div class="cpr-form"><span class="cpr-chip l">L</span></div>
             </div>
           </div>
@@ -1914,9 +1918,9 @@
               <span class="cpr-verdict">Won the matchup, missed the median. The Commissioner goes 1&ndash;1 and leaves Mahomes at 21 on the bench. <em>Inconclusive</em>.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div></div>
               <div class="cpr-form"><span class="cpr-chip w">W</span></div>
             </div>
           </div>
@@ -1931,9 +1935,9 @@
               <span class="cpr-verdict">Showed up to the draft AND went 0&ndash;2. A.J. Brown left early with an ankle injury and is now on IR &mdash; that&rsquo;s not <em>low motor</em>, Tom, that&rsquo;s a real WR1 problem heading into Week 2.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div></div>
               <div class="cpr-form"><span class="cpr-chip l">L</span></div>
             </div>
           </div>
@@ -1948,9 +1952,9 @@
               <span class="cpr-verdict">Allen at 35, Bijan at 27, still only 112 and below the median. Won the matchup. Lost the week. The rest of that roster is <em>inconclusive</em>.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div></div>
               <div class="cpr-form"><span class="cpr-chip w">W</span></div>
             </div>
           </div>
@@ -1965,9 +1969,9 @@
               <span class="cpr-verdict">Gibbs at 31. Waddle at 0.7. Bowers out with a knee procedure, not benched by choice &mdash; hoping he&rsquo;s back as soon as Week 2. The film is not just inconclusive, the film is <em>concerning</em>.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div></div>
               <div class="cpr-form"><span class="cpr-chip l">L</span></div>
             </div>
           </div>
@@ -1982,9 +1986,9 @@
               <span class="cpr-verdict">Highest projected team. Lowest score. Chase at 2.2. Loveland at ZERO. Dead. To. Me.</span>
             </div>
             <div class="cpr-right">
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
-              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div></div>
               <div class="cpr-form"><span class="cpr-chip l">L</span></div>
             </div>
           </div>
