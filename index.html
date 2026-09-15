@@ -513,11 +513,13 @@
     .cpr-team.top3 { color: #C9A227; }
     .cpr-team.bot3 { color: #7a9ab8; }
     .cpr-verdict { grid-column: 1; grid-row: 2; font-size: 11.5px; line-height: 1.45; color: #7a9ab8; }
+    /* Why the team sits at this rank, as distinct from Chad's commentary on it. */
+    .cpr-why { grid-column: 1; grid-row: 3; font-size: 10.5px; line-height: 1.4; color: #4a7a9b; font-style: italic; margin-top: 3px; }
     .cpr-verdict em { font-style: normal; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #c8dcea; }
     /* Stats on the top row, form guide beneath them. The form row is
        left-aligned so chips start under the Wk column and fill rightward as
        the season adds weeks. */
-    .cpr-right { grid-column: 2; grid-row: 1 / span 2; flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; gap: 5px; }
+    .cpr-right { grid-column: 2; grid-row: 1 / span 3; flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; gap: 5px; justify-content: center; }
     .cpr-stats { display: flex; align-items: stretch; justify-content: flex-end; gap: 10px; }
     .cpr-stat { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; min-width: 56px; }
     .cpr-stat-lbl { font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #4a7a9b; }
@@ -545,6 +547,7 @@
       /* Verdict spans the full body width here rather than being squeezed into
          the left column beside the stats. */
       .cpr-verdict { grid-column: 1 / -1; grid-row: 2; margin-top: 3px; }
+      .cpr-why { grid-column: 1 / -1; grid-row: 3; }
       .cpr-right { grid-row: 1; }
       .cpr-num, .cpr-tier { width: 34px; }
       .cpr-body { padding: 8px 10px; gap: 8px; }
@@ -1834,6 +1837,7 @@
           <div class="cpr-body">
             <span class="cpr-team top3">Comatose Minnows</span>
               <span class="cpr-verdict">Bo Nix scored FIVE POINTS. <em>Five.</em> Didn&rsquo;t matter. That dog in the depth chart hit COMPLETELY different this week.</span>
+              <span class="cpr-why">Clear number one. Top score, perfect record, no argument to hear.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
@@ -1848,6 +1852,7 @@
           <div class="cpr-body">
             <span class="cpr-team top3">Wilsons Waterboys</span>
               <span class="cpr-verdict">Drake Maye missed his projection by half and they put up 150 anyway. <em>High motor</em> from those running backs. Unreal.</span>
+              <span class="cpr-why">Second-highest score, second-best record, second place. Some weeks the maths does itself.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
@@ -1862,6 +1867,7 @@
           <div class="cpr-body">
             <span class="cpr-team top3">Unsolicited Dak Pics</span>
               <span class="cpr-verdict">Caleb Williams at 37 points, comfortably clear of the median. <em>Tape don&rsquo;t lie</em> &mdash; that&rsquo;s smash smash smash energy from a QB nobody circled on draft day.</span>
+              <span class="cpr-why">Pips the Sleazehawks to third, because wins on the board beat points in the week.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div>
               <div class="cpr-div"></div>
@@ -1876,6 +1882,7 @@
           <div class="cpr-body">
             <span class="cpr-team top3">Swainley Sleazehawks</span>
               <span class="cpr-verdict">136 in a loss. Above the median, still a 1&ndash;1 week. Derrick Henry had that <em>alpha energy</em> all day long.</span>
+              <span class="cpr-why">Third-highest score in the league and it still only buys fourth. That&rsquo;s what the loss costs you.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1890,6 +1897,7 @@
           <div class="cpr-body">
             <span class="cpr-team">Portsmouth Pangolins</span>
               <span class="cpr-verdict">Jeanty at 29. Coker on the BENCH at 29. Above the median but lost the matchup. That bench call is <em>inconclusive</em> at best.</span>
+              <span class="cpr-why">Top of the one-and-ones on points. Beat the median, lost the game.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1904,6 +1912,7 @@
           <div class="cpr-body">
             <span class="cpr-team">Thames-side Tapirs</span>
               <span class="cpr-verdict">Won the matchup, missed the median. The Commissioner goes 1&ndash;1 and leaves Mahomes at 21 on the bench. <em>Inconclusive</em>.</span>
+              <span class="cpr-why">Won the game, missed the median, and sits behind a team that did the exact opposite.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1918,6 +1927,7 @@
           <div class="cpr-body">
             <span class="cpr-team">Beeford Ballers</span>
               <span class="cpr-verdict">Allen at 35, Bijan at 27, still only 112 and below the median. Won the matchup. Lost the week. The rest of that roster is <em>inconclusive</em>.</span>
+              <span class="cpr-why">Lowest score of anyone with a win on the board &mdash; and that win is precisely why they sit above Burley.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div>
               <div class="cpr-div"></div>
@@ -1932,6 +1942,7 @@
           <div class="cpr-body">
             <span class="cpr-team">Burley Bison</span>
               <span class="cpr-verdict">Showed up to the draft AND went 0&ndash;2. A.J. Brown left early with an ankle injury and is now on IR &mdash; that&rsquo;s not <em>low motor</em>, Tom, that&rsquo;s a real WR1 problem heading into Week 2.</span>
+              <span class="cpr-why">Outscored the Ballers and still finishes below them. Nought-and-two is nought-and-two.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
@@ -1946,6 +1957,7 @@
           <div class="cpr-body">
             <span class="cpr-team bot3">Worthing Wolverines</span>
               <span class="cpr-verdict">Gibbs at 31. Waddle at 0.7. Bowers out with a knee procedure, not benched by choice &mdash; hoping he&rsquo;s back as soon as Week 2. The film is not just inconclusive, the film is <em>concerning</em>.</span>
+              <span class="cpr-why">Second-lowest score, no wins, no case for the defence.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
@@ -1960,6 +1972,7 @@
           <div class="cpr-body">
             <span class="cpr-team bot3">Cholsey Cougars</span>
               <span class="cpr-verdict">Highest projected team. Lowest score. Chase at 2.2. Loveland at ZERO. Dead. To. Me.</span>
+              <span class="cpr-why">Bottom on points and bottom on record. Nowhere else to put them.</span>
             <div class="cpr-right">
               <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div>
               <div class="cpr-div"></div>
