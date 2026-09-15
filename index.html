@@ -496,11 +496,63 @@
     .rk-callout { border-left: 3px solid #C9A227; padding: 2px 0 2px 16px; }
     .rk-method { font-size: 11px; color: #4a6070; margin: 16px 0 0; padding-top: 10px; border-top: 1px solid #1e3a55; line-height: 1.6; }
 
+    /* Chad's power rankings — ranked rows with week/season split and tier badge */
+    .cpr-intro { background: #0d2137; border-left: 4px solid #ff6b35; border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 14px; line-height: 1.66; color: #d6e4f2; margin-bottom: 18px; }
+    .cpr-intro strong { color: #C9A227; }
+    .cpr-note { background: #0b1e30; border: 1px solid #1e3a55; border-left: 3px solid #8a6f2e; border-radius: 6px; padding: 10px 14px; font-size: 12px; line-height: 1.6; color: #7a9ab8; margin-bottom: 18px; }
+    .cpr-note strong { color: #e8f4ff; }
+    .cpr-label { font-size: 10px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #C9A227; margin-bottom: 9px; }
+    .cpr-row { display: flex; align-items: stretch; margin-bottom: 7px; border: 1px solid #1e3a55; border-radius: 8px; overflow: hidden; }
+    .cpr-num { display: flex; align-items: center; justify-content: center; width: 42px; flex-shrink: 0; background: #0b1e30; color: #4a7a9b; font-family: 'Archivo', system-ui, sans-serif; font-size: 20px; font-weight: 800; }
+    .cpr-num.top3 { color: #C9A227; background: #11233a; }
+    .cpr-num.bot3 { color: #e06868; background: #1a1420; }
+    .cpr-body { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 13px; background: #0d2137; }
+    .cpr-left { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .cpr-team { font-size: 14px; font-weight: 700; color: #e8f4ff; line-height: 1.2; }
+    .cpr-team.top3 { color: #C9A227; }
+    .cpr-team.bot3 { color: #7a9ab8; }
+    .cpr-verdict { font-size: 11.5px; line-height: 1.45; color: #7a9ab8; }
+    .cpr-verdict em { font-style: normal; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #9fb6c9; }
+    .cpr-right { flex-shrink: 0; display: flex; align-items: stretch; gap: 10px; }
+    .cpr-stat { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; min-width: 56px; }
+    .cpr-stat-lbl { font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #46708c; }
+    .cpr-score { font-family: 'Archivo', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: #e8f4ff; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .cpr-score.top3 { color: #C9A227; }
+    .cpr-score.bot3 { color: #7a9ab8; }
+    .cpr-rec { font-size: 10.5px; font-weight: 800; letter-spacing: .05em; color: #7a9ab8; }
+    .cpr-rec.perfect { color: #C9A227; }
+    .cpr-rec.winless { color: #e06868; }
+    .cpr-div { width: 1px; background: #1e3a55; }
+    /* Head-to-head result, which can differ from the record once the median
+       bonus is applied — a team can lose the fixture and still finish 1-1. */
+    .cpr-form { display: flex; gap: 3px; align-items: center; }
+    .cpr-chip { width: 17px; height: 17px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; }
+    .cpr-chip.w { background: #1e7a4a; }
+    .cpr-chip.l { background: #7a1f15; }
+    .cpr-tier { display: flex; align-items: center; justify-content: center; width: 42px; flex-shrink: 0; font-size: 17px; background: #0b1e30; border-left: 1px solid #1e3a55; }
+    .cpr-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 16px 0 20px; padding: 12px 15px; background: #0d2137; border: 1px solid #1e3a55; border-radius: 8px; }
+    .cpr-leg { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: #7a9ab8; }
+    .cpr-leg strong { color: #e8f4ff; }
+    .cpr-signoff { margin-top: 24px; padding: 14px 18px; background: #0d2137; border: 1px solid #1e3a55; border-top: 3px solid #C9A227; border-radius: 8px; font-size: 12.5px; line-height: 1.62; color: #7a9ab8; }
+    .cpr-signoff strong { color: #e8f4ff; }
+    .cpr-ed { margin-top: 10px; padding-top: 10px; border-top: 1px solid #1e3a55; font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 12px; color: #5f7d93; }
+    @media (max-width: 600px) {
+      .cpr-verdict { display: none; }
+      .cpr-num, .cpr-tier { width: 34px; }
+      .cpr-body { padding: 8px 10px; gap: 8px; }
+      .cpr-stat { min-width: 48px; }
+      .cpr-score { font-size: 16px; }
+      .cpr-team { font-size: 13px; }
+    }
+
     /* Matchups tab ordering. Default puts the live scoreboard first, which suits
        a preview week. Adding "article-first" to #pane-matchups drops it below
        the article for a recap week — a one-word change, nothing moves in the
        markup, and the archive stays last either way. */
-    #pane-matchups { display: flex; flex-direction: column; }
+    /* Must stay scoped to .active: an unscoped id rule outranks the .pane
+       display:none that hides inactive tabs, leaving this pane on screen
+       everywhere. */
+    #pane-matchups.active { display: flex; flex-direction: column; }
     #pane-matchups > .m-block { order: 1; }
     #pane-matchups > .dc-wrap { order: 2; }
     #pane-matchups > .archive-section { order: 3; }
@@ -1756,6 +1808,202 @@
 
     <!-- Power rankings & Records -->
     <div class="pane" id="pane-power">
+      <!-- ===== Article: Chad's Week 1 Power Rankings ===== -->
+      <div class="dc-wrap">
+        <div class="dc-kicker" style="color:#ff6b35;">&#9889; Chad Thunderbolt III &mdash; NPI Insider</div>
+        <div class="dc-title">Week 1 Power Rankings</div>
+        <div class="dc-byline">The Definitive, Inarguable, Fully Scientific Hierarchy &middot; Week 1 final scores &middot; 15 September 2026</div>
+        <div class="dc-rule" style="background:#ff6b35;"></div>
+
+        <div class="cpr-intro">FOLKS. <strong>WEEK ONE IS IN THE BOOKS.</strong> Four upsets. One team scores 162 with Bo Nix at five points. FIVE POINTS. The man had negative alpha energy and his team still won by 26. Records include a bonus Win for every team that beats the week&rsquo;s median score &mdash; this week that number was <strong>123.09</strong> &mdash; so pay attention, because the standings are not what you think they are. Chad Thunderbolt III. NPI Insider. THIS is the Week 1 Power Rankings.</div>
+
+        <div class="cpr-note"><strong>How records work:</strong> Each team plays their head-to-head matchup (1W or 1L) plus earns a bonus Win if their score beats the week&rsquo;s median. Week 1 median: <strong>123.09 pts</strong>. Maximum record: 2&ndash;0. Minimum: 0&ndash;2. Season and Weekly columns match for now &mdash; Week 1 <em>is</em> the season so far.</div>
+
+        <div class="cpr-label">Power Rankings &mdash; Week 1 Final</div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">1</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team top3">Comatose Minnows</span>
+              <span class="cpr-verdict">Bo Nix scored FIVE POINTS. <em>Five.</em> Didn&rsquo;t matter. That dog in the depth chart hit COMPLETELY different this week.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">162.74</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">2</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team top3">Wilsons Waterboys</span>
+              <span class="cpr-verdict">Drake Maye missed his projection by half and they put up 150 anyway. <em>High motor</em> from those running backs. Unreal.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">150.12</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">3</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team top3">Swainley Sleazehawks</span>
+              <span class="cpr-verdict">136 in a loss. Above the median, still a 1&ndash;1 week. Derrick Henry had that <em>alpha energy</em> all day long.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">136.76</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">4</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team top3">Unsolicited Dak Pics</span>
+              <span class="cpr-verdict">Caleb Williams at 37 points, comfortably clear of the median. <em>Tape don&rsquo;t lie</em> &mdash; that&rsquo;s smash smash smash energy from a QB nobody circled on draft day.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">134.66</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num">5</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team">Portsmouth Pangolins</span>
+              <span class="cpr-verdict">Jeanty at 29. Coker on the BENCH at 29. Above the median but lost the matchup. That bench call is <em>inconclusive</em> at best.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">125.02</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">😐</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num">6</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team">Thames-side Tapirs</span>
+              <span class="cpr-verdict">Won the matchup, missed the median. The Commissioner goes 1&ndash;1 and leaves Mahomes at 21 on the bench. <em>Inconclusive</em>.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">121.16</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">😐</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num">7</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team">Burley Bison</span>
+              <span class="cpr-verdict">Showed up to the draft AND went 0&ndash;2. A.J. Brown left early with an ankle injury and is now on IR &mdash; that&rsquo;s not <em>low motor</em>, Tom, that&rsquo;s a real WR1 problem heading into Week 2.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">114.20</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">😐</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num">8</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team">Beeford Ballers</span>
+              <span class="cpr-verdict">Allen at 35, Bijan at 27, still only 112 and below the median. Won the matchup. Lost the week. The rest of that roster is <em>inconclusive</em>.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">112.26</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">😐</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num bot3">9</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team bot3">Worthing Wolverines</span>
+              <span class="cpr-verdict">Gibbs at 31. Waddle at 0.7. Bowers out with a knee procedure, not benched by choice &mdash; hoping he&rsquo;s back as soon as Week 2. The film is not just inconclusive, the film is <em>concerning</em>.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">104.90</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">☠️</div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num bot3">10</div>
+          <div class="cpr-body">
+            <div class="cpr-left">
+              <span class="cpr-team bot3">Cholsey Cougars</span>
+              <span class="cpr-verdict">Highest projected team. Lowest score. Chase at 2.2. Loveland at ZERO. Dead. To. Me.</span>
+            </div>
+            <div class="cpr-right">
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">102.96</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">☠️</div>
+        </div>
+
+        <div class="cpr-legend">
+          <span class="cpr-leg">🔥 <span><strong>Smash smash smash</strong> &mdash; elite energy, tape don&rsquo;t lie</span></span>
+          <span class="cpr-leg">😐 <span><strong>Film&rsquo;s inconclusive</strong> &mdash; wait and see</span></span>
+          <span class="cpr-leg">☠️ <span><strong>Dead to me</strong> &mdash; no further comment</span></span>
+        </div>
+
+        <div class="cpr-signoff">
+          <strong>Chad Thunderbolt III</strong> &mdash; NPI Insider &amp; Draft Savant, The No Punt Intended Gazette.<br>
+          Reporting live from Desk Four. Week 2 waiver wire analysis incoming. Do NOT sleep on what I&rsquo;m about to tell you.
+          <div class="cpr-ed">Ed: Mr Thunderbolt III&rsquo;s power rankings have been published as submitted, with the exception of seventeen uses of the word &ldquo;BANANAS&rdquo; which this office has removed on grounds of editorial dignity. Mr Thunderbolt III&rsquo;s claim to be &ldquo;reporting live from Desk Four&rdquo; is noted. Desk Four is in this office. Mr Thunderbolt III is in this office. He has been here since Tuesday. &mdash; C.</div>
+        </div>
+      </div>
+
       <div class="section-hd">
         <span class="section-title">Power Rankings</span>
         <span class="section-note">Score = PPG × (0.6 + 0.4 × win%)</span>
@@ -2604,7 +2852,7 @@ const TABS = [
   { id: "trades",    label: "Waiver Wire<br><span style='font-weight:400;font-size:11px;opacity:.8'>Trades &amp; Free Agents</span>", mobileLabel: "Waiver Wire, Trades & Free Agents" },
   { id: "stats",     label: "Stat Zone" },
   { id: "draft",     label: "Draft Centre" },
-  { id: "power",     label: "Power Rankings<br><span style='font-weight:400;font-size:11px;opacity:.8'>& Records</span>", locked: true },
+  { id: "power",     label: "Power Rankings<br><span style='font-weight:400;font-size:11px;opacity:.8'>& Records</span>" },
   { id: "hof",       label: "Hall of Fame" },
   { id: "letters",   label: "Letters" }
 ];
