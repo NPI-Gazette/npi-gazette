@@ -545,7 +545,13 @@
     .cpr-chip { width: 17px; height: 17px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; }
     .cpr-chip.w { background: #14432a; color: #4ee08a; }
     .cpr-chip.l { background: #4d1a20; color: #f08a8a; }
-    .cpr-tier { display: flex; align-items: center; justify-content: center; width: 42px; flex-shrink: 0; font-size: 17px; background: #0b1e30; border-left: 1px solid #1e3a55; }
+    /* Column so the week-on-week movement chip stacks under the tier emoji.
+       Archived rankings carry no chip and centre the emoji exactly as before. */
+    .cpr-tier { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 42px; flex-shrink: 0; font-size: 17px; background: #0b1e30; border-left: 1px solid #1e3a55; }
+    .cpr-move { font-family: 'Archivo', system-ui, sans-serif; font-size: 10px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+    .cpr-move.up { color: #2ecc71; }
+    .cpr-move.down { color: #e07a7a; }
+    .cpr-move.same { color: #4a7a9b; }
     .cpr-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 16px 0 20px; padding: 12px 15px; background: #0d2137; border: 1px solid #1e3a55; border-radius: 8px; }
     .cpr-leg { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: #7a9ab8; }
     .cpr-leg strong { color: #e8f4ff; }
@@ -2033,6 +2039,203 @@
 
     <!-- Power rankings & Records -->
     <div class="pane" id="pane-power">
+      <!-- ===== Article: Chad's Week 2 Power Rankings ===== -->
+      <div class="dc-wrap">
+        <div class="dc-kicker">&#9889; Chad Thunderbolt III &mdash; NPI Insider</div>
+        <div class="dc-title">Week 2 Power Rankings</div>
+        <div class="dc-byline">The Definitive, Inarguable, Fully Scientific Hierarchy &middot; Week 2 final scores &middot; 22 September 2026</div>
+        <div class="dc-rule"></div>
+
+        <div class="cpr-intro">FOLKS. <strong>TWO OF YOU WENT TO BED FAVOURITES AND WOKE UP BEATEN.</strong> One Monday night fixture &mdash; Giants at Rams, ten rostered players &mdash; and by the time it was over the Ballers had won from a ONE PER CENT win probability and the Cougars had won because a DEFENCE outscored a quarterback and a running back. Meanwhile last week&rsquo;s number one scored 95.98 and fell FIVE PLACES. I said I&rsquo;d rank you below your own score if the vibes were off. The vibes, in several cases, are OFF.</div>
+
+        <div class="cpr-label">Power Rankings &mdash; Week 2 Final</div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">1</div>
+          <div class="cpr-body">
+            <span class="cpr-team top3">Unsolicited Dak Pics</span>
+              <span class="cpr-verdict">Caleb Williams gave them <em>7.72</em> and they won by 38. CeeDee Lamb 31.30, DeVonta Smith 22.70. The champion keeps winning games he has no business winning.</span>
+              <span class="cpr-why">Up two to the top. The last unbeaten team in the league &mdash; and in this building a record beats a points total every single time.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">134.32</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">268.98</span><span class="cpr-rec perfect">4&ndash;0</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥<span class="cpr-move up">&#9650;2</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">2</div>
+          <div class="cpr-body">
+            <span class="cpr-team top3">Wilsons Waterboys</span>
+              <span class="cpr-verdict">Benched Drake Maye for Brock Purdy and got <em>28.48</em> instead of 8.02. Read it perfectly. Lost anyway. Brutal game.</span>
+              <span class="cpr-why">Holds second. Most points scored in this league by a distance &mdash; 286.60 &mdash; and the only reason they&rsquo;re not first is the one in the loss column.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">136.48</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">286.60</span><span class="cpr-rec">3&ndash;1</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥<span class="cpr-move same">&ndash;</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">3</div>
+          <div class="cpr-body">
+            <span class="cpr-team top3">Portsmouth Pangolins</span>
+              <span class="cpr-verdict">A PERFECT LINEUP. Nothing on the bench. NOTHING. Smith-Njigba 38.00, Kelce 20.60, won by 54.72 &mdash; one week after leaving 30.50 out there. That is <em>alpha energy</em> and a spreadsheet working in harmony.</span>
+              <span class="cpr-why">Up two. Four teams sit at 3&ndash;1 and the Pangolins have more season points than two of them.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">142.36</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">267.38</span><span class="cpr-rec">3&ndash;1</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥<span class="cpr-move up">&#9650;2</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">4</div>
+          <div class="cpr-body">
+            <span class="cpr-team top3">Beeford Ballers</span>
+              <span class="cpr-verdict">Highest score of the week, 146.52, from a ONE PER CENT win probability. Josh Allen 40.82 and Davante Adams 35.50 &mdash; that&rsquo;s 52% of the whole total from two men. SMASH.</span>
+              <span class="cpr-why">Up THREE. Back-to-back wins, the biggest score of the week by 4.16, and just 3.86 season points between them and the Sleazehawks &mdash; when the totals are that tight, the most recent week decides it.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">146.52</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">258.78</span><span class="cpr-rec">3&ndash;1</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥<span class="cpr-move up">&#9650;3</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num top3">5</div>
+          <div class="cpr-body">
+            <span class="cpr-team top3">Swainley Sleazehawks</span>
+              <span class="cpr-verdict">Beat Scott. For the FIRST TIME IN FIVE TRIES. McCaffrey 20.60, Kincaid 19.00, and a kicker who keeps outscoring people&rsquo;s receivers. Monkey off the back.</span>
+              <span class="cpr-why">Down one, and harshly. Still ahead of the Ballers on season points by 3.86 &mdash; but 20.64 behind them last week, and it&rsquo;s the Ballers who are on two straight wins.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score top3">125.88</span><span class="cpr-rec perfect">2&ndash;0</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score top3">262.64</span><span class="cpr-rec">3&ndash;1</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">🔥<span class="cpr-move down">&#9660;1</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num">6</div>
+          <div class="cpr-body">
+            <span class="cpr-team">Comatose Minnows</span>
+              <span class="cpr-verdict">162.74 to 95.98 in seven days. Saquon Barkley returned <em>2.50</em>. The dog that was in the depth chart last week has left the building entirely.</span>
+              <span class="cpr-why">Down FIVE from first &mdash; biggest drop in the league. And they sit 0.06 season points behind the Ballers. Six one-hundredths.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">95.98</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">258.72</span><span class="cpr-rec">2&ndash;2</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">😐<span class="cpr-move down">&#9660;5</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num">7</div>
+          <div class="cpr-body">
+            <span class="cpr-team">Thames-side Tapirs</span>
+              <span class="cpr-verdict">87.64 &mdash; the lowest score anyone has managed all season. Patrick Mahomes sat on the bench with <em>28.98</em> while Jayden Daniels returned 14.74. The Commissioner is officially in a slump.</span>
+              <span class="cpr-why">Down one. Level with the Cougars at 1&ndash;3 and ahead of them only because of 10.04 season points.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">87.64</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score">208.80</span><span class="cpr-rec">1&ndash;3</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip w">W</span><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">😐<span class="cpr-move down">&#9660;1</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num">8</div>
+          <div class="cpr-body">
+            <span class="cpr-team">Cholsey Cougars</span>
+              <span class="cpr-verdict">FIRST WIN. Ja&rsquo;Marr Chase 23.00 after that 2.20 nonsense, and the Rams defence walked in on Monday night and won it for her by 2.40. Dead to me NO LONGER.</span>
+              <span class="cpr-why">Up two off the bottom. Fewest points in the league at 198.76, but she has a win and the two teams below her have none. Wins move you here.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">95.80</span><span class="cpr-rec">1&ndash;1</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">198.76</span><span class="cpr-rec">1&ndash;3</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span><span class="cpr-chip w">W</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">😐<span class="cpr-move up">&#9650;2</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num bot3">9</div>
+          <div class="cpr-body">
+            <span class="cpr-team bot3">Burley Bison</span>
+              <span class="cpr-verdict">Started Jaxson Dart for <em>0.80</em> with Matthew Stafford and his 26.98 sitting on the bench &mdash; IN THE SAME GAME. Lost by 2.40. Left 38.08 behind, most in the league.</span>
+              <span class="cpr-why">Down one. More season points than the Cougars and not one win to show for any of it. That is the definition of this ranking.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score bot3">93.40</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">207.60</span><span class="cpr-rec winless">0&ndash;4</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">☠️<span class="cpr-move down">&#9660;1</span></div>
+        </div>
+
+        <div class="cpr-row">
+          <div class="cpr-num bot3">10</div>
+          <div class="cpr-body">
+            <span class="cpr-team bot3">Worthing Wolverines</span>
+              <span class="cpr-verdict">He fixed the tight end. He fixed Waddle. Schultz 20.00, Waddle 17.80 &mdash; both corrections WORKED. Then Trevor Lawrence handed him <em>6.16</em> and Malik Nabers 0.60. You cannot legislate for that.</span>
+              <span class="cpr-why">Down one to last. 0&ndash;4, fewest points of the two winless teams, and the busiest waiver desk in the league has bought him nothing at all.</span>
+            <div class="cpr-right">
+              <div class="cpr-stats"><div class="cpr-stat"><span class="cpr-stat-lbl">Wk</span><span class="cpr-score">97.26</span><span class="cpr-rec winless">0&ndash;2</span></div>
+              <div class="cpr-div"></div>
+              <div class="cpr-stat"><span class="cpr-stat-lbl">Season</span><span class="cpr-score bot3">202.16</span><span class="cpr-rec winless">0&ndash;4</span></div></div>
+              <div class="cpr-form"><span class="cpr-chip l">L</span><span class="cpr-chip l">L</span></div>
+            </div>
+          </div>
+          <div class="cpr-tier">☠️<span class="cpr-move down">&#9660;1</span></div>
+        </div>
+
+        <div class="cpr-legend">
+          <span class="cpr-leg">🔥 <span><strong>Smash smash smash</strong> &mdash; elite energy, tape don&rsquo;t lie</span></span>
+          <span class="cpr-leg">😐 <span><strong>Film&rsquo;s inconclusive</strong> &mdash; wait and see</span></span>
+          <span class="cpr-leg">☠️ <span><strong>Dead to me</strong> &mdash; no further comment</span></span>
+        </div>
+
+        <div class="cpr-signoff">
+          <strong>Chad Thunderbolt III</strong> &mdash; NPI Insider &amp; Draft Savant, The No Punt Intended Gazette.<br>
+          Reporting live from Desk Four. The waiver wire report follows, where I go through every move you actually made and grade it. Three of you dropped somebody I am going to have QUESTIONS about.
+          <div class="cpr-ed">Ed: Mr Thunderbolt III revised these rankings between filing and publication, moving the Beeford Ballers up a place on what he describes as &ldquo;momentum&rdquo; and this office describes as &ldquo;a second opinion.&rdquo; Both versions were delivered with total certainty. Mr Thunderbolt III has also asked whether Desk Four can be moved &ldquo;closer to the window.&rdquo; It cannot. &mdash; C.</div>
+        </div>
+      </div>
+
+      <div class="section-hd" style="margin-top:28px;">
+        <span class="section-title">Season Records</span>
+      </div>
+      <div id="records-body"></div>
+      <div class="archive-section">
+        <div class="archive-hd">Archive</div>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">Week 1 Power Rankings</span>
+            <span class="archive-item-meta">15 September 2026</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
       <!-- ===== Article: Chad's Week 1 Power Rankings ===== -->
       <div class="dc-wrap">
         <div class="dc-kicker">&#9889; Chad Thunderbolt III &mdash; NPI Insider</div>
@@ -2209,12 +2412,9 @@
           <div class="cpr-ed">Ed: Mr Thunderbolt III&rsquo;s power rankings have been published as submitted, with the exception of seventeen uses of the word &ldquo;BANANAS&rdquo; which this office has removed on grounds of editorial dignity. Mr Thunderbolt III&rsquo;s claim to be &ldquo;reporting live from Desk Four&rdquo; is noted. Desk Four is in this office. Mr Thunderbolt III is in this office. He has been here since Tuesday. &mdash; C.</div>
         </div>
       </div>
-
-      <div class="section-hd" style="margin-top:28px;">
-        <span class="section-title">Season Records</span>
-      </div>
-      <div id="records-body"></div>
-    </div>
+          </div>
+        </details>
+      </div>    </div>
 
     <!-- Records pane kept as shell so old references don't break -->
     <div class="pane" id="pane-records"></div>
