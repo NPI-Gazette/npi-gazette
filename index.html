@@ -494,6 +494,35 @@
     .rk-moves .mv-add { color: #2ecc71; }
     .rk-moves .mv-drop { color: #e07a7a; }
     .rk-moves .mv-none { color: #4a7a9b; font-weight: 400; font-style: italic; }
+    /* All-play table (Gazette editorials). Sans-serif on purpose: it is a data
+       exhibit sitting inside serif body copy and should read as one. */
+    .ap-tbl { width: 100%; border-collapse: collapse; margin: 6px 0 20px; font-family: 'Archivo', system-ui, sans-serif; }
+    .ap-tbl th { text-align: left; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #7a9ab8; padding: 0 10px 7px 0; border-bottom: 1px solid #1e3a55; }
+    .ap-tbl td { padding: 8px 10px 8px 0; border-bottom: 1px solid rgba(30,58,85,.5); font-size: 13px; color: #d6e4f2; vertical-align: middle; }
+    .ap-tbl tr:last-child td { border-bottom: none; }
+    .ap-team { font-weight: 700; color: #e8f4ff; white-space: nowrap; }
+    .ap-num { font-variant-numeric: tabular-nums; white-space: nowrap; color: #e8f4ff; font-weight: 600; }
+    .ap-rec { font-variant-numeric: tabular-nums; white-space: nowrap; color: #7a9ab8; }
+    .ap-barcell { width: 32%; }
+    .ap-track { background: #0b1e30; border-radius: 3px; height: 7px; width: 100%; }
+    .ap-fill { background: #4a7a9b; border-radius: 3px; height: 7px; }
+    .ap-tag { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; padding: 2px 7px; border-radius: 4px; white-space: nowrap; border: 1px solid #1e3a55; color: #4a7a9b; }
+    .ap-tag.flattered { color: #e07a7a; border-color: rgba(224,122,122,.45); }
+    .ap-tag.robbed { color: #2ecc71; border-color: rgba(46,204,113,.45); }
+    /* Findings: each observation gets its own rule and label so the analysis
+       reads as a list of conclusions rather than four serif paragraphs. */
+    .ap-find { border-left: 2px solid #C9A227; padding: 1px 0 1px 16px; margin: 0 0 18px; }
+    .ap-find-hd { font-family: 'Archivo', system-ui, sans-serif; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .13em; color: #C9A227; margin-bottom: 6px; }
+    .ap-find p.dc-lead { margin-bottom: 0; }
+    .ap-find p.dc-lead + p.dc-lead { margin-top: 10px; }
+    /* Two teams, near-identical merit, opposite records — shown rather than told. */
+    .ap-vs { display: flex; align-items: stretch; gap: 10px; margin: 13px 0 4px; font-family: 'Archivo', system-ui, sans-serif; }
+    .ap-vs-side { flex: 1; min-width: 0; background: #0b1e30; border: 1px solid #1e3a55; border-radius: 8px; padding: 10px 13px; }
+    .ap-vs-team { font-size: 12px; font-weight: 700; color: #e8f4ff; margin-bottom: 7px; line-height: 1.25; }
+    .ap-vs-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: #4a7a9b; margin-top: 4px; }
+    .ap-vs-row b { font-size: 16px; font-weight: 800; color: #e8f4ff; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+    .ap-vs-row.good b { color: #2ecc71; }
+    .ap-vs-row.bad b { color: #e07a7a; }
     .rk-move { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 12px; }
     .rk-up { color: #4ec994; font-weight: 600; }
     .rk-dn { color: #e06868; font-weight: 600; }
@@ -720,6 +749,13 @@
        Stack each row instead: name + figure share the top line, badge and prose
        each span the full width beneath. */
     @media (max-width: 600px) {
+      /* The all-play bar is decorative once the figures are present, and it is
+         the first thing to go when the columns get tight. */
+      .ap-barcell, .ap-tbl th.ap-barcell { display: none; }
+      .ap-tbl td, .ap-tbl th { padding-right: 7px; font-size: 12px; }
+      .ap-team { white-space: normal; }
+      .ap-find { padding-left: 12px; }
+      .ap-vs { flex-direction: column; gap: 7px; }
       .rk-tbl, .rk-tbl tbody { display: block; }
       .rk-tbl thead { display: none; }
       .rk-tbl tr { display: grid; grid-template-columns: 1fr auto; gap: 7px 10px; padding: 12px 0; border-bottom: 1px solid rgba(30,58,85,.6); }
@@ -3297,51 +3333,85 @@
     <!-- Gazette / News -->
     <div class="pane active" id="pane-gazette">
       <div class="news-wrap">
-        <!-- ===== Article: Week 2 Is Done. Two Results Were Settled in the Medical Tent. ===== -->
+        <!-- ===== Article: The Table Is Telling the Truth About Three of You ===== -->
         <article class="news-article">
           <div class="masthead">
             <div class="masthead-title">The No Punt Intended Gazette</div>
             <div class="masthead-sub">Season 2026 &middot; From the Editor&rsquo;s Desk</div>
           </div>
-          <div class="article-date">Published 22 September 2026</div>
+          <div class="article-date">Published 1 October 2026</div>
 
-          <div class="article-head">&#128240; Weekly Recap &middot; Week 2</div>
-          <div class="article-sub">Week 2 Is Done. Two Results Were Settled in the Medical Tent.</div>
+          <div class="article-head">&#128240; Weekly Recap &middot; Week 3</div>
+          <div class="article-sub">The Table Is Telling the Truth About Three of You.</div>
           <div class="dc-byline" style="margin:-8px 0 16px;">A dispatch from the Editor in Chief</div>
 
-          <p class="dc-lead">This office wrote last week that the scoring would come back down, and that Week 2 always corrects this. The league averaged 126.48 a team in Week 1. It averaged <strong>115.56</strong> in Week 2. This office intends to mention that precisely once and then move on.</p>
+          <p class="dc-lead">Three weeks of fourteen are complete. Mr Thunderbolt III has ranked you. Ms Blitz has watched the tape. This office has done something duller and rather more useful: it has worked out which of you are actually any good.</p>
 
-          <p class="dc-lead">Elsewhere the table did what tables do. The Unsolicited Dak Pics are 4&ndash;0 and remain tiresome. The Burley Bison and the Worthing Wolverines are 0&ndash;4. Two fixtures changed hands on Monday night, which both of this newspaper&rsquo;s writers have covered at length and neither has undersold.</p>
+          <p class="dc-lead">The method is simple. In any given week your score is compared not with the one opponent the fixture list handed you, but with all nine &mdash; <strong>twenty-seven games</strong> for every manager across three weeks. Nobody gets an easy draw and nobody gets ambushed. What remains is how often you were genuinely better than the room.</p>
 
-          <p class="dc-lead">There is, however, something underneath this week that the coverage has gone past, and this office has spent three days on it. It concerns two of the five results, and it is not a matter of anybody picking the wrong team.</p>
+          <table class="ap-tbl">
+            <thead>
+              <tr>
+                <th>Team</th>
+                <th>Rec</th>
+                <th>All-play</th>
+                <th class="ap-barcell"></th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="ap-team">Wilsons Waterboys</td><td class="ap-rec">5&ndash;1</td><td class="ap-num">21/27 &middot; 78%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:77.8%"></div></div></td><td><span class="ap-tag">Par</span></td></tr>
+              <tr><td class="ap-team">Beeford Ballers</td><td class="ap-rec">5&ndash;1</td><td class="ap-num">20/27 &middot; 74%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:74.1%"></div></div></td><td><span class="ap-tag">Par</span></td></tr>
+              <tr><td class="ap-team">Portsmouth Pangolins</td><td class="ap-rec">5&ndash;1</td><td class="ap-num">20/27 &middot; 74%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:74.1%"></div></div></td><td><span class="ap-tag">Par</span></td></tr>
+              <tr><td class="ap-team">Comatose Minnows</td><td class="ap-rec">4&ndash;2</td><td class="ap-num">17/27 &middot; 63%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:63%"></div></div></td><td><span class="ap-tag">Par</span></td></tr>
+              <tr><td class="ap-team">Swainley Sleazehawks</td><td class="ap-rec">3&ndash;3</td><td class="ap-num">16/27 &middot; 59%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:59.3%"></div></div></td><td><span class="ap-tag">Par</span></td></tr>
+              <tr><td class="ap-team">Unsolicited Dak Pics</td><td class="ap-rec">4&ndash;2</td><td class="ap-num">14/27 &middot; 52%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:51.9%"></div></div></td><td><span class="ap-tag flattered">Flattered</span></td></tr>
+              <tr><td class="ap-team">Worthing Wolverines</td><td class="ap-rec">2&ndash;4</td><td class="ap-num">13/27 &middot; 48%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:48.1%"></div></div></td><td><span class="ap-tag robbed">Robbed</span></td></tr>
+              <tr><td class="ap-team">Burley Bison</td><td class="ap-rec">0&ndash;6</td><td class="ap-num">7/27 &middot; 26%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:25.9%"></div></div></td><td><span class="ap-tag robbed">Robbed</span></td></tr>
+              <tr><td class="ap-team">Thames-side Tapirs</td><td class="ap-rec">1&ndash;5</td><td class="ap-num">4/27 &middot; 15%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:14.8%"></div></div></td><td><span class="ap-tag">Par</span></td></tr>
+              <tr><td class="ap-team">Cholsey Cougars</td><td class="ap-rec">1&ndash;5</td><td class="ap-num">3/27 &middot; 11%</td><td class="ap-barcell"><div class="ap-track"><div class="ap-fill" style="width:11.1%"></div></div></td><td><span class="ap-tag">Par</span></td></tr>
+            </tbody>
+          </table>
 
-          <div class="article-head">The Bison lost. The reason was not the lineup.</div>
+          <p class="dc-lead">Three observations, and then this office will let you get on with it.</p>
 
-          <p class="dc-lead">Jaxson Dart played <strong>seven offensive snaps out of fifty-eight</strong> before leaving with a knee injury. He is now listed Out. Nico Collins did not register a single statistic in the fixture &mdash; not a catch, not a target &mdash; and is now listed Out with a hamstring. Both men were fit, active and correctly named when that lineup locked on Sunday.</p>
+          <div class="ap-find">
+            <div class="ap-find-hd">One &middot; The top is honest</div>
+            <p class="dc-lead">The three teams on 5&ndash;1 are the three best teams on the all-play table, in that order, and every one of them sits within six-tenths of a point of the record it has earned. This office finds nothing whatsoever to complain about and is dissatisfied by the experience.</p>
+          </div>
 
-          <p class="dc-lead">Dart was projected at 18.07 and returned 0.80. Collins was projected at 14.85 and returned nothing at all. The Bison lost to the Cholsey Cougars by <strong>2.40</strong>, and that defeat is properly recorded &mdash; they lost, the Cougars won, the standings are correct. But the margin was 2.40 and those two absences were worth <strong>32.12</strong> between them. Either one alone, had he stayed upright, wins that fixture comfortably.</p>
+          <div class="ap-find">
+            <div class="ap-find-hd">Two &middot; The middle is fiction</div>
+            <p class="dc-lead">One game separates these two across twenty-seven comparisons apiece. Their records are two games apart, and the only difference between them is which names the fixture list put in front of them.</p>
+            <div class="ap-vs">
+              <div class="ap-vs-side">
+                <div class="ap-vs-team">Unsolicited Dak Pics</div>
+                <div class="ap-vs-row"><span>All-play</span><b>14/27</b></div>
+                <div class="ap-vs-row good"><span>Record</span><b>4&ndash;2</b></div>
+              </div>
+              <div class="ap-vs-side">
+                <div class="ap-vs-team">Worthing Wolverines</div>
+                <div class="ap-vs-row"><span>All-play</span><b>13/27</b></div>
+                <div class="ap-vs-row bad"><span>Record</span><b>2&ndash;4</b></div>
+              </div>
+            </div>
+            <p class="dc-lead">The reigning champion is not having a good season. The reigning champion is having an ordinary season against a kind schedule, and this office would like that noted before anybody engraves anything.</p>
+          </div>
 
-          <p class="dc-lead">Ms Blitz described the Bison&rsquo;s afternoon as hard to watch and Mr Thunderbolt III graded it accordingly, placing them ninth. On the numbers in front of them, both were entitled to. This office simply notes that Tom named a fit quarterback and a fit receiver, and lost both before the game had properly started. That is not team selection. That is weather.</p>
+          <div class="ap-find">
+            <div class="ap-find-hd">Three &middot; And then the Burley Bison</div>
+            <p class="dc-lead">Seven times in twenty-seven they were better than the man opposite. That is not good &mdash; but it is more than the Thames-side Tapirs (four) and the Cholsey Cougars (three) have managed, and precisely as many as the two of them have managed combined. Both of those teams have a win. The Bison have none.</p>
+            <p class="dc-lead">Every other manager in this competition sits within nine-tenths of a point of the record their scoring deserves. Tom is adrift of his by more than one and a half. He is not running a good team &mdash; he is running the unluckiest one, and it is not close.</p>
+          </div>
 
-          <div class="article-head">The Waterboys lost. Same story, quieter.</div>
+          <p class="dc-lead" style="margin-top:22px;padding-top:18px;border-top:1px solid #1e3a55;">One footnote, and it arrives with a fixture attached. The two teams at the foot of this table are the <strong>Thames-side Tapirs</strong> on four of 27 and the <strong>Cholsey Cougars</strong> on three &mdash; seven occasions between them, out of a possible fifty-four, on which either was better than the man opposite. Both are 1&ndash;5. And on Sunday they play each other.</p>
 
-          <p class="dc-lead">DJ Moore played <strong>twenty-three snaps of seventy-four</strong>, returned <span class="st-dn">&minus;0.10</span> against a projection of 10.92, and is now listed Out with a shoulder injury.</p>
+          <p class="dc-lead">Somebody has to win it. The loser ends the week as the only side in this competition on 1&ndash;6, and this office intends to watch with an interest it is not especially proud of. In the Tapirs&rsquo; defence, a team that has lost its first three draft picks to the treatment room is not so much being measured by this exercise as survived by it. The Cougars have no equivalent mitigation and will not be offered one.</p>
 
-          <p class="dc-lead">The Waterboys lost to the Beeford Ballers by 10.04. Moore&rsquo;s shortfall was 11.02. Had he finished the match and merely met his projection, Gary posts 147.50 and wins by <strong>0.98</strong>. Both writers put that defeat down to Davante Adams&rsquo; Monday night, which is true as far as it goes and is the more entertaining explanation. It is not the whole of it. Mr Adams won the Ballers their fixture. He is not the reason the Waterboys lost theirs.</p>
-
-          <div class="article-head">For the record</div>
-
-          <p class="dc-lead">Two further starters left early without altering anything, and this office records them for completeness. Saquon Barkley managed <strong>twelve snaps of seventy-six</strong> and 2.50 points; the Comatose Minnows lost by 38.34 and would have lost regardless. Jayden Daniels lasted thirty-nine of seventy-one before his elbow went; the Thames-side Tapirs lost by 54.72, which no quarterback alive was going to repair.</p>
-
-          <p class="dc-lead">So: five fixtures, and on two of them the decisive event was a man being helped off the field. Both defeats stand and both sit in the standings exactly where they belong. But when this league reviews Week 2 and concludes that the Bison and the Waterboys were badly managed, it will be wrong on both counts, and this office would rather that were on the record now than discovered in November.</p>
-
-          <p class="dc-lead">One final observation, offered without conclusion. <strong>Seventeen</strong> players in this league are currently listed Out, Doubtful or on injured reserve, spread across nine of the ten rosters. The two longest lists belong to the Burley Bison, with four, and the Worthing Wolverines, with three &mdash; who are also, as it happens, the only two teams sitting at 0&ndash;4. This office declines to call that causation and merely records it.</p>
-
-          <p class="dc-lead">The single roster with nobody on the injury report at all belongs to the Swainley Sleazehawks, who chose this particular week to beat Scott for the first time in five attempts. Make of that what you will. This office has made quite enough of it already.</p>
-          <p class="dc-lead">Waivers process tomorrow morning. With seventeen names on that injury list and a free agent pool still holding sixteen quarterbacks listed first on an NFL depth chart &mdash; Dak Prescott and C.J. Stroud among them &mdash; this office anticipates the busiest wire of the season so far, and has instructed Mr Thunderbolt III to be ready for it. He informs this office that he has been ready since Sunday.</p>
+          <p class="dc-lead">Week 4 begins tonight. Three of you are exactly as good as you think you are. One of you is considerably worse. One of you deserves a great deal better than he is getting.</p>
 
           <div class="editor-sign" style="margin-top:18px;">&mdash; C. Laude, Editor in Chief</div>
-          <div style="font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:11.5px;color:#4a7a9b;line-height:1.6;margin-top:6px;">Snap counts, projections and injury designations via Sleeper, retrieved 22 September 2026. All lineups on file. All benches examined.</div>
+          <div style="font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:11.5px;color:#4a7a9b;line-height:1.6;margin-top:6px;">All-play records computed across Weeks 1&ndash;3, every manager against all nine opponents each week. &ldquo;Par&rdquo; denotes a record within six-tenths of a point of the all-play rate. Scores via Sleeper, retrieved 1 October 2026.</div>
         </article>
           <div class="bios-hd">Team Profiles · Season 2026</div>
 
@@ -3509,6 +3579,60 @@
       <div class="archive-section">
         <div class="archive-hd">Archive</div>
         <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">Week 2 Is Done. Two Results Were Settled in the Medical Tent.</span>
+            <span class="archive-item-meta">22 September 2026</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
+        <!-- ===== Article: Week 2 Is Done. Two Results Were Settled in the Medical Tent. ===== -->
+        <article class="news-article">
+          <div class="masthead">
+            <div class="masthead-title">The No Punt Intended Gazette</div>
+            <div class="masthead-sub">Season 2026 &middot; From the Editor&rsquo;s Desk</div>
+          </div>
+          <div class="article-date">Published 22 September 2026</div>
+
+          <div class="article-head">&#128240; Weekly Recap &middot; Week 2</div>
+          <div class="article-sub">Week 2 Is Done. Two Results Were Settled in the Medical Tent.</div>
+          <div class="dc-byline" style="margin:-8px 0 16px;">A dispatch from the Editor in Chief</div>
+
+          <p class="dc-lead">This office wrote last week that the scoring would come back down, and that Week 2 always corrects this. The league averaged 126.48 a team in Week 1. It averaged <strong>115.56</strong> in Week 2. This office intends to mention that precisely once and then move on.</p>
+
+          <p class="dc-lead">Elsewhere the table did what tables do. The Unsolicited Dak Pics are 4&ndash;0 and remain tiresome. The Burley Bison and the Worthing Wolverines are 0&ndash;4. Two fixtures changed hands on Monday night, which both of this newspaper&rsquo;s writers have covered at length and neither has undersold.</p>
+
+          <p class="dc-lead">There is, however, something underneath this week that the coverage has gone past, and this office has spent three days on it. It concerns two of the five results, and it is not a matter of anybody picking the wrong team.</p>
+
+          <div class="article-head">The Bison lost. The reason was not the lineup.</div>
+
+          <p class="dc-lead">Jaxson Dart played <strong>seven offensive snaps out of fifty-eight</strong> before leaving with a knee injury. He is now listed Out. Nico Collins did not register a single statistic in the fixture &mdash; not a catch, not a target &mdash; and is now listed Out with a hamstring. Both men were fit, active and correctly named when that lineup locked on Sunday.</p>
+
+          <p class="dc-lead">Dart was projected at 18.07 and returned 0.80. Collins was projected at 14.85 and returned nothing at all. The Bison lost to the Cholsey Cougars by <strong>2.40</strong>, and that defeat is properly recorded &mdash; they lost, the Cougars won, the standings are correct. But the margin was 2.40 and those two absences were worth <strong>32.12</strong> between them. Either one alone, had he stayed upright, wins that fixture comfortably.</p>
+
+          <p class="dc-lead">Ms Blitz described the Bison&rsquo;s afternoon as hard to watch and Mr Thunderbolt III graded it accordingly, placing them ninth. On the numbers in front of them, both were entitled to. This office simply notes that Tom named a fit quarterback and a fit receiver, and lost both before the game had properly started. That is not team selection. That is weather.</p>
+
+          <div class="article-head">The Waterboys lost. Same story, quieter.</div>
+
+          <p class="dc-lead">DJ Moore played <strong>twenty-three snaps of seventy-four</strong>, returned <span class="st-dn">&minus;0.10</span> against a projection of 10.92, and is now listed Out with a shoulder injury.</p>
+
+          <p class="dc-lead">The Waterboys lost to the Beeford Ballers by 10.04. Moore&rsquo;s shortfall was 11.02. Had he finished the match and merely met his projection, Gary posts 147.50 and wins by <strong>0.98</strong>. Both writers put that defeat down to Davante Adams&rsquo; Monday night, which is true as far as it goes and is the more entertaining explanation. It is not the whole of it. Mr Adams won the Ballers their fixture. He is not the reason the Waterboys lost theirs.</p>
+
+          <div class="article-head">For the record</div>
+
+          <p class="dc-lead">Two further starters left early without altering anything, and this office records them for completeness. Saquon Barkley managed <strong>twelve snaps of seventy-six</strong> and 2.50 points; the Comatose Minnows lost by 38.34 and would have lost regardless. Jayden Daniels lasted thirty-nine of seventy-one before his elbow went; the Thames-side Tapirs lost by 54.72, which no quarterback alive was going to repair.</p>
+
+          <p class="dc-lead">So: five fixtures, and on two of them the decisive event was a man being helped off the field. Both defeats stand and both sit in the standings exactly where they belong. But when this league reviews Week 2 and concludes that the Bison and the Waterboys were badly managed, it will be wrong on both counts, and this office would rather that were on the record now than discovered in November.</p>
+
+          <p class="dc-lead">One final observation, offered without conclusion. <strong>Seventeen</strong> players in this league are currently listed Out, Doubtful or on injured reserve, spread across nine of the ten rosters. The two longest lists belong to the Burley Bison, with four, and the Worthing Wolverines, with three &mdash; who are also, as it happens, the only two teams sitting at 0&ndash;4. This office declines to call that causation and merely records it.</p>
+
+          <p class="dc-lead">The single roster with nobody on the injury report at all belongs to the Swainley Sleazehawks, who chose this particular week to beat Scott for the first time in five attempts. Make of that what you will. This office has made quite enough of it already.</p>
+          <p class="dc-lead">Waivers process tomorrow morning. With seventeen names on that injury list and a free agent pool still holding sixteen quarterbacks listed first on an NFL depth chart &mdash; Dak Prescott and C.J. Stroud among them &mdash; this office anticipates the busiest wire of the season so far, and has instructed Mr Thunderbolt III to be ready for it. He informs this office that he has been ready since Sunday.</p>
+
+          <div class="editor-sign" style="margin-top:18px;">&mdash; C. Laude, Editor in Chief</div>
+          <div style="font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:11.5px;color:#4a7a9b;line-height:1.6;margin-top:6px;">Snap counts, projections and injury designations via Sleeper, retrieved 22 September 2026. All lineups on file. All benches examined.</div>
+        </article>
+          </div>
+        </details>        <details class="archive-item">
           <summary>
             <span class="archive-item-title">Congratulations on Your Enormous Score. It Means Less Than You Think.</span>
             <span class="archive-item-meta">16 September 2026</span>
