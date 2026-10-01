@@ -456,9 +456,15 @@
     .tot-score-v { font-family: 'Archivo', system-ui, sans-serif; font-size: 13px; font-weight: 800; color: #c8dcea; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
     .tot-score.lead .tot-score-v { color: #4ec994; }
     .tot-tag { display: inline-block; font-family: 'Archivo', system-ui, sans-serif; font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #C9A227; border: 1px solid rgba(201,162,39,.4); border-radius: 4px; padding: 2px 7px; margin-bottom: 10px; }
+    /* Named derbies get a filled chip so a standing rivalry reads differently
+       from a one-week "one to watch". */
+    .tot-tag.derby { background: rgba(201,162,39,.15); border-color: rgba(201,162,39,.55); color: #e8c766; }
     .tot-rule { height: 1px; background: #1e3a55; margin-bottom: 12px; }
     /* Alexa keeps the Merriweather face she is set in everywhere else on the site. */
     .tot-copy { font-family: 'Merriweather', Georgia, serif; font-size: 13.5px; line-height: 1.68; color: #d6e4f2; margin: 0; }
+    /* Cards carrying more than one paragraph need the gap; a single one still
+       sits flush, so the margin goes between siblings rather than below each. */
+    .tot-copy + .tot-copy { margin-top: 11px; }
     @media (max-width: 600px) {
       .tot-hd { flex-direction: column; gap: 10px; }
       .tot-scores { flex-direction: row; align-items: baseline; gap: 16px; }
@@ -1636,7 +1642,7 @@
     <!-- WEEKLY TOGGLE: add "article-first" to the pane below to drop the live
          scoreboard beneath the article (recap weeks); remove it to put the
          scoreboard back on top (preview weeks). Nothing else needs moving. -->
-    <div class="pane article-first" id="pane-matchups">
+    <div class="pane" id="pane-matchups">
       <div class="m-block">
         <div class="section-hd">
           <span class="section-title">Matchups</span>
@@ -1649,6 +1655,123 @@
         <div id="mlist" class="m-list"></div>
       </div>
 
+      <!-- ===== Article: Tales of the Tape — Week 4 Previews ===== -->
+      <div class="dc-wrap" style="margin-top:34px; padding-top:26px; border-top:2px solid #1e3a55;">
+        <div class="dc-kicker">Tales of the Tape</div>
+        <div class="dc-title">Week 4 Previews</div>
+        <div class="dc-byline">by Alexa Blitz &mdash; Beat Writer &amp; Analyst &middot; projections: Sleeper half-PPR, pulled 1 October 2026</div>
+        <div class="dc-rule"></div>
+
+        <p class="dc-lead">Two derbies this week, and they are the two best fixtures on the card.</p>
+
+        <p class="dc-lead">The <strong>Ox Bowl</strong> puts Gilly against Tommy &mdash; wife against husband, one house in Oxfordshire, two teams on 1&ndash;5, and the loser ends the week as the only side in this competition still stuck on a single win. The <strong>Worthing Bowl</strong> puts Scott against Adam, two managers who live close enough to settle this in person and almost certainly will.</p>
+
+        <p class="dc-lead">I have previewed a lot of football. I have never previewed a fixture where both managers share a kitchen.</p>
+
+        <!-- Tommy vs Gilly — THE OX BOWL -->
+        <div class="tot-card marquee">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Thames-side Tapirs</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Cholsey Cougars</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score"><span class="tot-score-l">Tapirs proj.</span><span class="tot-score-v">115.6</span></div>
+              <div class="tot-score lead"><span class="tot-score-l">Cougars proj.</span><span class="tot-score-v">117.8</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <span class="tot-tag derby">The Ox Bowl</span>
+          <p class="tot-copy">Both 1&ndash;5. Both bottom of the Editor&rsquo;s all-play table. The loser finishes the week as the only team in this league on 1&ndash;6, and 2.2 points separate them on paper. Gilly leads the series 3&ndash;2 and two of those five meetings were settled by <strong>2.62</strong> and <strong>1.82</strong> &mdash; these two do close games, which is presumably what living together does to a rivalry.</p>
+          <p class="tot-copy">Two injury notes decide it. <strong>Puka Nacua is back</strong> in the Tapirs&rsquo; lineup for the first time since Week 1 &mdash; questionable, but projecting 14.57, and comfortably the best news Tommy has had in a month. And <strong>Lamar Jackson is questionable</strong> for the Cougars at 21.97, the highest-projected player in the fixture by a distance. If Lamar sits, that 117.8 is fiction and this becomes Tommy&rsquo;s game. If he plays, Gilly wins the house.</p>
+        </div>
+
+        <!-- Scott vs Adam — THE WORTHING BOWL -->
+        <div class="tot-card marquee">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Worthing Wolverines</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Comatose Minnows</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score"><span class="tot-score-l">Wolverines proj.</span><span class="tot-score-v">123.8</span></div>
+              <div class="tot-score lead"><span class="tot-score-l">Minnows proj.</span><span class="tot-score-v">129.2</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <span class="tot-tag derby">The Worthing Bowl</span>
+          <p class="tot-copy">Close enough to be neighbourly about it and far too close to let it go. The series is 2&ndash;2 and wildly swingy &mdash; Adam has won by 34 and by 91, Scott by 11 and by 49. Nobody has ever had a tight one. Jahmyr Gibbs projects 22.35 and is the best player in the fixture; the margin on paper is 5.4.</p>
+          <p class="tot-copy">And Scott is walking into a derby with <strong class="st-dn">nine players</strong> in a ten-man lineup. Last week the hole was at kicker and the Commissioner sorted it out on Sunday afternoon; this week it is at defence. He dropped Kansas City on Wednesday morning and has not replaced them &mdash; there is no D/ST on that roster at all, and Pittsburgh is sitting on the wire projecting 8.69. Somebody noticed in time last week. I would not bank on that twice, and I would not bank on Adam being the one to mention it.</p>
+        </div>
+
+        <!-- Andy vs Jonny -->
+        <div class="tot-card">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Swainley Sleazehawks</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Beeford Ballers</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Sleazehawks proj.</span><span class="tot-score-v">135.4</span></div>
+              <div class="tot-score"><span class="tot-score-l">Ballers proj.</span><span class="tot-score-v">111.9</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <span class="tot-tag">One to watch</span>
+          <p class="tot-copy">The widest projection of the week, 23.5, and it points at the team with the <em>worse</em> record. Andy is 3&ndash;3 and the Ballers are 5&ndash;1, and the numbers say the Sleazehawks should win this comfortably. Six previous meetings, three each, nobody has strung two together. Travis Etienne is out for Jonny and Josh Allen at 23.12 is carrying rather a lot again &mdash; Allen and Bijan Robinson have between them produced <strong>38.6%</strong> of everything the Ballers have scored this season. Andy has McCaffrey, Henry and Burrow all projecting 16-plus and no obvious weakness. If the table is going to correct itself anywhere, it is here.</p>
+        </div>
+
+        <!-- Gary vs Tom -->
+        <div class="tot-card">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Wilsons Waterboys</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Burley Bison</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Waterboys proj.</span><span class="tot-score-v">131.9</span></div>
+              <div class="tot-score"><span class="tot-score-l">Bison proj.</span><span class="tot-score-v">115.3</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <p class="tot-copy">The best team in the league against the unluckiest one, which is the fixture list showing its sense of humour. Gary leads this 4&ndash;1 and two of those wins came by 46 and 44 points. Tom is 0&ndash;6 despite scoring more all season than either of the 1&ndash;5 teams above him, and he has spent the week doing everything right again &mdash; Jordan Addison claimed on a 98% snap share, Stafford settled at quarterback, Jonathan Taylor projecting 20.19. None of it has translated yet. At some point the arithmetic has to pay him back. It does not have to be this week.</p>
+        </div>
+
+        <!-- Turks vs Issa -->
+        <div class="tot-card">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Portsmouth Pangolins</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Unsolicited Dak Pics</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Pangolins proj.</span><span class="tot-score-v">127.2</span></div>
+              <div class="tot-score"><span class="tot-score-l">Dak Pics proj.</span><span class="tot-score-v">112.6</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <p class="tot-copy">These two have met once, in Week 6 last season, and Issa won by 28.58 &mdash; so Turks has never beaten him. He may not get a better chance. The Dak Pics arrive with <strong>four questionable starters</strong>: Justin Jefferson, Mike Evans, DeVonta Smith and Bucky Irving. That is most of a receiving corps. The Editor spent Thursday pointing out that the reigning champion has been flattered by his schedule; this is the week the schedule stops being kind.</p>
+        </div>
+
+        <p class="dc-lead" style="margin-top:22px;">Two derbies, one of which decides who sits alone at the bottom and one of which will be argued about over a fence. Week 4 starts tonight.</p>
+
+        <div class="news-footer">Alexa Blitz &mdash; Beat Writer &amp; Analyst, The No Punt Intended Gazette</div>
+      </div>
+
+      <div class="archive-section">
+        <div class="archive-hd">Archive</div>
+        <details class="archive-item">
+          <summary>
+            <span class="archive-item-title">Week 3 Recap</span>
+            <span class="archive-item-meta">29 September 2026</span>
+            <span class="archive-chevron">&#9658;</span>
+          </summary>
+          <div class="archive-body">
       <!-- ===== Article: Tales of the Tape — Week 3 Recap ===== -->
       <div class="dc-wrap" style="margin-top:34px; padding-top:26px; border-top:2px solid #1e3a55;">
         <div class="dc-kicker">Tales of the Tape</div>
@@ -1732,10 +1855,8 @@
 
         <div class="news-footer">Alexa Blitz &mdash; Beat Writer &amp; Analyst, The No Punt Intended Gazette</div>
       </div>
-
-      <div class="archive-section">
-        <div class="archive-hd">Archive</div>
-        <details class="archive-item">
+          </div>
+        </details>        <details class="archive-item">
           <summary>
             <span class="archive-item-title">Week 3 Previews</span>
             <span class="archive-item-meta">24 September 2026</span>
