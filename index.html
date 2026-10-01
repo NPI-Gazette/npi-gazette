@@ -154,6 +154,16 @@
       background: #0d2137; border: 1px solid #1e3a55; border-radius: 12px;
       padding: 14px 18px; display: flex; align-items: center; gap: 10px;
     }
+    /* A named rivalry gets a gold title above the scoreline. The card turns into
+       a column and the three normal children move into .m-row, so every other
+       card keeps the plain horizontal layout untouched. */
+    .m-card.derby { flex-direction: column; align-items: stretch; gap: 0; }
+    .m-card.derby .m-row { display: flex; align-items: center; gap: 10px; }
+    .m-derby {
+      font-family: 'Archivo', system-ui, sans-serif; font-size: 10px; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase; color: #C9A227;
+      text-align: center; margin-bottom: 11px;
+    }
     .m-team { flex: 1; display: flex; align-items: center; gap: 9px; min-width: 0; cursor: pointer; }
     .m-team.right { flex-direction: row-reverse; text-align: right; }
     .m-name { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -856,6 +866,8 @@
       /* Smaller scores, and the avatars pushed out toward the card edges, to buy
          width back for the team names between them. Avatar size is unchanged. */
       .m-card { padding: 12px 10px; gap: 6px; }
+      .m-card.derby .m-row { gap: 6px; }
+      .m-derby { font-size: 9px; letter-spacing: .1em; margin-bottom: 9px; }
       .m-team { gap: 7px; }
       .m-name { font-size: 12px; }
       .m-score { column-gap: 2px; }
@@ -1662,11 +1674,11 @@
         <div class="dc-byline">by Alexa Blitz &mdash; Beat Writer &amp; Analyst &middot; projections: Sleeper half-PPR, pulled 1 October 2026</div>
         <div class="dc-rule"></div>
 
-        <p class="dc-lead">Two derbies this week, and they are the two best fixtures on the card.</p>
+        <p class="dc-lead">Three derbies this week, which is a lot for a ten-team league.</p>
 
-        <p class="dc-lead">The <strong>Ox Bowl</strong> sends the Tapirs and the Cougars at one another, both on 1&ndash;5, and both still looking for a way to win a week that does not involve each other. The <strong>Worthing Bowl</strong> needs no introduction in this competition and will not be receiving one here.</p>
+        <p class="dc-lead">The <strong>Ox Bowl</strong> sends the Tapirs and the Cougars at one another, both on 1&ndash;5, and both still looking for a way to win a week that does not involve each other. The <strong>Worthing Bowl</strong> needs no introduction in this competition and will not be receiving one here. And the <strong>Bro Bowl</strong> puts the top of the league against the bottom of it, which is a difficult thing to have to explain at Christmas.</p>
 
-        <p class="dc-lead">Neither of them is going to be settled quietly.</p>
+        <p class="dc-lead">None of them is going to be settled quietly.</p>
 
         <!-- Tommy vs Gilly — THE OX BOWL -->
         <div class="tot-card marquee">
@@ -1707,6 +1719,24 @@
           <p class="tot-copy">And if he does not &mdash; if another technical issue is declared on Sunday afternoon &mdash; it will be worth watching whether The Commissioner feels quite as accommodating about it a second time.</p>
         </div>
 
+        <!-- Gary vs Tom -->
+        <div class="tot-card marquee">
+          <div class="tot-hd">
+            <div class="tot-teams">
+              <span class="tot-team">Wilsons Waterboys</span>
+              <span class="tot-vs">vs</span>
+              <span class="tot-team">Burley Bison</span>
+            </div>
+            <div class="tot-scores">
+              <div class="tot-score lead"><span class="tot-score-l">Waterboys proj.</span><span class="tot-score-v">131.9</span></div>
+              <div class="tot-score"><span class="tot-score-l">Bison proj.</span><span class="tot-score-v">115.3</span></div>
+            </div>
+          </div>
+          <div class="tot-rule"></div>
+          <span class="tot-tag derby">The Bro Bowl</span>
+          <p class="tot-copy">Now to the Bro Bowl. Think Pro Bowl, except that only one team is any good. Top of the league against the bottom of it, which is the fixture list showing its sense of humour. Gary leads this 4&ndash;1 and two of those wins came by 46 and 44 points, so the family record is not currently in dispute. Tom is 0&ndash;6 despite scoring more all season than either of the 1&ndash;5 teams above him, and he has spent the week doing everything right again &mdash; Jordan Addison claimed on a 98% snap share, Stafford settled at quarterback, Jonathan Taylor projecting 20.19. None of it has translated yet. At some point the arithmetic has to pay him back. It would be quite something if it picked this week to do it.</p>
+        </div>
+
         <!-- Andy vs Jonny -->
         <div class="tot-card">
           <div class="tot-hd">
@@ -1723,23 +1753,6 @@
           <div class="tot-rule"></div>
           <span class="tot-tag">One to watch</span>
           <p class="tot-copy">The widest projection of the week, 23.5, and it points at the team with the <em>worse</em> record. Andy is 3&ndash;3 and the Ballers are 5&ndash;1, and the numbers say the Sleazehawks should win this comfortably. Six previous meetings, three each, nobody has strung two together. Travis Etienne is out for Jonny and Josh Allen at 23.12 is carrying rather a lot again &mdash; Allen and Bijan Robinson have between them produced <strong>38.6%</strong> of everything the Ballers have scored this season. Andy has McCaffrey, Henry and Burrow all projecting 16-plus and no obvious weakness. If the table is going to correct itself anywhere, it is here.</p>
-        </div>
-
-        <!-- Gary vs Tom -->
-        <div class="tot-card">
-          <div class="tot-hd">
-            <div class="tot-teams">
-              <span class="tot-team">Wilsons Waterboys</span>
-              <span class="tot-vs">vs</span>
-              <span class="tot-team">Burley Bison</span>
-            </div>
-            <div class="tot-scores">
-              <div class="tot-score lead"><span class="tot-score-l">Waterboys proj.</span><span class="tot-score-v">131.9</span></div>
-              <div class="tot-score"><span class="tot-score-l">Bison proj.</span><span class="tot-score-v">115.3</span></div>
-            </div>
-          </div>
-          <div class="tot-rule"></div>
-          <p class="tot-copy">The best team in the league against the unluckiest one, which is the fixture list showing its sense of humour. Gary leads this 4&ndash;1 and two of those wins came by 46 and 44 points. Tom is 0&ndash;6 despite scoring more all season than either of the 1&ndash;5 teams above him, and he has spent the week doing everything right again &mdash; Jordan Addison claimed on a 98% snap share, Stafford settled at quarterback, Jonathan Taylor projecting 20.19. None of it has translated yet. At some point the arithmetic has to pay him back. It does not have to be this week.</p>
         </div>
 
         <!-- Turks vs Issa -->
@@ -1759,7 +1772,7 @@
           <p class="tot-copy">These two have met once, in Week 6 last season, and Issa won by 28.58 &mdash; so Turks has never beaten him. He may not get a better chance. The Dak Pics arrive with <strong>four questionable starters</strong>: Justin Jefferson, Mike Evans, DeVonta Smith and Bucky Irving. That is most of a receiving corps. The Editor spent Thursday pointing out that the reigning champion has been flattered by his schedule; this is the week the schedule stops being kind.</p>
         </div>
 
-        <p class="dc-lead" style="margin-top:22px;">Two derbies, one of which hands somebody only their second win of the season, and both of which will be argued about long after the final whistle. Week 4 starts tonight.</p>
+        <p class="dc-lead" style="margin-top:22px;">Three derbies, one of which hands somebody only their second win of the season, and all of which will be argued about long after the final whistle. Week 4 starts tonight.</p>
 
         <div class="news-footer">Alexa Blitz &mdash; Beat Writer &amp; Analyst, The No Punt Intended Gazette</div>
       </div>
@@ -4612,6 +4625,18 @@ async function loadMatchups(week) {
   }
 }
 
+// Standing rivalries, keyed by the pair of roster ids in ascending order so the
+// lookup does not care which side of the fixture a team is drawn on. Keyed by
+// pairing rather than by week, so the title turns up whenever they next meet.
+const DERBIES = {
+  "1-5":  "The Ox Bowl",        // Thames-side Tapirs v Cholsey Cougars
+  "3-10": "The Worthing Bowl",  // Worthing Wolverines v Comatose Minnows
+  "6-7":  "The Bro Bowl"        // Wilsons Waterboys v Burley Bison
+};
+function derbyName(a, b) {
+  return DERBIES[[Number(a), Number(b)].sort((x, y) => x - y).join("-")] || null;
+}
+
 function renderMatchups(week) {
   const raw = S.matchupCache[week] || [];
   const grouped = {};
@@ -4641,8 +4666,9 @@ function renderMatchups(week) {
     const hasScore = t1.pts > 0 || t2.pts > 0;
     const t1w = hasScore && t1.pts > t2.pts, t2w = hasScore && t2.pts > t1.pts;
 
+    const derby = derbyName(t1.rid, t2.rid);
     const card = document.createElement("div");
-    card.className = "m-card";
+    card.className = "m-card" + (derby ? " derby" : "");
 
     const left = document.createElement("div");
     left.className = "m-team";
@@ -4682,7 +4708,17 @@ function renderMatchups(week) {
       '<div class="m-sub">' + esc(t2.owner) + '</div>';
     right.appendChild(ri);
 
-    card.append(left, mid, right);
+    if (derby) {
+      const title = document.createElement("div");
+      title.className = "m-derby";
+      title.textContent = derby;
+      const row = document.createElement("div");
+      row.className = "m-row";
+      row.append(left, mid, right);
+      card.append(title, row);
+    } else {
+      card.append(left, mid, right);
+    }
     list.appendChild(card);
   });
   // Fills in once the projections land; the live scores are already on screen.
